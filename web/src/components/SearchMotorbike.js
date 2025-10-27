@@ -36,29 +36,42 @@ function SearchMotorbike() {
       setStatus("");
     } catch (err) {
       setInfo(null);
-      setStatus("Không tìm thấy hoặc lỗi: " + err.message);
+      const msg = (err && (err.code === 4001 || err.code === 'ACTION_REJECTED' || /user rejected/i.test(err.message)))
+        ? 'Giao dịch/tác vụ đã bị từ chối bởi người dùng.'
+        : (err && err.message) ? err.message : String(err);
+      setStatus('Không tìm thấy hoặc lỗi: ' + msg);
+      console.error(err);
     }
   };
 
   return (
     <div>
       <h2>Tra cứu thông tin xe máy</h2>
-  <button onClick={handleConnectWallet} type="button">Kết nối ví Ethereum</button>
-      <div style={{ margin: "10px 0", color: "green" }}>{status}</div>
-      <form onSubmit={handleSearch}>
-        <label>Token ID (NFT):</label>
-        <input type="number" value={tokenId} onChange={e => setTokenId(e.target.value)} required /><br />
-        <button type="submit">Tra cứu</button>
+      <div className="muted">Nhập Token ID để lấy thông tin và chủ sở hữu.</div>
+      <div style={{marginTop:12}}>
+        <button className="btn" onClick={handleConnectWallet} type="button">Kết nối ví Ethereum</button>
+        <div className="status">{status}</div>
+      </div>
+
+      <form onSubmit={handleSearch} style={{marginTop:12}}>
+        <div className="form-row">
+          <label>Token ID (NFT)</label>
+          <input type="number" value={tokenId} onChange={e => setTokenId(e.target.value)} required />
+        </div>
+        <div className="form-actions">
+          <button className="btn" type="submit">Tra cứu</button>
+        </div>
       </form>
+
       {info && (
-        <div style={{marginTop:20}}>
+        <div style={{marginTop:16}}>
           <h3>Thông tin xe máy</h3>
-          <p>Số khung (VIN): {info.vin}</p>
-          <p>Số máy: {info.engineNumber}</p>
-          <p>Model: {info.model}</p>
-          <p>Màu sắc: {info.color}</p>
-          <p>Năm sản xuất: {info.year}</p>
-          <p>Chủ sở hữu: {info.owner}</p>
+          <p><strong>Số khung (VIN):</strong> {info.vin}</p>
+          <p><strong>Số máy:</strong> {info.engineNumber}</p>
+          <p><strong>Model:</strong> {info.model}</p>
+          <p><strong>Màu sắc:</strong> {info.color}</p>
+          <p><strong>Năm sản xuất:</strong> {info.year}</p>
+          <p><strong>Chủ sở hữu:</strong> {info.owner}</p>
         </div>
       )}
     </div>

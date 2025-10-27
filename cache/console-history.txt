@@ -1,0 +1,67 @@
+events.forEach(e => console.log(e.args.from, e.args.to, e.args.tokenId.toString()));
+console.log('events:', events.length);
+const events = await c.queryFilter(c.filters.Transfer());
+eNFT', ADDRESS);
+}
+  console.log('getMotorbike() không tồn tại trong ABI');
+} else {
+  console.log('getMotorbike:', await c.getMotorbike(tokenId));
+if (typeof c.getMotorbike === 'function') {
+console.log('ownerOf:', await c.ownerOf(tokenId));
+const tokenId = "0"; // thay bằng tokenId thực nếu có
+g(logs);
+console.loconsole.lo
+const filter = { address: ADDREconst logs = await ethers.provider.send("eth_getLogs", [filter]);
+const topic0 = ethers.utils.id("Transfer(address,address,uint256)");
+console.log('events.length =', events.lengevents.forEach(e => console.log('Transfer', e.args.from, '=>', e.args.to, 'tokenId=', e.args.tokenId.toString()));
+const events = await c.queryFilter(c.filters.Transfer());
+}
+  }
+    console.log('not parsed by this ABI, topic0=', log.topics && log.topics[0]);
+    console.  } catch(e) {
+    const parsed = c.interface.parseLog(log);
+  try {
+for (const log of receipt.logs) {
+console.log('functions:', Object.keys
+const c = await ethers.getContractAt("MotorbikeNFT", ADDRESS);
+console.log(receipt.logs);
+console.log('status', receipt.status, 'blockNumber', receipt.blockNumber, 'logs.length', receipt.logs.length);
+const receipt = await ethers.provider.getTransactionReceipt(txHash);
+const txHash = "0x6f75a0a2d4da62702f91cf9e97d46bdcb7897bdd55df5d0d6491796851cf135d";
+(await ethers.provider.getCode(ADDRESS)).slice(0,10)  // nếu trả "0x" là chưa có contract
+const ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+console.log('status', receipt.status, 'blockNumber', receipt.blockNumber)
+const receipt = await eda62702f91cf9e97d46bdcb7897bdd55df5d0d6491796851cf135d")
+// Gán receipt nếu chưa có
+const c = await ethers.getContractAt("MotorbikeNFT
+// Xem console.log(Object.keys(contract.functions))
+console.log(typeof contract !== 'undefined' ? 'contract ready' : 'contract not defined')
+// Kiểm tra contract hiện có (nếu đã khai báo trước)
+const contract = await ethers.getContractAt("MotorbikeNFT", "0x5FbDB2315678afecb367f032d93F642f64180aa3")
+const receipt = await ethers.provider.getTransactionReceipt("0x6f75a0a2d4da62702f91cf9e97d46bdcb7897console.log(receipt.status, receipt.blockNumber)
+const receipt = await ethers.provider.getTransacticonsole.log(receipt.status, receipt.blockNumber)
+await contract.getMotawait contract.ownerOf(lastId)
+const lastId = next - 1
+const next = (await contract.nextTokenId()).toNumber()
+await contract.getMawait contract.tokenURI(tokenId)       // nếu bạn dùng tokenURI
+await contract.ownerOf(tokenId)
+const tokenId = /* tokenId từ event, ví dụ 0 */;
+events.forEach(e => console.l()))
+const events = await contract.queryFilter(contract.filters.Transfer())
+const contract = await ethers.getContractAt("MotorbikeNFT", "0x5FbDB2315678afecb367f032d93F642f64180aa3")
+await ethers.provider.getTransactionReceipt("0x6f75a0a2d4da62702f91cf9e97d46bdcb7897bdd55df5d0d6491796851cf135d")
+await ethers.provider.getBalance("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+// chạy trong: npx hardhat console --network localhost
+await ethers.provider.getTransactionCount(addr, 'pending') // giá trị pending (nếu có)
+await ethers.provider.getTransactionCount(addr, 'latest')  // giá trị latest
+const addr = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"; // địa chỉ của bạn
+await ethers.provider.getTransactionCount(addr, 'latest')
+const addr = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+addr = "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+const addr = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
+const addr = "<CONTRACT_ADDRESS>";             // ví dụ "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+await ethers.provider.getBalance("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+await ethers.provider.getBalance("0xf39Fd6e51aad88
+0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+ ETH bằng ethers.utils.formatEther)

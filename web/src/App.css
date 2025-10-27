@@ -36,3 +36,95 @@
     transform: rotate(360deg);
   }
 }
+
+/* --- Project styles (simple, clean admin UI) --- */
+:root{
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --accent: #2b7cff;
+  --muted: #6b7280;
+  --success: #16a34a;
+}
+body {
+  background: var(--bg);
+  color: #0f172a;
+  font-family: Inter, Roboto, Arial, sans-serif;
+}
+.app-container{
+  max-width: 960px;
+  margin: 28px auto;
+  padding: 24px;
+}
+.app-header{
+  text-align: center;
+  margin-bottom: 18px;
+}
+.brand{
+  font-size: 28px;
+  font-weight: 700;
+}
+.subtitle{
+  color: var(--muted);
+  margin-top: 6px;
+}
+.grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.card{
+  background: var(--card);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+.full{
+  grid-column: 1 / -1;
+}
+.form-row{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:10px;
+}
+.form-row label{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.form-row input, .form-row button, .form-row select{
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #e6e9ef;
+  font-size:14px;
+}
+.form-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:8px;
+}
+.btn{
+  background:var(--accent);
+  color:white;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+.btn.secondary{
+  background:#f3f4f6;
+  color:#0f172a;
+}
+.status{
+  color: var(--success);
+  margin-top:8px;
+}
+.muted{
+  color:var(--muted);
+  font-size:13px;
+}
+@media (max-width:800px){
+  .grid{grid-template-columns:1fr}
+}

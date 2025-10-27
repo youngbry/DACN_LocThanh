@@ -12,6 +12,15 @@ root.render(
   </React.StrictMode>
 );
 
+// Global error handlers to surface useful info in console for debugging
+window.addEventListener('unhandledrejection', event => {
+  console.error('Unhandled promise rejection:', event.reason);
+});
+
+window.addEventListener('error', event => {
+  console.error('Uncaught error:', event.error || event.message, event);
+});
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
