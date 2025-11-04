@@ -1,0 +1,301 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ethers } from 'ethers';
+import { CONTRACT_ADDRESS, ABI as CONTRACT_ABI } from '../blockchain/MotorbikeNFT';
+import './AdminNFTManagement.css';
+
+const AdminNFTManagement = () => {
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [adminAddress, setAdminAddress] = useState('');
+    const [allNFTs, setAllNFTs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState({
+        totalNFTs: 0,
+        uniqueOwners: 0
+    });
+
+    useEffect(() => {
+        checkAdminAndLoadNFTs();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const checkAdminAndLoadNFTs = async () => {
+        try {
+            setLoading(true);
+            
+            if (typeof window.ethereum !== 'undefined') {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const accounts = await provider.send("eth_requestAccounts", []);
+                
+                if (accounts.length > 0) {
+                    const userAddress = accounts[0];
+                    setAdminAddress(userAddress);
+                    
+                    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+                    
+                    // Check if user is admin
+                    const owner = await contract.owner();
+                    const adminCheck = owner.toLowerCase() === userAddress.toLowerCase();
+                    setIsAdmin(adminCheck);
+                    
+                    if (adminCheck) {
+                        await loadAllNFTs(provider, contract);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Lỗi kiểm tra admin:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadAllNFTs = async (provider, contract) => {
+        try {
+            // Get all Transfer events to find all NFTs
+            const transferEvents = await contract.queryFilter(contract.filters.Transfer());
+            
+            // Get unique token IDs
+            const tokenIds = [...new Set(transferEvents.map(event => 
+                event.args.tokenId.toString()
+            ))];
+            
+            const nfts = [];
+            const owners = new Set();
+            
+            for (const tokenId of tokenIds) {
+                try {
+                    const nftData = await contract.getMotorbike(tokenId);
+                    const owner = await contract.ownerOf(tokenId);
+                    
+                    owners.add(owner.toLowerCase());
+                    
+                    // Get transfer history for this NFT
+                    const nftTransfers = transferEvents.filter(event => 
+                        event.args.tokenId.toString() === tokenId
+                    ).sort((a, b) => a.blockNumber - b.blockNumber);
+                    
+                    // Get block timestamps
+                    const transferHistory = [];
+                    for (const transfer of nftTransfers) {
+                        const block = await provider.getBlock(transfer.blockNumber);
+                        transferHistory.push({
+                            from: transfer.args.from,
+                            to: transfer.args.to,
+                            blockNumber: transfer.blockNumber,
+                            timestamp: new Date(block.timestamp * 1000),
+                            transactionHash: transfer.transactionHash
+                        });
+                    }
+                    
+                    nfts.push({
+                        tokenId: tokenId,
+                        vin: nftData.vin,
+                        engineNumber: nftData.engineNumber,
+                        model: nftData.model,
+                        color: nftData.color,
+                        year: nftData.year.toString(),
+                        currentOwner: owner,
+                        transferHistory: transferHistory,
+                        transferCount: transferHistory.length
+                    });
+                } catch (error) {
+                    console.error(`Lỗi load NFT ${tokenId}:`, error);
+                }
+            }
+            
+            // Sort by tokenId
+            nfts.sort((a, b) => parseInt(a.tokenId) - parseInt(b.tokenId));
+            
+            setAllNFTs(nfts);
+            setStats({
+                totalNFTs: nfts.length,
+                uniqueOwners: owners.size
+            });
+            
+        } catch (error) {
+            console.error('Lỗi load NFTs:', error);
+        }
+    };
+
+    const formatAddress = (address) => {
+        if (address === ethers.ZeroAddress) return 'Mint (Tạo mới)';
+        return `${address.slice(0, 6)}...${address.slice(-4)}`;
+    };
+
+    const formatDate = (date) => {
+        return date.toLocaleString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text);
+        alert('Đã copy!');
+    };
+
+    if (loading) {
+        return (
+            <div className="admin-nft-management">
+                <div className="loading-section">
+                    <div className="spinner"></div>
+                    <p>Đang tải dữ liệu quản lý...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!isAdmin) {
+        return (
+            <div className="admin-nft-management">
+                <div className="access-denied">
+                    <h2>🚫 Truy cập bị từ chối</h2>
+                    <p>Bạn không có quyền admin để xem trang này.</p>
+                    <Link to="/admin" className="back-btn">
+                        ← Quay về Admin Dashboard
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="admin-nft-management">
+            <div className="management-header">
+                <h1>📋 Quản lý tất cả NFT</h1>
+                <div className="header-actions">
+                    <Link to="/admin" className="back-btn">
+                        ← Admin Dashboard
+                    </Link>
+                    <button 
+                        onClick={checkAdminAndLoadNFTs} 
+                        className="refresh-btn"
+                    >
+                        🔄 Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <div className="management-stats">
+                <div className="stat-card">
+                    <div className="stat-icon">🏍️</div>
+                    <div className="stat-content">
+                        <h3>Tổng NFT</h3>
+                        <div className="stat-number">{stats.totalNFTs}</div>
+                    </div>
+                </div>
+                
+                <div className="stat-card">
+                    <div className="stat-icon">👥</div>
+                    <div className="stat-content">
+                        <h3>Chủ sở hữu</h3>
+                        <div className="stat-number">{stats.uniqueOwners}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="nft-management-content">
+                {allNFTs.length === 0 ? (
+                    <div className="no-nfts">
+                        <div className="no-nfts-icon">🏍️</div>
+                        <h3>Chưa có NFT nào được tạo</h3>
+                        <p>Hãy tạo NFT đầu tiên từ Admin Dashboard</p>
+                        <Link to="/admin" className="create-btn">
+                            🏭 Tạo NFT đầu tiên
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="nfts-table">
+                        {allNFTs.map((nft) => (
+                            <div key={nft.tokenId} className="nft-management-card">
+                                <div className="nft-main-info">
+                                    <div className="nft-header">
+                                        <span className="nft-id">#{nft.tokenId}</span>
+                                        <span className="nft-year">{nft.year}</span>
+                                        <span className="transfer-count">
+                                            {nft.transferCount} lần chuyển
+                                        </span>
+                                    </div>
+                                    
+                                    <h3 className="nft-model">{nft.model}</h3>
+                                    
+                                    <div className="nft-specs">
+                                        <div className="spec-row">
+                                            <span className="spec-label">VIN:</span>
+                                            <span className="spec-value">{nft.vin}</span>
+                                        </div>
+                                        <div className="spec-row">
+                                            <span className="spec-label">Số máy:</span>
+                                            <span className="spec-value">{nft.engineNumber}</span>
+                                        </div>
+                                        <div className="spec-row">
+                                            <span className="spec-label">Màu:</span>
+                                            <span className="spec-value">{nft.color}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="current-owner">
+                                        <span className="owner-label">Chủ hiện tại:</span>
+                                        <div className="owner-address">
+                                            <span>{formatAddress(nft.currentOwner)}</span>
+                                            <button 
+                                                onClick={() => copyToClipboard(nft.currentOwner)}
+                                                className="copy-btn"
+                                            >
+                                                📋
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="nft-history">
+                                    <h4>📜 Lịch sử chuyển quyền</h4>
+                                    <div className="history-list">
+                                        {nft.transferHistory.map((transfer, index) => (
+                                            <div key={index} className="history-item">
+                                                <div className="history-header">
+                                                    <span className="history-date">
+                                                        {formatDate(transfer.timestamp)}
+                                                    </span>
+                                                    <span className="history-block">
+                                                        Block #{transfer.blockNumber}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="history-transfer">
+                                                    <span className="transfer-from">
+                                                        {formatAddress(transfer.from)}
+                                                    </span>
+                                                    <span className="transfer-arrow">→</span>
+                                                    <span className="transfer-to">
+                                                        {formatAddress(transfer.to)}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="history-tx">
+                                                    <span>TX: {transfer.transactionHash.slice(0, 10)}...</span>
+                                                    <button 
+                                                        onClick={() => copyToClipboard(transfer.transactionHash)}
+                                                        className="copy-btn small"
+                                                    >
+                                                        📋
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default AdminNFTManagement;

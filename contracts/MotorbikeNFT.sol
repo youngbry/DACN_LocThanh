@@ -35,4 +35,8 @@ contract MotorbikeNFT is ERC721, Ownable {
         require(ownerOf(tokenId) != address(0), "Token does not exist");
         return motorbikes[tokenId];
     }
+    
+    function totalSupply() public view returns (uint256) {
+        return nextTokenId;
+    }
 }

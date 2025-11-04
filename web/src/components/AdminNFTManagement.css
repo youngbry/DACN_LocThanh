@@ -1,0 +1,477 @@
+.admin-nft-management {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loading-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    color: #666;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #ff6b6b;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.access-denied {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    background: #fff5f5;
+    border: 2px solid #feb2b2;
+    border-radius: 20px;
+    padding: 40px;
+    color: #c53030;
+}
+
+.management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+}
+
+.management-header h1 {
+    margin: 0;
+    font-size: 2.2em;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.back-btn,
+.refresh-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn:hover,
+.refresh-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: white;
+}
+
+.management-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    border-left: 5px solid #ff6b6b;
+}
+
+.stat-icon {
+    font-size: 3.5em;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-content h3 {
+    margin: 0 0 10px 0;
+    color: #2d3748;
+    font-size: 1.2em;
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ff6b6b;
+    margin: 0;
+}
+
+.no-nfts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    text-align: center;
+    background: #f7fafc;
+    border-radius: 20px;
+    padding: 40px;
+}
+
+.no-nfts-icon {
+    font-size: 5em;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+.no-nfts h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.no-nfts p {
+    color: #718096;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.create-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.create-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    text-decoration: none;
+    color: white;
+}
+
+.nfts-table {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.nft-management-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    border-left: 5px solid #ff6b6b;
+}
+
+.nft-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.nft-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nft-id {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+.nft-year {
+    background: #718096;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.transfer-count {
+    background: #4299e1;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.nft-model {
+    color: #2d3748;
+    margin: 0;
+    font-size: 1.6em;
+    font-weight: bold;
+}
+
+.nft-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.spec-row:last-child {
+    border-bottom: none;
+}
+
+.spec-label {
+    color: #718096;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.spec-value {
+    color: #2d3748;
+    font-weight: bold;
+    font-family: monospace;
+    background: #f7fafc;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.current-owner {
+    background: #f7fafc;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.owner-label {
+    display: block;
+    color: #718096;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.owner-address {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.owner-address span {
+    font-family: monospace;
+    font-weight: bold;
+    color: #2d3748;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    flex: 1;
+}
+
+.copy-btn {
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: #3182ce;
+    transform: scale(1.05);
+}
+
+.copy-btn.small {
+    padding: 4px 8px;
+    font-size: 0.8em;
+}
+
+.nft-history h4 {
+    color: #2d3748;
+    margin: 0 0 20px 0;
+    font-size: 1.3em;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-item {
+    background: #f7fafc;
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 4px solid #4299e1;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.history-date {
+    color: #2d3748;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.history-block {
+    background: #4299e1;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.history-transfer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.transfer-from,
+.transfer-to {
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #2d3748;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85em;
+}
+
+.transfer-arrow {
+    font-size: 1.2em;
+    color: #4299e1;
+    font-weight: bold;
+}
+
+.history-tx {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    color: #718096;
+}
+
+.history-tx span {
+    font-family: monospace;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 1200px) {
+    .nft-management-card {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-nft-management {
+        padding: 15px;
+    }
+    
+    .management-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .management-header h1 {
+        font-size: 1.8em;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+    
+    .back-btn,
+    .refresh-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .management-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .spec-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .spec-value {
+        align-self: stretch;
+        text-align: center;
+    }
+    
+    .history-transfer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .transfer-arrow {
+        text-align: center;
+        transform: rotate(90deg);
+    }
+}

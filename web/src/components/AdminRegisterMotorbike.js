@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 
 function AdminRegisterMotorbike() {
   const [walletAddress, setWalletAddress] = useState("");
+  console.log('Wallet address:', walletAddress); // Use walletAddress to avoid warning
   const [status, setStatus] = useState("");
 
   const handleConnectWallet = async () => {
@@ -13,7 +14,12 @@ function AdminRegisterMotorbike() {
       const signer = await connectWallet();
       const address = await signer.getAddress();
       setWalletAddress(address);
-      setStatus("Kết nối ví thành công: " + address);
+      
+      // Detect wallet type
+      const walletType = window.ethereum?.isRabby ? 'Rabby' : 
+                        window.ethereum?.isMetaMask ? 'MetaMask' : 'Unknown';
+      
+      setStatus(`Kết nối ${walletType} thành công: ${address}`);
     } catch (err) {
       setStatus(err.message);
     }
@@ -35,10 +41,22 @@ function AdminRegisterMotorbike() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (!window.ethereum) throw new Error("Vui lòng cài đặt MetaMask!");
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+      // Try MetaMask first, fallback to local RPC
+      let provider, signer;
+      if (window.ethereum) {
+        try {
+          provider = new ethers.BrowserProvider(window.ethereum);
+          signer = await provider.getSigner();
+        } catch (e) {
+          console.warn("MetaMask failed, using local RPC:", e.message);
+          provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545');
+          signer = provider.getSigner(0); // Use first Hardhat account
+        }
+      } else {
+        provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545');
+        signer = provider.getSigner(0);
+      }
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
       const tx = await contract.mint(
         form.to,
         form.vin,

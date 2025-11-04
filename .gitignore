@@ -1,1 +1,25 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables (IMPORTANT - NEVER commit!)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Hardhat
+cache/
+artifacts/
+typechain/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
