@@ -1,265 +1,571 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ethers } from 'ethers';
-import { CONTRACT_ADDRESS, ABI as NFT_ABI } from '../blockchain/MotorbikeNFT';
-import { MARKETPLACE_ADDRESS, MARKETPLACE_ABI } from '../blockchain/MotorbikeMarketplace';
-import './Marketplace.css';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { ethers } from "ethers";
+import {
+  MARKETPLACE_ADDRESS,
+  MARKETPLACE_ABI,
+} from "../blockchain/MotorbikeMarketplace";
+import { CONTRACT_ADDRESS, ABI as NFT_ABI } from "../blockchain/MotorbikeNFT";
+
+const RPC_ENDPOINTS = ["http://127.0.0.1:8545", "http://localhost:8545"];
 
 const Marketplace = () => {
-    const [nfts, setNfts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [userAddress, setUserAddress] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filterYear, setFilterYear] = useState('');
-    const [filterModel, setFilterModel] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [nfts, setNfts] = useState([]);
+  const [error, setError] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [buyingTokenId, setBuyingTokenId] = useState(null);
 
-    useEffect(() => {
-        loadMarketplaceNFTs();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  const formatAddress = (address) => {
+    if (!address) return "";
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
 
-    const loadMarketplaceNFTs = async () => {
-        try {
-            setLoading(true);
-            
-            if (typeof window.ethereum !== 'undefined') {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const accounts = await provider.send("eth_requestAccounts", []);
-                const userAddr = accounts.length > 0 ? accounts[0] : '';
-                setUserAddress(userAddr);
-                
-                const nftContract = new ethers.Contract(CONTRACT_ADDRESS, NFT_ABI, provider);
-                const marketplaceContract = new ethers.Contract(MARKETPLACE_ADDRESS, MARKETPLACE_ABI, provider);
-                
-                // Lấy danh sách NFT đang được bán
-                const activeListings = await marketplaceContract.getActiveListings();
-                const nftList = [];
-                
-                // Lấy thông tin chi tiết từng NFT đang bán
-                for (let listing of activeListings) {
-                    try {
-                        const nftData = await nftContract.getMotorbike(listing.tokenId);
-                        const owner = await nftContract.ownerOf(listing.tokenId);
-                        
-                        nftList.push({
-                            tokenId: Number(listing.tokenId),
-                            vin: nftData.vin,
-                            engineNumber: nftData.engineNumber,
-                            model: nftData.model,
-                            color: nftData.color,
-                            year: nftData.year.toString(),
-                            owner: owner,
-                            seller: listing.seller,
-                            price: ethers.formatEther(listing.price),
-                            listedAt: new Date(Number(listing.listedAt) * 1000),
-                            isOwner: owner.toLowerCase() === userAddr.toLowerCase()
-                        });
-                    } catch (error) {
-                        console.error(`Lỗi load NFT #${listing.tokenId}:`, error);
-                    }
-                }
-                
-                setNfts(nftList);
-            }
-        } catch (error) {
-            console.error('Lỗi load marketplace:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const filteredNFTs = nfts.filter(nft => {
-        const matchSearch = nft.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          nft.vin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          nft.color.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchYear = filterYear === '' || nft.year === filterYear;
-        const matchModel = filterModel === '' || nft.model.toLowerCase().includes(filterModel.toLowerCase());
-        
-        return matchSearch && matchYear && matchModel;
-    });
-
-    const uniqueYears = [...new Set(nfts.map(nft => nft.year))].sort((a, b) => b - a);
-    const uniqueModels = [...new Set(nfts.map(nft => nft.model))];
-
-    const buyNFT = async (nft) => {
-        const confirmed = window.confirm(
-            `Xác nhận mua NFT #${nft.tokenId}?\n\n` +
-            `🏍️ Xe: ${nft.model}\n` +
-            `💰 Giá: ${nft.price} ETH\n` +
-            `👤 Người bán: ${nft.seller}\n\n` +
-            `Bạn sẽ thanh toán ${nft.price} ETH để mua NFT này.`
-        );
-        
-        if (!confirmed) return;
-        
-        try {
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = await provider.getSigner();
-            const marketplaceContract = new ethers.Contract(MARKETPLACE_ADDRESS, MARKETPLACE_ABI, signer);
-            
-            // Mua NFT thông qua marketplace
-            const priceWei = ethers.parseEther(nft.price);
-            const tx = await marketplaceContract.buyNFT(nft.tokenId, { value: priceWei });
-            await tx.wait();
-            
-            alert(`✅ Mua NFT thành công!\n\n🏍️ NFT #${nft.tokenId}\n💰 Đã thanh toán: ${nft.price} ETH\n📋 Transaction: ${tx.hash}`);
-            loadMarketplaceNFTs(); // Reload danh sách
-            
-        } catch (error) {
-            console.error('Lỗi mua NFT:', error);
-            
-            let errorMessage = 'Có lỗi xảy ra khi mua NFT';
-            if (error.message.includes('user rejected')) {
-                errorMessage = 'Bạn đã từ chối giao dịch';
-            } else if (error.message.includes('insufficient funds')) {
-                errorMessage = 'Không đủ ETH để mua NFT này';
-            } else if (error.message.includes('Cannot buy your own NFT')) {
-                errorMessage = 'Không thể mua NFT của chính mình';
-            }
-            
-            alert('❌ ' + errorMessage);
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="marketplace-loading">
-                <div className="spinner"></div>
-                <p>Đang tải marketplace...</p>
-            </div>
-        );
+  const getReadableProvider = useCallback(async () => {
+    if (typeof window !== "undefined" && window.ethereum) {
+      try {
+        const browserProvider = new ethers.BrowserProvider(window.ethereum);
+        await browserProvider.getNetwork();
+        return browserProvider;
+      } catch (browserError) {
+        console.warn("Browser provider unavailable", browserError);
+      }
     }
 
-    return (
-        <div className="marketplace">
-            <div className="marketplace-header">
-                <h1>🏪 Marketplace NFT Xe Máy</h1>
-                <p className="marketplace-subtitle">
-                    Khám phá và sở hữu các NFT xe máy độc đáo
-                </p>
-            </div>
+    for (const rpcUrl of RPC_ENDPOINTS) {
+      try {
+        const rpcProvider = new ethers.JsonRpcProvider(rpcUrl);
+        await rpcProvider.getNetwork();
+        return rpcProvider;
+      } catch (rpcError) {
+        console.warn(`RPC ${rpcUrl} failed`, rpcError);
+      }
+    }
 
-            <div className="marketplace-filters">
-                <div className="filter-group">
-                    <input
-                        type="text"
-                        placeholder="🔍 Tìm kiếm theo tên xe, VIN, màu sắc..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
-                
-                <div className="filter-group">
-                    <select 
-                        value={filterYear} 
-                        onChange={(e) => setFilterYear(e.target.value)}
-                        className="filter-select"
-                    >
-                        <option value="">Tất cả năm</option>
-                        {uniqueYears.map(year => (
-                            <option key={year} value={year}>{year}</option>
-                        ))}
-                    </select>
-                </div>
-                
-                <div className="filter-group">
-                    <input
-                        type="text"
-                        placeholder="Lọc theo mẫu xe..."
-                        value={filterModel}
-                        onChange={(e) => setFilterModel(e.target.value)}
-                        className="filter-input"
-                    />
-                </div>
-            </div>
+    throw new Error("Không thể kết nối tới mạng blockchain");
+  }, []);
 
-            <div className="marketplace-stats">
-                <div className="stat-item">
-                    <span className="stat-number">{nfts.length}</span>
-                    <span className="stat-label">Tổng NFT</span>
-                </div>
-                <div className="stat-item">
-                    <span className="stat-number">{filteredNFTs.length}</span>
-                    <span className="stat-label">Hiển thị</span>
-                </div>
-                <div className="stat-item">
-                    <span className="stat-number">{nfts.filter(n => n.isOwner).length}</span>
-                    <span className="stat-label">Của tôi</span>
-                </div>
-            </div>
+  const loadMarketplaceData = useCallback(async () => {
+    setLoading(true);
+    setError("");
 
-            {filteredNFTs.length === 0 ? (
-                <div className="no-nfts">
-                    <div className="no-nfts-icon">🔍</div>
-                    <h3>Không tìm thấy NFT nào</h3>
-                    <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
-                </div>
-            ) : (
-                <div className="nft-grid">
-                    {filteredNFTs.map((nft) => (
-                        <div key={nft.tokenId} className={`nft-card ${nft.isOwner ? 'owned' : ''}`}>
-                            <div className="nft-header">
-                                <span className="nft-id">#{nft.tokenId}</span>
-                                <span className="nft-year">{nft.year}</span>
-                                {nft.isOwner && <span className="owner-badge">👑 Của tôi</span>}
-                            </div>
-                            
-                            <h3 className="nft-title">{nft.model}</h3>
-                            
-                            <div className="nft-details">
-                                <div className="detail-item">
-                                    <span className="detail-label">VIN:</span>
-                                    <span className="detail-value">{nft.vin.slice(0, 8)}...</span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="detail-label">Màu:</span>
-                                    <span className="detail-value">{nft.color}</span>
-                                </div>
-                            </div>
-                            
-                            <div className="nft-price">
-                                <span className="price-label">💰 Giá bán:</span>
-                                <span className="price-value">{nft.price} ETH</span>
-                            </div>
-                            
-                            <div className="nft-seller">
-                                <span className="seller-label">Người bán:</span>
-                                <span className="seller-address">
-                                    {nft.seller.slice(0, 6)}...{nft.seller.slice(-4)}
-                                </span>
-                            </div>
-                            
-                            <div className="nft-actions">
-                                <Link 
-                                    to={`/user/nft/${nft.tokenId}`} 
-                                    className="action-btn view"
-                                >
-                                    👁️ Xem chi tiết
-                                </Link>
-                                
-                                {nft.isOwner ? (
-                                    <button 
-                                        className="action-btn owned"
-                                        disabled
-                                    >
-                                        � NFT của tôi
-                                    </button>
-                                ) : (
-                                    <button 
-                                        onClick={() => buyNFT(nft)}
-                                        className="action-btn buy"
-                                    >
-                                        🛒 Mua {nft.price} ETH
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+    try {
+      const provider = await getReadableProvider();
+      const marketplaceContract = new ethers.Contract(
+        MARKETPLACE_ADDRESS,
+        MARKETPLACE_ABI,
+        provider
+      );
+      const nftContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        NFT_ABI,
+        provider
+      );
+
+      const listings = await marketplaceContract.getActiveListings();
+
+      const enriched = await Promise.all(
+        listings.map(async (listing) => {
+          try {
+            const tokenId = Number(listing.tokenId);
+            const motorbike = await nftContract.getMotorbike(tokenId);
+
+            return {
+              tokenId,
+              seller: listing.seller,
+              priceEth: ethers.formatEther(listing.price),
+              priceRaw: listing.price,
+              listedAt: Number(listing.listedAt),
+              model: motorbike.model,
+              year: motorbike.year?.toString?.() || "",
+              color: motorbike.color,
+              vin: motorbike.vin,
+              engineNumber: motorbike.engineNumber,
+            };
+          } catch (innerError) {
+            console.error(`Không thể tải NFT #${listing.tokenId}`, innerError);
+            return null;
+          }
+        })
+      );
+
+      const filtered = enriched.filter(Boolean);
+      filtered.sort((a, b) => b.listedAt - a.listedAt);
+      setNfts(filtered);
+    } catch (loadError) {
+      console.error("loadMarketplaceData", loadError);
+      setError(loadError?.message || "Không thể tải dữ liệu marketplace");
+      setNfts([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [getReadableProvider]);
+
+  const checkWalletConnection = useCallback(async () => {
+    if (typeof window === "undefined" || !window.ethereum) return;
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+
+      if (accounts.length > 0) {
+        setWalletAddress(accounts[0]);
+      } else {
+        setWalletAddress("");
+      }
+    } catch (walletError) {
+      console.warn("checkWalletConnection", walletError);
+    }
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const init = async () => {
+      await checkWalletConnection();
+      if (mounted) {
+        await loadMarketplaceData();
+      }
+    };
+
+    init().catch(() => {});
+
+    if (typeof window !== "undefined" && window.ethereum) {
+      const handleAccountsChanged = (accounts) => {
+        setWalletAddress(accounts.length > 0 ? accounts[0] : "");
+      };
+
+      window.ethereum.on("accountsChanged", handleAccountsChanged);
+
+      return () => {
+        mounted = false;
+        window.ethereum.removeListener(
+          "accountsChanged",
+          handleAccountsChanged
+        );
+      };
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [checkWalletConnection, loadMarketplaceData]);
+
+  const handleConnectWallet = async () => {
+    if (typeof window === "undefined" || !window.ethereum) {
+      setError("Vui lòng cài đặt Rabby hoặc MetaMask");
+      return null;
+    }
+
+    try {
+      setIsConnecting(true);
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      const account = accounts?.[0] || "";
+      setWalletAddress(account);
+      setError("");
+      return account;
+    } catch (connectError) {
+      console.error("handleConnectWallet", connectError);
+      setError("Không thể kết nối ví của bạn");
+      return null;
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const ensureWallet = async () => {
+    if (walletAddress) {
+      return walletAddress;
+    }
+    return await handleConnectWallet();
+  };
+
+  const handleBuy = async (nft) => {
+    try {
+      const account = await ensureWallet();
+      if (!account) {
+        return;
+      }
+
+      if (!window.ethereum) {
+        setError("Không phát hiện ví trên trình duyệt");
+        return;
+      }
+
+      setBuyingTokenId(nft.tokenId);
+      setError("");
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const marketplaceContract = new ethers.Contract(
+        MARKETPLACE_ADDRESS,
+        MARKETPLACE_ABI,
+        signer
+      );
+
+      const tx = await marketplaceContract.buyNFT(nft.tokenId, {
+        value: nft.priceRaw,
+      });
+      await tx.wait();
+
+      await loadMarketplaceData();
+      alert(`✅ Mua NFT #${nft.tokenId} thành công!`);
+    } catch (buyError) {
+      console.error("handleBuy", buyError);
+
+      const message = buyError?.message || "";
+      if (message.includes("user rejected")) {
+        setError("Bạn đã từ chối giao dịch mua");
+      } else if (message.includes("insufficient funds")) {
+        setError("Không đủ ETH để thanh toán");
+      } else {
+        setError("Không thể mua NFT. Vui lòng thử lại");
+      }
+    } finally {
+      setBuyingTokenId(null);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+        padding: "2rem 0",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "0 1.5rem",
+        }}
+      >
+        <div
+          style={{
+            background: "white",
+            borderRadius: "16px",
+            padding: "2rem",
+            marginBottom: "2rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+            textAlign: "center",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "800",
+              marginBottom: "0.5rem",
+              background: "linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            🛒 Chợ NFT Xe Máy
+          </h1>
+          <p
+            style={{
+              color: "#64748b",
+              fontSize: "1.125rem",
+              margin: 0,
+            }}
+          >
+            Khám phá và mua các NFT xe máy độc đáo
+          </p>
         </div>
-    );
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "1rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <div
+            style={{
+              color: "#64748b",
+              fontSize: "0.95rem",
+            }}
+          >
+            {walletAddress
+              ? `Đang kết nối với ví ${formatAddress(walletAddress)}`
+              : "Chưa kết nối ví"}
+          </div>
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <button
+              onClick={loadMarketplaceData}
+              style={{
+                padding: "0.6rem 1.2rem",
+                borderRadius: "999px",
+                border: "1px solid #2563eb",
+                background: "white",
+                color: "#2563eb",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              🔄 Làm mới
+            </button>
+            <button
+              onClick={handleConnectWallet}
+              disabled={isConnecting}
+              style={{
+                padding: "0.6rem 1.5rem",
+                borderRadius: "999px",
+                border: "none",
+                background: "linear-gradient(135deg, #2563eb, #06b6d4)",
+                color: "white",
+                fontWeight: 600,
+                cursor: isConnecting ? "not-allowed" : "pointer",
+                opacity: isConnecting ? 0.7 : 1,
+              }}
+            >
+              {isConnecting ? "Đang kết nối..." : "🔗 Kết nối ví"}
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <div
+            style={{
+              marginBottom: "1.5rem",
+              padding: "1rem",
+              borderRadius: "12px",
+              background: "rgba(220, 38, 38, 0.12)",
+              color: "#b91c1c",
+              fontWeight: 500,
+            }}
+          >
+            ⚠️ {error}
+          </div>
+        )}
+
+        {loading ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "360px",
+              color: "#64748b",
+            }}
+          >
+            <div
+              style={{
+                width: "3rem",
+                height: "3rem",
+                border: "3px solid #e2e8f0",
+                borderTop: "3px solid #2563eb",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+                marginBottom: "1rem",
+              }}
+            ></div>
+            <p>Đang tải các NFT đang bán...</p>
+          </div>
+        ) : nfts.length === 0 ? (
+          <div
+            style={{
+              background: "white",
+              borderRadius: "16px",
+              padding: "2rem",
+              textAlign: "center",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+            }}
+          >
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🛍️</div>
+            <h2 style={{ margin: "0 0 0.5rem", color: "#1e293b" }}>
+              Chưa có NFT nào đang được bán
+            </h2>
+            <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
+              Hãy thử làm mới trang hoặc quay lại sau.
+            </p>
+            <Link
+              to="/user"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                padding: "0.75rem 1.5rem",
+                borderRadius: "999px",
+                textDecoration: "none",
+                fontWeight: 600,
+                color: "white",
+                background: "linear-gradient(135deg, #2563eb, #06b6d4)",
+              }}
+            >
+              🏍️ Quản lý NFT của tôi
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <h2
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "700",
+                color: "#1e293b",
+                marginBottom: "2rem",
+              }}
+            >
+              NFT đang bán ({nfts.length})
+            </h2>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                gap: "1.5rem",
+              }}
+            >
+              {nfts.map((nft) => (
+                <div
+                  key={nft.tokenId}
+                  style={{
+                    background: "white",
+                    borderRadius: "16px",
+                    overflow: "hidden",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      background:
+                        "linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "4rem",
+                      color: "white",
+                    }}
+                  >
+                    🏍️
+                  </div>
+
+                  <div style={{ padding: "1.5rem" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      <h3
+                        style={{
+                          fontSize: "1.25rem",
+                          fontWeight: "700",
+                          color: "#1e293b",
+                          margin: 0,
+                        }}
+                      >
+                        {nft.model || `NFT #${nft.tokenId}`}
+                      </h3>
+                      <div
+                        style={{
+                          fontSize: "1.125rem",
+                          fontWeight: "700",
+                          color: "#059669",
+                        }}
+                      >
+                        {nft.priceEth} ETH
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gap: "0.5rem",
+                        marginBottom: "1.25rem",
+                        fontSize: "0.9rem",
+                        color: "#64748b",
+                      }}
+                    >
+                      <div>VIN: {nft.vin || "(n/a)"}</div>
+                      <div>Số máy: {nft.engineNumber || "(n/a)"}</div>
+                      <div>{`Màu: ${nft.color || "(n/a)"} · Năm: ${
+                        nft.year || "(n/a)"
+                      }`}</div>
+                      <div>Người bán: {formatAddress(nft.seller)}</div>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "0.5rem",
+                      }}
+                    >
+                      <Link
+                        to={`/user/nft/${nft.tokenId}`}
+                        style={{
+                          flex: 1,
+                          padding: "0.75rem",
+                          background: "#f8fafc",
+                          color: "#64748b",
+                          textDecoration: "none",
+                          borderRadius: "8px",
+                          textAlign: "center",
+                          fontWeight: "600",
+                          fontSize: "0.875rem",
+                        }}
+                      >
+                        Chi tiết
+                      </Link>
+
+                      <button
+                        onClick={() => handleBuy(nft)}
+                        disabled={buyingTokenId === nft.tokenId}
+                        style={{
+                          flex: 1,
+                          padding: "0.75rem",
+                          background: "#2563eb",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          fontWeight: "600",
+                          fontSize: "0.9rem",
+                          cursor:
+                            buyingTokenId === nft.tokenId
+                              ? "not-allowed"
+                              : "pointer",
+                          opacity: buyingTokenId === nft.tokenId ? 0.7 : 1,
+                        }}
+                      >
+                        {buyingTokenId === nft.tokenId
+                          ? "Đang xử lý..."
+                          : "Mua ngay"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `,
+        }}
+      />
+    </div>
+  );
 };
 
 export default Marketplace;

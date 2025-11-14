@@ -164,6 +164,33 @@
   {
     "type": "event",
     "anonymous": false,
+    "name": "MotorbikeUpdated",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": true
+      },
+      {
+        "type": "string",
+        "name": "model",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "color",
+        "indexed": false
+      },
+      {
+        "type": "uint256",
+        "name": "year",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
     "name": "OwnershipTransferred",
     "inputs": [
       {
@@ -175,6 +202,28 @@
         "type": "address",
         "name": "newOwner",
         "indexed": true
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "TokenLockSet",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": true
+      },
+      {
+        "type": "bool",
+        "name": "locked",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "reason",
+        "indexed": false
       }
     ]
   },
@@ -227,6 +276,25 @@
       {
         "type": "address",
         "name": "owner"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "engineToTokenId",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "bytes32",
+        "name": ""
       }
     ],
     "outputs": [
@@ -310,6 +378,82 @@
       {
         "type": "address",
         "name": "operator"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "isEngineNumberUsed",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "string",
+        "name": "engineNumber"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "isVinUsed",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "string",
+        "name": "vin"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "lockReason",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "string",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "locked",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
       }
     ],
     "outputs": [
@@ -521,6 +665,27 @@
   },
   {
     "type": "function",
+    "name": "setTokenLock",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      },
+      {
+        "type": "bool",
+        "name": "isLocked"
+      },
+      {
+        "type": "string",
+        "name": "reason"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
     "name": "supportsInterface",
     "constant": true,
     "stateMutability": "view",
@@ -618,5 +783,49 @@
       }
     ],
     "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "updateMotorbikeDetails",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      },
+      {
+        "type": "string",
+        "name": "model"
+      },
+      {
+        "type": "string",
+        "name": "color"
+      },
+      {
+        "type": "uint256",
+        "name": "year"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "vinToTokenId",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "bytes32",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ]
   }
 ]

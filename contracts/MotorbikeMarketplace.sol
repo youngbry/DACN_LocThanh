@@ -5,6 +5,10 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+interface IMotorbikeNFT {
+    function locked(uint256 tokenId) external view returns (bool);
+}
+
 contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
     struct Listing {
         uint256 tokenId;
@@ -43,6 +47,7 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
                 "Marketplace not approved to transfer NFT");
         require(price > 0, "Price must be greater than 0");
         require(!isListed[tokenId], "NFT already listed");
+        require(!IMotorbikeNFT(address(nftContract)).locked(tokenId), "Token locked");
 
         listings[tokenId] = Listing({
             tokenId: tokenId,
@@ -52,10 +57,23 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
             listedAt: block.timestamp
         });
 
-        listedTokens.push(tokenId);
+        // Only add to listedTokens array if not already present
+        if (!_isTokenInArray(tokenId)) {
+            listedTokens.push(tokenId);
+        }
         isListed[tokenId] = true;
 
         emit NFTListed(tokenId, msg.sender, price);
+    }
+
+    // Helper function to check if token is already in array
+    function _isTokenInArray(uint256 tokenId) private view returns (bool) {
+        for (uint256 i = 0; i < listedTokens.length; i++) {
+            if (listedTokens[i] == tokenId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Update listing price
@@ -77,6 +95,7 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
         require(listings[tokenId].isActive, "Listing not active");
         require(msg.value >= listings[tokenId].price, "Insufficient payment");
         require(msg.sender != listings[tokenId].seller, "Cannot buy your own NFT");
+        require(!IMotorbikeNFT(address(nftContract)).locked(tokenId), "Token locked");
 
         Listing memory listing = listings[tokenId];
         
@@ -98,6 +117,7 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
         require(isListed[tokenId], "NFT not listed");
         require(listings[tokenId].seller == msg.sender, "You're not the seller");
         require(listings[tokenId].isActive, "Listing not active");
+        require(!IMotorbikeNFT(address(nftContract)).locked(tokenId), "Token locked");
 
         listings[tokenId].isActive = false;
         isListed[tokenId] = false;

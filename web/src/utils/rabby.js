@@ -1,38 +1,38 @@
 // Rabby Wallet specific configurations
 export const RABBY_NETWORKS = {
   sepolia: {
-    chainId: '0xAA36A7',
-    chainName: 'Sepolia Testnet',
+    chainId: "0xAA36A7",
+    chainName: "Sepolia Testnet",
     nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18
+      name: "Ethereum",
+      symbol: "ETH",
+      decimals: 18,
     },
-    rpcUrls: ['https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY'],
-    blockExplorerUrls: ['https://sepolia.etherscan.io/']
+    rpcUrls: ["https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY"],
+    blockExplorerUrls: ["https://sepolia.etherscan.io/"],
   },
   mumbai: {
-    chainId: '0x13881',
-    chainName: 'Polygon Mumbai',
+    chainId: "0x13881",
+    chainName: "Polygon Mumbai",
     nativeCurrency: {
-      name: 'MATIC',
-      symbol: 'MATIC',
-      decimals: 18
+      name: "MATIC",
+      symbol: "MATIC",
+      decimals: 18,
     },
-    rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-    blockExplorerUrls: ['https://mumbai.polygonscan.com/']
+    rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+    blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
   },
   bscTestnet: {
-    chainId: '0x61',
-    chainName: 'BSC Testnet',
+    chainId: "0x61",
+    chainName: "BSC Testnet",
     nativeCurrency: {
-      name: 'BNB',
-      symbol: 'tBNB',
-      decimals: 18
+      name: "BNB",
+      symbol: "tBNB",
+      decimals: 18,
     },
-    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-    blockExplorerUrls: ['https://testnet.bscscan.com/']
-  }
+    rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+    blockExplorerUrls: ["https://testnet.bscscan.com/"],
+  },
 };
 
 // Auto-add network to Rabby
@@ -46,14 +46,14 @@ export async function setupRabbyNetwork(networkName) {
     try {
       // Try to switch first
       await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
+        method: "wallet_switchEthereumChain",
         params: [{ chainId: network.chainId }],
       });
     } catch (switchError) {
       // If network doesn't exist, add it
       if (switchError.code === 4902) {
         await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
+          method: "wallet_addEthereumChain",
           params: [network],
         });
       } else {
@@ -67,10 +67,10 @@ export async function setupRabbyNetwork(networkName) {
 export async function getCurrentNetwork() {
   if (window.ethereum) {
     try {
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      const chainId = await window.ethereum.request({ method: "eth_chainId" });
       return chainId;
     } catch (error) {
-      console.error('Failed to get network:', error);
+      console.error("Failed to get network:", error);
       return null;
     }
   }

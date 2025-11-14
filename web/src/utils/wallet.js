@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 function detectWallet() {
   if (window.ethereum) {
     if (window.ethereum.isRabby) {
-      return 'Rabby';
+      return "Rabby";
     } else if (window.ethereum.isMetaMask) {
-      return 'MetaMask';
+      return "MetaMask";
     } else {
-      return 'Unknown Wallet';
+      return "Unknown Wallet";
     }
   }
   return null;
@@ -16,17 +16,17 @@ function detectWallet() {
 
 export async function connectWallet() {
   const walletType = detectWallet();
-  
+
   if (window.ethereum) {
     try {
       console.log(`🔗 Connecting to ${walletType}...`);
-      
+
       // Request account access
       await window.ethereum.request({ method: "eth_requestAccounts" });
-      
+
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      
+
       console.log(`✅ Connected to ${walletType}`);
       return signer;
     } catch (error) {
@@ -42,11 +42,11 @@ export async function addNetwork(networkConfig) {
   if (window.ethereum) {
     try {
       await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
+        method: "wallet_addEthereumChain",
         params: [networkConfig],
       });
     } catch (error) {
-      console.error('Failed to add network:', error);
+      console.error("Failed to add network:", error);
       throw error;
     }
   }
@@ -57,11 +57,11 @@ export async function switchNetwork(chainId) {
   if (window.ethereum) {
     try {
       await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
+        method: "wallet_switchEthereumChain",
         params: [{ chainId }],
       });
     } catch (error) {
-      console.error('Failed to switch network:', error);
+      console.error("Failed to switch network:", error);
       throw error;
     }
   }

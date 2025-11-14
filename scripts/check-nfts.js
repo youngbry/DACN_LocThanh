@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 async function main() {
   // Contract address từ deploy
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-  
+
   // Get contract instance
   const MotorbikeNFT = await ethers.getContractFactory("MotorbikeNFT");
   const contract = MotorbikeNFT.attach(contractAddress);
@@ -19,7 +19,7 @@ async function main() {
       try {
         const motorbike = await contract.getMotorbike(i);
         const owner = await contract.ownerOf(i);
-        
+
         console.log(`🏍️  NFT #${i}`);
         console.log(`   VIN (Số khung): ${motorbike.vin}`);
         console.log(`   Số máy: ${motorbike.engineNumber}`);
@@ -36,7 +36,6 @@ async function main() {
     if (nextTokenId == 0) {
       console.log("🔍 Chưa có NFT nào được tạo.");
     }
-
   } catch (error) {
     console.error("❌ Lỗi khi kiểm tra NFT:", error.message);
   }

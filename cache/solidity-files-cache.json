@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\admin\\source\\repos\\GIT yongbry\\DACN_LocThanh\\contracts\\MotorbikeNFT.sol": {
-      "lastModificationDate": 1762196661112,
-      "contentHash": "7dbbdf978b14e78137340a9ae91b8960",
+      "lastModificationDate": 1763080436307,
+      "contentHash": "b48207086e4dfa9e830375bca75c26d2",
       "sourceName": "contracts/MotorbikeNFT.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -611,8 +611,8 @@
       ]
     },
     "C:\\Users\\admin\\source\\repos\\GIT yongbry\\DACN_LocThanh\\contracts\\MotorbikeMarketplace.sol": {
-      "lastModificationDate": 1762248002557,
-      "contentHash": "7a423e2c2095585130807230230f346a",
+      "lastModificationDate": 1763081269919,
+      "contentHash": "09f4d029622f886d3c71459f49fea38d",
       "sourceName": "contracts/MotorbikeMarketplace.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -647,6 +647,7 @@
         "^0.8.20"
       ],
       "artifacts": [
+        "IMotorbikeNFT",
         "MotorbikeMarketplace"
       ]
     },

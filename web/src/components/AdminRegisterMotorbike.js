@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { connectWallet } from "../utils/wallet";
 import { ABI, CONTRACT_ADDRESS } from "../blockchain/MotorbikeNFT";
@@ -6,7 +5,7 @@ import { ethers } from "ethers";
 
 function AdminRegisterMotorbike() {
   const [walletAddress, setWalletAddress] = useState("");
-  console.log('Wallet address:', walletAddress); // Use walletAddress to avoid warning
+  console.log("Wallet address:", walletAddress); // Use walletAddress to avoid warning
   const [status, setStatus] = useState("");
 
   const handleConnectWallet = async () => {
@@ -14,11 +13,14 @@ function AdminRegisterMotorbike() {
       const signer = await connectWallet();
       const address = await signer.getAddress();
       setWalletAddress(address);
-      
+
       // Detect wallet type
-      const walletType = window.ethereum?.isRabby ? 'Rabby' : 
-                        window.ethereum?.isMetaMask ? 'MetaMask' : 'Unknown';
-      
+      const walletType = window.ethereum?.isRabby
+        ? "Rabby"
+        : window.ethereum?.isMetaMask
+        ? "MetaMask"
+        : "Unknown";
+
       setStatus(`Kết nối ${walletType} thành công: ${address}`);
     } catch (err) {
       setStatus(err.message);
@@ -31,7 +33,7 @@ function AdminRegisterMotorbike() {
     model: "",
     color: "",
     year: "",
-    to: ""
+    to: "",
   });
 
   const handleChange = (e) => {
@@ -49,11 +51,11 @@ function AdminRegisterMotorbike() {
           signer = await provider.getSigner();
         } catch (e) {
           console.warn("MetaMask failed, using local RPC:", e.message);
-          provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545');
+          provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
           signer = provider.getSigner(0); // Use first Hardhat account
         }
       } else {
-        provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545');
+        provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
         signer = provider.getSigner(0);
       }
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
@@ -69,10 +71,16 @@ function AdminRegisterMotorbike() {
       setStatus("Đăng ký NFT xe máy thành công!");
     } catch (err) {
       // Friendly error handling: detect user rejection or common wallet errors
-      const msg = (err && (err.code === 4001 || err.code === 'ACTION_REJECTED' || /user rejected/i.test(err.message)))
-        ? 'Giao dịch đã bị từ chối bởi người dùng (hãy xác nhận "Sign" trong ví).'
-        : (err && err.message) ? err.message : String(err);
-      setStatus('Lỗi: ' + msg + ' (xem console để biết chi tiết)');
+      const msg =
+        err &&
+        (err.code === 4001 ||
+          err.code === "ACTION_REJECTED" ||
+          /user rejected/i.test(err.message))
+          ? 'Giao dịch đã bị từ chối bởi người dùng (hãy xác nhận "Sign" trong ví).'
+          : err && err.message
+          ? err.message
+          : String(err);
+      setStatus("Lỗi: " + msg + " (xem console để biết chi tiết)");
       console.error(err);
     }
   };
@@ -80,47 +88,104 @@ function AdminRegisterMotorbike() {
   return (
     <div>
       <h2>Đăng ký xe máy (Admin)</h2>
-      <div className="muted">Dùng tài khoản admin để mint NFT cho chủ sở hữu.</div>
+      <div className="muted">
+        Dùng tài khoản admin để mint NFT cho chủ sở hữu.
+      </div>
 
-      <div style={{marginTop:12}}>
-        <button className="btn" onClick={handleConnectWallet} type="button">Kết nối ví Ethereum</button>
+      <div style={{ marginTop: 12 }}>
+        <button className="btn" onClick={handleConnectWallet} type="button">
+          Kết nối ví Ethereum
+        </button>
         <div className="status">{status}</div>
       </div>
 
-      <form onSubmit={handleSubmit} style={{marginTop:12}}>
+      <form onSubmit={handleSubmit} style={{ marginTop: 12 }}>
         <div className="form-row">
           <label>Số khung (VIN)</label>
-          <input type="text" name="vin" value={form.vin} onChange={handleChange} required />
+          <input
+            type="text"
+            name="vin"
+            value={form.vin}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-row">
           <label>Số máy</label>
-          <input type="text" name="engineNumber" value={form.engineNumber} onChange={handleChange} required />
+          <input
+            type="text"
+            name="engineNumber"
+            value={form.engineNumber}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-row">
           <label>Model</label>
-          <input type="text" name="model" value={form.model} onChange={handleChange} required />
+          <input
+            type="text"
+            name="model"
+            value={form.model}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-row">
           <label>Màu sắc</label>
-          <input type="text" name="color" value={form.color} onChange={handleChange} required />
+          <input
+            type="text"
+            name="color"
+            value={form.color}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-row">
           <label>Năm sản xuất</label>
-          <input type="number" name="year" value={form.year} onChange={handleChange} required />
+          <input
+            type="number"
+            name="year"
+            value={form.year}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-row">
           <label>Địa chỉ ví người nhận</label>
-          <input type="text" name="to" value={form.to} onChange={handleChange} required />
+          <input
+            type="text"
+            name="to"
+            value={form.to}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-actions">
-          <button className="btn" type="submit">Đăng ký NFT xe máy</button>
-          <button type="button" className="btn secondary" onClick={() => setForm({vin:'',engineNumber:'',model:'',color:'',year:'',to:''})}>Xóa</button>
+          <button className="btn" type="submit">
+            Đăng ký NFT xe máy
+          </button>
+          <button
+            type="button"
+            className="btn secondary"
+            onClick={() =>
+              setForm({
+                vin: "",
+                engineNumber: "",
+                model: "",
+                color: "",
+                year: "",
+                to: "",
+              })
+            }
+          >
+            Xóa
+          </button>
         </div>
       </form>
     </div>
