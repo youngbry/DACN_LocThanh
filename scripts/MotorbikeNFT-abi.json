@@ -208,6 +208,65 @@
   {
     "type": "event",
     "anonymous": false,
+    "name": "ReportResolved",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "reportId",
+        "indexed": true
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": true
+      },
+      {
+        "type": "address",
+        "name": "resolver",
+        "indexed": false
+      },
+      {
+        "type": "bool",
+        "name": "unlocked",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "adminNote",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "ReportSubmitted",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "reportId",
+        "indexed": true
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": true
+      },
+      {
+        "type": "address",
+        "name": "reporter",
+        "indexed": true
+      },
+      {
+        "type": "string",
+        "name": "reason",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
     "name": "TokenLockSet",
     "inputs": [
       {
@@ -361,6 +420,76 @@
             "name": "year"
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "getReport",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "reportId"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "id"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      },
+      {
+        "type": "address",
+        "name": "reporter"
+      },
+      {
+        "type": "string",
+        "name": "reason"
+      },
+      {
+        "type": "uint256",
+        "name": "timestamp"
+      },
+      {
+        "type": "bool",
+        "name": "resolved"
+      },
+      {
+        "type": "address",
+        "name": "resolver"
+      },
+      {
+        "type": "bool",
+        "name": "unlocked"
+      },
+      {
+        "type": "string",
+        "name": "adminNote"
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "getTokenReportIds",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256[]",
+        "name": ""
       }
     ]
   },
@@ -547,6 +676,20 @@
   },
   {
     "type": "function",
+    "name": "nextReportId",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
     "name": "nextTokenId",
     "constant": true,
     "stateMutability": "view",
@@ -598,6 +741,78 @@
     "constant": false,
     "payable": false,
     "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "reports",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "id"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      },
+      {
+        "type": "address",
+        "name": "reporter"
+      },
+      {
+        "type": "string",
+        "name": "reason"
+      },
+      {
+        "type": "uint256",
+        "name": "timestamp"
+      },
+      {
+        "type": "bool",
+        "name": "resolved"
+      },
+      {
+        "type": "address",
+        "name": "resolver"
+      },
+      {
+        "type": "bool",
+        "name": "unlocked"
+      },
+      {
+        "type": "string",
+        "name": "adminNote"
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "resolveReport",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "reportId"
+      },
+      {
+        "type": "bool",
+        "name": "unlock"
+      },
+      {
+        "type": "string",
+        "name": "adminNote"
+      }
+    ],
     "outputs": []
   },
   {
@@ -686,6 +901,23 @@
   },
   {
     "type": "function",
+    "name": "submitReport",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      },
+      {
+        "type": "string",
+        "name": "reason"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
     "name": "supportsInterface",
     "constant": true,
     "stateMutability": "view",
@@ -713,6 +945,29 @@
     "outputs": [
       {
         "type": "string",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "tokenReportIds",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      },
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
         "name": ""
       }
     ]

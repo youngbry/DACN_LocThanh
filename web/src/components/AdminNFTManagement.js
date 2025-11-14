@@ -21,6 +21,7 @@ const AdminNFTManagement = () => {
   const [editMap, setEditMap] = useState({}); // { [tokenId]: { editing, model, color, year } }
   const [lockInput, setLockInput] = useState({}); // { [tokenId]: reason }
   const [pending, setPending] = useState({}); // { [tokenId]: 'edit'|'lock'|undefined }
+  // Removed unused report-related state
 
   useEffect(() => {
     checkAdminAndLoadNFTs();
@@ -198,9 +199,7 @@ const AdminNFTManagement = () => {
       await tx.wait();
       await checkAdminAndLoadNFTs();
       if (!currentLocked) setLockInput((prev) => ({ ...prev, [tokenId]: "" }));
-      alert(
-        `✅ ${currentLocked ? "Mở khóa" : "Khóa"} NFT #${tokenId} thành công`
-      );
+      alert(`✅ ${currentLocked ? "Mở khóa" : "Khóa"} NFT #${tokenId} thành công`);
     } catch (err) {
       console.error("Lỗi đặt khóa NFT:", err);
       alert("❌ Lỗi đặt khóa NFT: " + (err?.message || "Không rõ lỗi"));
@@ -588,6 +587,8 @@ const AdminNFTManagement = () => {
           </div>
         )}
       </div>
+
+      {/* Reports panel moved to dedicated AdminReports page */}
     </div>
   );
 };

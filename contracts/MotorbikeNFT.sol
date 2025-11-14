@@ -30,6 +30,26 @@ contract MotorbikeNFT is ERC721, Ownable {
     event MotorbikeUpdated(uint256 indexed tokenId, string model, string color, uint256 year);
     event TokenLockSet(uint256 indexed tokenId, bool locked, string reason);
 
+    // Reporting system
+    struct Report {
+        uint256 id;
+        uint256 tokenId;
+        address reporter;
+        string reason;
+        uint256 timestamp;
+        bool resolved;
+        address resolver;
+        bool unlocked;
+        string adminNote;
+    }
+
+    uint256 public nextReportId;
+    mapping(uint256 => Report) public reports; // reportId => Report
+    mapping(uint256 => uint256[]) public tokenReportIds; // tokenId => reportIds
+
+    event ReportSubmitted(uint256 indexed reportId, uint256 indexed tokenId, address indexed reporter, string reason);
+    event ReportResolved(uint256 indexed reportId, uint256 indexed tokenId, address resolver, bool unlocked, string adminNote);
+
     constructor() ERC721("MotorbikeNFT", "MBNFT") Ownable(msg.sender) {}
 
     function mint(
@@ -88,6 +108,63 @@ contract MotorbikeNFT is ERC721, Ownable {
             lockReason[tokenId] = "";
         }
         emit TokenLockSet(tokenId, isLocked, reason);
+    }
+
+    // Submit a report if user believes token locked wrongly (only when locked)
+    function submitReport(uint256 tokenId, string calldata reason) external {
+        require(_ownerOf(tokenId) != address(0), "Token does not exist");
+        require(locked[tokenId], "Token not locked");
+        require(bytes(reason).length > 0, "Reason required");
+
+        uint256 reportId = nextReportId++;
+        reports[reportId] = Report({
+            id: reportId,
+            tokenId: tokenId,
+            reporter: msg.sender,
+            reason: reason,
+            timestamp: block.timestamp,
+            resolved: false,
+            resolver: address(0),
+            unlocked: false,
+            adminNote: ""
+        });
+        tokenReportIds[tokenId].push(reportId);
+        emit ReportSubmitted(reportId, tokenId, msg.sender, reason);
+    }
+
+    // Admin resolves report; can optionally unlock token and add note
+    function resolveReport(uint256 reportId, bool unlock, string calldata adminNote) external onlyOwner {
+        Report storage rep = reports[reportId];
+        require(!rep.resolved, "Already resolved");
+        rep.resolved = true;
+        rep.resolver = msg.sender;
+        rep.unlocked = unlock;
+        rep.adminNote = adminNote;
+        if (unlock && locked[rep.tokenId]) {
+            locked[rep.tokenId] = false;
+            lockReason[rep.tokenId] = "";
+            emit TokenLockSet(rep.tokenId, false, "UNLOCKED_BY_REPORT");
+        }
+        emit ReportResolved(reportId, rep.tokenId, msg.sender, unlock, adminNote);
+    }
+
+    function getTokenReportIds(uint256 tokenId) external view returns (uint256[] memory) {
+        return tokenReportIds[tokenId];
+    }
+
+    function getReport(uint256 reportId) external view returns (
+        uint256 id,
+        uint256 tokenId,
+        address reporter,
+        string memory reason,
+        uint256 timestamp,
+        bool resolved,
+        address resolver,
+        bool unlocked,
+        string memory adminNote
+    ) {
+        Report storage r = reports[reportId];
+        return (r.id, r.tokenId, r.reporter, r.reason, r.timestamp, r.resolved, r.resolver, r.unlocked, r.adminNote);
     }
 
     // Helper views for frontends

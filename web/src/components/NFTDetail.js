@@ -14,6 +14,10 @@ const NFTDetail = () => {
   const [loading, setLoading] = useState(true);
   const [userAddress, setUserAddress] = useState("");
   const [isOwner, setIsOwner] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportMessage, setReportMessage] = useState("");
+  const [submittingReport, setSubmittingReport] = useState(false);
 
   // Use userAddress to avoid eslint warning
   console.log("Current user address:", userAddress);
@@ -123,6 +127,37 @@ const NFTDetail = () => {
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     alert("Đã copy địa chỉ!");
+  };
+
+  const submitReport = async () => {
+    if (!reportReason.trim()) {
+      setReportMessage("❌ Vui lòng nhập lý do");
+      return;
+    }
+    try {
+      setSubmittingReport(true);
+      setReportMessage("");
+      const res = await fetch("/api/reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category: "unlock",
+          tokenId: nft.tokenId,
+          subject: `Yêu cầu mở khóa NFT #${nft.tokenId}`,
+          message: reportReason.trim(),
+          contact: {},
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setReportMessage(`✅ Đã gửi báo cáo #${data.id}. Cảm ơn bạn!`);
+      setReportReason("");
+    } catch (err) {
+      console.error("Lỗi gửi báo cáo:", err);
+      setReportMessage("❌ Lỗi gửi báo cáo");
+    } finally {
+      setSubmittingReport(false);
+    }
   };
 
   if (loading) {
@@ -252,6 +287,12 @@ const NFTDetail = () => {
                   >
                     🔒 NFT đã khóa
                   </button>
+                  <button
+                    className="action-btn report"
+                    onClick={() => setShowReportForm(true)}
+                  >
+                    📢 Gửi báo cáo mở khóa
+                  </button>
                 </div>
               )}
             </div>
@@ -323,6 +364,49 @@ const NFTDetail = () => {
           🏠 Dashboard
         </Link>
       </div>
+      {showReportForm && (
+        <div className="report-modal">
+          <div className="report-content">
+            <h3>📢 Báo cáo yêu cầu mở khóa NFT #{tokenId}</h3>
+            <p>Giải thích vì sao NFT này bị khóa không đúng:</p>
+            <textarea
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
+              placeholder="Ví dụ: Xe bị khóa nhầm, tôi vừa hoàn tất kiểm định."
+              disabled={submittingReport}
+            />
+            <div className="report-actions">
+              <button
+                className="action-btn secondary"
+                onClick={() => {
+                  if (!submittingReport) {
+                    setShowReportForm(false);
+                    setReportMessage("");
+                  }
+                }}
+              >
+                ✖️ Hủy
+              </button>
+              <button
+                className="action-btn primary"
+                onClick={submitReport}
+                disabled={submittingReport || !reportReason.trim()}
+              >
+                {submittingReport ? "⏳ Đang gửi..." : "📨 Gửi báo cáo"}
+              </button>
+            </div>
+            {reportMessage && (
+              <div
+                className={`report-message ${
+                  reportMessage.startsWith("✅") ? "success" : "error"
+                }`}
+              >
+                {reportMessage}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

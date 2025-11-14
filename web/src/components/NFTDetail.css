@@ -118,6 +118,16 @@
   font-size: 0.9em;
 }
 
+.locked-badge {
+  background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+
 .nft-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -514,6 +524,100 @@
   color: white;
 }
 
+.action-btn.report {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.action-btn.report:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.3);
+  text-decoration: none;
+  color: white;
+}
+
+.action-btn.disabled {
+  background: #6c757d;
+  color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.report-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.report-content {
+  background: white;
+  max-width: 600px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.report-content h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+.report-content p {
+  margin: 0;
+  color: #495057;
+  font-size: 0.95em;
+}
+
+.report-content textarea {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  padding: 12px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.95em;
+  background: #f8f9fa;
+}
+.report-content textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+  background: #fff;
+}
+
+.report-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.report-message {
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+.report-message.success {
+  background: #e6fffa;
+  color: #0d9488;
+  border: 1px solid #0d9488;
+}
+.report-message.error {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #c53030;
+}
+
 @media (max-width: 768px) {
   .nft-detail {
     padding: 15px;
@@ -552,6 +656,13 @@
   .nft-detail-footer {
     flex-direction: column;
     gap: 15px;
+  }
+
+  .report-content {
+    padding: 25px 20px;
+  }
+  .report-actions {
+    flex-direction: column;
   }
 
   .owner-address {

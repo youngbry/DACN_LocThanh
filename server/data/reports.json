@@ -1,0 +1,144 @@
+{
+  "reports": [
+    {
+      "id": "qVBwCbOI2a",
+      "subject": "sao nft của tôi bị khóa",
+      "message": "sao nft của tôi bị khóa",
+      "category": "unlock",
+      "tokenId": null,
+      "contact": {
+        "name": "nguyễn thành lộc",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763133882356,
+      "updatedAt": 1763135155639,
+      "adminNote": "Giữ khóa sau rà soát",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763135155639,
+      "unlockRequested": true,
+      "unlockDecision": false
+    },
+    {
+      "id": "trb7fqEFa3",
+      "subject": "sao lại khóa token của tôi phải có lý do chứ?",
+      "message": "sâs",
+      "category": "unlock",
+      "tokenId": "1",
+      "contact": {
+        "name": "Lộc",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763135556364,
+      "updatedAt": 1763135591569,
+      "adminNote": "ko ế",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763135591569,
+      "unlockRequested": true,
+      "unlockDecision": false
+    },
+    {
+      "id": "LO2tOayQP5",
+      "subject": "sao nft của tôi bị khóa",
+      "message": "sao nft của tôi bị khóa",
+      "category": "unlock",
+      "tokenId": "1",
+      "contact": {
+        "name": "nguyễn thành lộc",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763135669378,
+      "updatedAt": 1763135680196,
+      "adminNote": "ko",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763135680196,
+      "unlockRequested": true,
+      "unlockDecision": false
+    },
+    {
+      "id": "D3kZyryEU_",
+      "subject": "sao nft của tôi bị khóa",
+      "message": "sao nft của tôi bị khóa",
+      "category": "unlock",
+      "tokenId": null,
+      "contact": {
+        "name": "Nguyễn ",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763135971992,
+      "updatedAt": 1763135982725,
+      "adminNote": "ko",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763135982725,
+      "unlockRequested": true,
+      "unlockDecision": false
+    },
+    {
+      "id": "AVewXGS1Uc",
+      "subject": "sao nft của tôi bị khóa",
+      "message": "sasda",
+      "category": "unlock",
+      "tokenId": null,
+      "contact": {
+        "name": "Nguyễn ",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763136855302,
+      "updatedAt": 1763136935570,
+      "adminNote": "Mở khóa theo báo cáo",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763136935570,
+      "unlockRequested": true,
+      "unlockDecision": true
+    },
+    {
+      "id": "bUZEyzyT3o",
+      "subject": "sao nft của tôi bị khóa",
+      "message": "sao nft của tôi bị khóa",
+      "category": "unlock",
+      "tokenId": null,
+      "contact": {
+        "name": "Nguyễn ",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763137011319,
+      "updatedAt": 1763137697720,
+      "adminNote": "Phản hồi từ admin",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763137697720,
+      "unlockRequested": true,
+      "unlockDecision": null
+    },
+    {
+      "id": "05-aMot7vy",
+      "subject": "sao nft của tôi bị khóa",
+      "message": "sao nft của tôi bị khóa",
+      "category": "listing",
+      "tokenId": "1",
+      "contact": {
+        "name": "Nguyễn ",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "resolved",
+      "createdAt": 1763138806701,
+      "updatedAt": 1763138882779,
+      "adminNote": "chúng tôi sẽ kiểm tra lại và báo lại bạn trong thời gian sớm nhất",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1763138882779,
+      "unlockRequested": false,
+      "unlockDecision": null
+    }
+  ]
+}

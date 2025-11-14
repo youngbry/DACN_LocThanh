@@ -11,6 +11,7 @@ import "./App.css";
 // Import components
 import AdminDashboard from "./components/AdminDashboard";
 import AdminNFTManagement from "./components/AdminNFTManagement";
+import AdminReports from "./components/AdminReports";
 import UserDashboard from "./components/UserDashboard";
 import NFTDetail from "./components/NFTDetail";
 import SellNFT from "./components/SellNFT";
@@ -18,6 +19,7 @@ import ListNFT from "./components/ListNFT";
 import Marketplace from "./components/Marketplace";
 import MyNFTs from "./components/MyNFTs";
 import TransferNFT from "./components/TransferNFT";
+import ReportIssue from "./components/ReportIssue";
 
 // Header with navigation links for user pages
 const Navigation = () => {
@@ -79,6 +81,9 @@ const Navigation = () => {
           <NavLink to="/marketplace" style={linkStyle}>
             Chợ
           </NavLink>
+          <NavLink to="/report" style={linkStyle}>
+            Báo cáo
+          </NavLink>
         </div>
       </div>
     </nav>
@@ -98,6 +103,7 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/nfts" element={<AdminNFTManagement />} />
+            <Route path="/admin/reports" element={<AdminReports />} />
 
             {/* User Routes */}
             <Route path="/user" element={<UserDashboard />} />
@@ -107,6 +113,7 @@ function App() {
             <Route path="/my-nfts" element={<MyNFTs />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/transfer" element={<TransferNFT />} />
+            <Route path="/report" element={<ReportIssue />} />
 
             {/* 404 - Not Found */}
             <Route
