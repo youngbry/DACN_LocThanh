@@ -199,7 +199,9 @@ const AdminNFTManagement = () => {
       await tx.wait();
       await checkAdminAndLoadNFTs();
       if (!currentLocked) setLockInput((prev) => ({ ...prev, [tokenId]: "" }));
-      alert(`✅ ${currentLocked ? "Mở khóa" : "Khóa"} NFT #${tokenId} thành công`);
+      alert(
+        `✅ ${currentLocked ? "Mở khóa" : "Khóa"} NFT #${tokenId} thành công`
+      );
     } catch (err) {
       console.error("Lỗi đặt khóa NFT:", err);
       alert("❌ Lỗi đặt khóa NFT: " + (err?.message || "Không rõ lỗi"));

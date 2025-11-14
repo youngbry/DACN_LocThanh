@@ -24,12 +24,7 @@
   background: #2d3748;
 }
 
-.management-header {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
-}
+/* Removed old column layout for management-header to align with AdminReports header layout */
 
 .loading-section {
   display: flex;

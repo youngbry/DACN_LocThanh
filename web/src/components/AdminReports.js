@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { CONTRACT_ADDRESS, ABI as CONTRACT_ABI } from "../blockchain/MotorbikeNFT";
+import {
+  CONTRACT_ADDRESS,
+  ABI as CONTRACT_ABI,
+} from "../blockchain/MotorbikeNFT";
 import "./AdminReports.css";
 
 const AdminReports = () => {
@@ -28,7 +31,11 @@ const AdminReports = () => {
       const user = accounts[0];
       setAdminAddress(user);
 
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI,
+        provider
+      );
       const owner = await contract.owner();
       const isOwner = owner.toLowerCase() === user.toLowerCase();
       setIsAdmin(isOwner);
@@ -112,7 +119,9 @@ const AdminReports = () => {
         <div className="access-denied">
           <h2>🚫 Truy cập bị từ chối</h2>
           <p>Bạn không có quyền admin để xem trang này.</p>
-          <Link to="/admin" className="back-btn">← Quay về Admin Dashboard</Link>
+          <Link to="/admin" className="back-btn">
+            ← Quay về Admin Dashboard
+          </Link>
         </div>
       </div>
     );
@@ -121,44 +130,83 @@ const AdminReports = () => {
   return (
     <div className="admin-reports">
       <div className="reports-header">
-        <button onClick={() => window.history.back()} className="back-btn" title="Quay lại">← Quay lại</button>
+        <button
+          onClick={() => window.history.back()}
+          className="back-btn"
+          title="Quay lại"
+        >
+          ← Quay lại
+        </button>
         <h1>📢 Báo cáo từ người dùng</h1>
         <div className="header-actions">
-          <button onClick={loadReports} className="refresh-btn">🔄 Làm mới</button>
+          <button onClick={loadReports} className="refresh-btn">
+            🔄 Làm mới
+          </button>
         </div>
       </div>
 
       <div className="reports-section">
         {loadingReports ? (
-          <div className="loading-reports"><div className="spinner"></div>Đang tải báo cáo...</div>
+          <div className="loading-reports">
+            <div className="spinner"></div>Đang tải báo cáo...
+          </div>
         ) : reports.length === 0 ? (
           <p className="no-reports">Chưa có báo cáo nào.</p>
         ) : (
           <div className="reports-list">
             {reports.map((r) => (
-              <div key={r.id} className={`report-card ${r.resolved ? "resolved" : "pending"}`}>
+              <div
+                key={r.id}
+                className={`report-card ${r.resolved ? "resolved" : "pending"}`}
+              >
                 <div className="report-header">
                   <span className="report-id">#R{r.id}</span>
-                  {r.tokenId && <span className="report-token">NFT #{r.tokenId}</span>}
-                  <span className={`report-status ${r.resolved ? "resolved" : "pending"}`}>
+                  {r.tokenId && (
+                    <span className="report-token">NFT #{r.tokenId}</span>
+                  )}
+                  <span
+                    className={`report-status ${
+                      r.resolved ? "resolved" : "pending"
+                    }`}
+                  >
                     {r.resolved ? "✅ Đã xử lý" : "⏳ Chưa xử lý"}
                   </span>
                 </div>
 
                 <div className="report-body">
-                  <div className="report-field"><strong>Thời gian:</strong> {new Date(r.createdAt).toLocaleString("vi-VN")}</div>
-                  <div className="report-field"><strong>Thể loại:</strong> {r.category}</div>
-                  {r.subject && <div className="report-field"><strong>Tiêu đề:</strong> {r.subject}</div>}
-                  <div className="report-reason"><strong>Nội dung:</strong> {r.message}</div>
+                  <div className="report-field">
+                    <strong>Thời gian:</strong>{" "}
+                    {new Date(r.createdAt).toLocaleString("vi-VN")}
+                  </div>
+                  <div className="report-field">
+                    <strong>Thể loại:</strong> {r.category}
+                  </div>
+                  {r.subject && (
+                    <div className="report-field">
+                      <strong>Tiêu đề:</strong> {r.subject}
+                    </div>
+                  )}
+                  <div className="report-reason">
+                    <strong>Nội dung:</strong> {r.message}
+                  </div>
                   {(r.contact?.email || r.contact?.phone) && (
-                    <div className="report-field"><strong>Liên hệ:</strong> {r.contact?.email || ""} {r.contact?.phone ? `(${r.contact.phone})` : ""}</div>
+                    <div className="report-field">
+                      <strong>Liên hệ:</strong> {r.contact?.email || ""}{" "}
+                      {r.contact?.phone ? `(${r.contact.phone})` : ""}
+                    </div>
                   )}
                   {r.wallet && (
-                    <div className="report-field"><strong>Ví:</strong> {`${r.wallet.slice(0,6)}...${r.wallet.slice(-4)}`}</div>
+                    <div className="report-field">
+                      <strong>Ví:</strong>{" "}
+                      {`${r.wallet.slice(0, 6)}...${r.wallet.slice(-4)}`}
+                    </div>
                   )}
                   {r.resolved && (
                     <div className="report-admin-note">
-                      <strong>Ghi chú admin:</strong> {r.adminNote || "(Không)"} {r.unlockDecision === true && <span className="unlock-tag">🔓 Đã mở khóa</span>}
+                      <strong>Ghi chú admin:</strong> {r.adminNote || "(Không)"}{" "}
+                      {r.unlockDecision === true && (
+                        <span className="unlock-tag">🔓 Đã mở khóa</span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -170,10 +218,16 @@ const AdminReports = () => {
                       <textarea
                         placeholder="Nhập ghi chú phản hồi cho người dùng"
                         value={noteMap[r.id] || ""}
-                        onChange={(e) => setNoteMap((m) => ({ ...m, [r.id]: e.target.value }))}
+                        onChange={(e) =>
+                          setNoteMap((m) => ({ ...m, [r.id]: e.target.value }))
+                        }
                       />
                     </div>
-                    <button className="action-btn primary" onClick={() => sendReply(r.id)} disabled={pending["report_" + r.id]}>
+                    <button
+                      className="action-btn primary"
+                      onClick={() => sendReply(r.id)}
+                      disabled={pending["report_" + r.id]}
+                    >
                       📨 Gửi phản hồi
                     </button>
                   </div>

@@ -319,13 +319,6 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <div className="admin-header">
-        <button
-          onClick={() => window.history.back()}
-          className="back-btn"
-          title="Quay lại"
-        >
-          ← Quay lại
-        </button>
         <h1>👨‍💼 Admin Dashboard</h1>
         <div className="admin-info">
           <span className="admin-label">Admin:</span>
