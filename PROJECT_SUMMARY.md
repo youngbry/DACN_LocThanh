@@ -49,6 +49,12 @@ npm start
 # Terminal 4: chạy server
 
 cd "c:\Users\admin\source\repos\GIT yongbry\DACN_locThanh\server"; npm start
+
+# Backup trước khi tắt node
+npx hardhat run scripts/backup-state.js --network localhost
+
+# Sau khi khởi động lại node (mất state), phục hồi
+npx hardhat run scripts/restore-state.js --network localhost
 ```
 
 ### 3. Cấu hình ví

@@ -139,6 +139,23 @@
       "resolvedAt": 1763138882779,
       "unlockRequested": false,
       "unlockDecision": null
+    },
+    {
+      "id": "joIgJRvKId",
+      "subject": "Yêu cầu mở khóa NFT #0",
+      "message": "sao lại khóa NFT của tôi",
+      "category": "unlock",
+      "tokenId": "0",
+      "contact": {},
+      "wallet": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "status": "open",
+      "createdAt": 1763261530188,
+      "updatedAt": 1763261530188,
+      "adminNote": "",
+      "resolvedBy": null,
+      "resolvedAt": null,
+      "unlockRequested": true,
+      "unlockDecision": null
     }
   ]
 }

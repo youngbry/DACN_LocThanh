@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-11-16T02:53:11.906Z",
+  "network": "localhost",
+  "nftAddress": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "marketplaceAddress": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+  "tokens": [
+    {
+      "tokenId": 0,
+      "vin": "RLHPC4508M712345655",
+      "engineNumber": "PC45E712345656",
+      "model": "Honda Winner X 150",
+      "color": "Đen nhám",
+      "year": 2023,
+      "owner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "locked": true
+    },
+    {
+      "tokenId": 1,
+      "vin": "RLHPC4508M712345611",
+      "engineNumber": "PC45E712345611",
+      "model": "Honda Winner X 150",
+      "color": "Đen nhám",
+      "year": 2023,
+      "owner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "locked": false
+    }
+  ],
+  "listings": []
+}

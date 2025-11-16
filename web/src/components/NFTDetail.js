@@ -18,6 +18,8 @@ const NFTDetail = () => {
   const [reportReason, setReportReason] = useState("");
   const [reportMessage, setReportMessage] = useState("");
   const [submittingReport, setSubmittingReport] = useState(false);
+  const [tokenReports, setTokenReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(false);
 
   // Use userAddress to avoid eslint warning
   console.log("Current user address:", userAddress);
@@ -69,6 +71,10 @@ const NFTDetail = () => {
 
         // Kiểm tra quyền sở hữu
         setIsOwner(owner.toLowerCase() === userAddr.toLowerCase());
+
+        if (isLocked) {
+          await fetchTokenReports(tokenId);
+        }
 
         // Lấy lịch sử chuyển quyền
         await loadOwnershipHistory(provider, contract, tokenId);
@@ -136,27 +142,60 @@ const NFTDetail = () => {
     }
     try {
       setSubmittingReport(true);
-      setReportMessage("");
+      setReportMessage("⏳ Đang gửi báo cáo...");
+      // Lấy địa chỉ ví để ghi lại (không gửi on-chain)
+      let wallet = null;
+      if (window.ethereum) {
+        try {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
+          wallet = accounts[0] || null;
+        } catch {}
+      }
       const res = await fetch("/api/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category: "unlock",
-          tokenId: nft.tokenId,
-          subject: `Yêu cầu mở khóa NFT #${nft.tokenId}`,
+          tokenId: tokenId,
+          subject: `Yêu cầu mở khóa NFT #${tokenId}`,
           message: reportReason.trim(),
+          wallet,
           contact: {},
         }),
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
-      setReportMessage(`✅ Đã gửi báo cáo #${data.id}. Cảm ơn bạn!`);
+      setReportMessage(`✅ Đã gửi báo cáo #R${data.id} cho NFT #${tokenId}`);
       setReportReason("");
+      await fetchTokenReports(tokenId);
     } catch (err) {
       console.error("Lỗi gửi báo cáo:", err);
-      setReportMessage("❌ Lỗi gửi báo cáo");
+      setReportMessage("❌ Lỗi gửi báo cáo: " + (err?.message || "Không rõ"));
     } finally {
       setSubmittingReport(false);
+    }
+  };
+
+  const fetchTokenReports = async (tid) => {
+    try {
+      setLoadingReports(true);
+      const res = await fetch("/api/reports");
+      if (!res.ok) throw new Error("Không lấy được danh sách báo cáo");
+      const list = await res.json();
+      const filtered = list.filter(
+        (r) => String(r.tokenId) === String(tid) && r.category === "unlock"
+      );
+      // Sắp xếp: chưa xử lý trước, sau đó mới → mới nhất trước
+      filtered.sort((a, b) => {
+        if (a.status !== b.status) return a.status === "open" ? -1 : 1;
+        return b.createdAt - a.createdAt;
+      });
+      setTokenReports(filtered);
+    } catch (e) {
+      console.warn("Không thể tải báo cáo token:", e.message);
+    } finally {
+      setLoadingReports(false);
     }
   };
 
@@ -364,6 +403,40 @@ const NFTDetail = () => {
           🏠 Dashboard
         </Link>
       </div>
+      {nft.locked && (
+        <div className="token-reports-panel">
+          <h3>📢 Yêu cầu mở khóa cho NFT #{tokenId}</h3>
+          {loadingReports ? (
+            <div className="loading-reports">
+              <div className="spinner small"></div>Đang tải báo cáo...
+            </div>
+          ) : tokenReports.length === 0 ? (
+            <p className="no-token-reports">Chưa có yêu cầu nào.</p>
+          ) : (
+            <div className="token-reports-list">
+              {tokenReports.map((r) => (
+                <div key={r.id} className={`token-report-item ${r.status}`}>
+                  <div className="token-report-line">
+                    <span className="token-report-id">#R{r.id}</span>
+                    <span className={`token-report-status ${r.status}`}>
+                      {r.status === "open" ? "⏳ Chờ xử lý" : "✅ Đã xử lý"}
+                    </span>
+                  </div>
+                  <div className="token-report-message">{r.message}</div>
+                  <div className="token-report-meta">
+                    <span>{new Date(r.createdAt).toLocaleString("vi-VN")}</span>
+                    {r.adminNote && r.status === "resolved" && (
+                      <span className="token-report-admin">
+                        Phản hồi: {r.adminNote}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {showReportForm && (
         <div className="report-modal">
           <div className="report-content">
