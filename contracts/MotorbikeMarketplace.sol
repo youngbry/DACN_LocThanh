@@ -18,10 +18,19 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
         uint256 listedAt;
     }
 
+    struct PriceChange {
+        uint256 oldPrice;
+        uint256 newPrice;
+        uint256 timestamp;
+    }
+
     IERC721 public nftContract;
     
     // Mapping from tokenId to listing
     mapping(uint256 => Listing) public listings;
+
+    // Price history per tokenId (chronological)
+    mapping(uint256 => PriceChange[]) public priceHistory;
     
     // Array of all listed token IDs
     uint256[] public listedTokens;
@@ -85,6 +94,13 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
 
         uint256 oldPrice = listings[tokenId].price;
         listings[tokenId].price = newPrice;
+
+        // Record history
+        priceHistory[tokenId].push(PriceChange({
+            oldPrice: oldPrice,
+            newPrice: newPrice,
+            timestamp: block.timestamp
+        }));
 
         emit PriceUpdated(tokenId, oldPrice, newPrice);
     }
@@ -201,5 +217,10 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
             }
         }
         return count;
+    }
+
+    // Get full price history for a tokenId
+    function getPriceHistory(uint256 tokenId) external view returns (PriceChange[] memory) {
+        return priceHistory[tokenId];
     }
 }

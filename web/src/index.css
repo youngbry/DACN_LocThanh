@@ -622,3 +622,47 @@ p {
     justify-content: center;
   }
 }
+
+/* ============================= */
+/* Global High-Contrast Input Text */
+/* ============================= */
+input,
+textarea,
+select {
+  color: #0f172a !important;
+  font-weight: 600;
+  -webkit-text-fill-color: #0f172a; /* Safari */
+}
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+  font-weight: 400;
+  opacity: 1;
+}
+
+/* Dark admin panels need light text */
+.admin-dashboard .form-group input,
+.admin-nft-management input,
+.admin-nft-management .lock-reason-input,
+.edit-row input {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a;
+  font-weight: 600;
+}
+.admin-dashboard .form-group input::placeholder,
+.admin-nft-management input::placeholder,
+.admin-nft-management .lock-reason-input::placeholder,
+.edit-row input::placeholder {
+  color: #64748b !important;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Ensure disabled retains readable contrast */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569;
+  font-weight: 600;
+}

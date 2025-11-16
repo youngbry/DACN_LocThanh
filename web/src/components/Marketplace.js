@@ -16,6 +16,44 @@ const Marketplace = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
   const [buyingTokenId, setBuyingTokenId] = useState(null);
+  // Filters
+  const [filterModel, setFilterModel] = useState("");
+  const [filterColor, setFilterColor] = useState("");
+  const [filterYear, setFilterYear] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  // Price edit
+  const [editingTokenId, setEditingTokenId] = useState(null);
+  const [newPriceEth, setNewPriceEth] = useState("");
+
+  // Reusable styles
+  const inputStyle = {
+    padding: "0.5rem",
+    borderRadius: "8px",
+    border: "1px solid #cbd5e1",
+    fontSize: "0.8rem",
+    outline: "none",
+  };
+  const filterButtonStyle = {
+    padding: "0.55rem 1rem",
+    borderRadius: "8px",
+    background: "#0ea5e9",
+    color: "white",
+    border: "none",
+    fontWeight: 600,
+    cursor: "pointer",
+    fontSize: "0.75rem",
+  };
+  const filterResetStyle = {
+    padding: "0.55rem 1rem",
+    borderRadius: "8px",
+    background: "#e2e8f0",
+    color: "#0f172a",
+    border: "none",
+    fontWeight: 600,
+    cursor: "pointer",
+    fontSize: "0.75rem",
+  };
 
   const formatAddress = (address) => {
     if (!address) return "";
@@ -70,6 +108,20 @@ const Marketplace = () => {
           try {
             const tokenId = Number(listing.tokenId);
             const motorbike = await nftContract.getMotorbike(tokenId);
+            // Price history from contract (may be empty)
+            let history = [];
+            try {
+              const rawHistory = await marketplaceContract.getPriceHistory(
+                tokenId
+              );
+              history = rawHistory.map((h) => ({
+                oldPriceEth: ethers.formatEther(h.oldPrice),
+                newPriceEth: ethers.formatEther(h.newPrice),
+                timestamp: Number(h.timestamp),
+              }));
+            } catch (_) {
+              history = [];
+            }
 
             return {
               tokenId,
@@ -82,6 +134,7 @@ const Marketplace = () => {
               color: motorbike.color,
               vin: motorbike.vin,
               engineNumber: motorbike.engineNumber,
+              priceHistory: history,
             };
           } catch (innerError) {
             console.error(`Không thể tải NFT #${listing.tokenId}`, innerError);
@@ -91,8 +144,27 @@ const Marketplace = () => {
       );
 
       const filtered = enriched.filter(Boolean);
-      filtered.sort((a, b) => b.listedAt - a.listedAt);
-      setNfts(filtered);
+      // Apply filters
+      const modelLower = filterModel.toLowerCase();
+      const colorLower = filterColor.toLowerCase();
+      const yearFilter = filterYear.trim();
+      const minP = minPrice ? parseFloat(minPrice) : null;
+      const maxP = maxPrice ? parseFloat(maxPrice) : null;
+
+      const afterFilter = filtered.filter((n) => {
+        if (modelLower && !(n.model || "").toLowerCase().includes(modelLower))
+          return false;
+        if (colorLower && !(n.color || "").toLowerCase().includes(colorLower))
+          return false;
+        if (yearFilter && n.year !== yearFilter) return false;
+        const priceNum = parseFloat(n.priceEth);
+        if (minP !== null && priceNum < minP) return false;
+        if (maxP !== null && priceNum > maxP) return false;
+        return true;
+      });
+
+      afterFilter.sort((a, b) => b.listedAt - a.listedAt);
+      setNfts(afterFilter);
     } catch (loadError) {
       console.error("loadMarketplaceData", loadError);
       setError(loadError?.message || "Không thể tải dữ liệu marketplace");
@@ -100,7 +172,14 @@ const Marketplace = () => {
     } finally {
       setLoading(false);
     }
-  }, [getReadableProvider]);
+  }, [
+    getReadableProvider,
+    filterModel,
+    filterColor,
+    filterYear,
+    minPrice,
+    maxPrice,
+  ]);
 
   const checkWalletConnection = useCallback(async () => {
     if (typeof window === "undefined" || !window.ethereum) return;
@@ -229,6 +308,52 @@ const Marketplace = () => {
     }
   };
 
+  const startEditPrice = (nft) => {
+    setEditingTokenId(nft.tokenId);
+    setNewPriceEth(nft.priceEth);
+  };
+
+  const cancelEdit = () => {
+    setEditingTokenId(null);
+    setNewPriceEth("");
+  };
+
+  const saveNewPrice = async (nft) => {
+    try {
+      const account = await ensureWallet();
+      if (!account) return;
+      if (!window.ethereum) {
+        setError("Không phát hiện ví trên trình duyệt");
+        return;
+      }
+      if (
+        !newPriceEth ||
+        isNaN(parseFloat(newPriceEth)) ||
+        parseFloat(newPriceEth) <= 0
+      ) {
+        setError("Giá mới không hợp lệ");
+        return;
+      }
+      setError("");
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const marketplaceContract = new ethers.Contract(
+        MARKETPLACE_ADDRESS,
+        MARKETPLACE_ABI,
+        signer
+      );
+      const weiPrice = ethers.parseEther(newPriceEth);
+      const tx = await marketplaceContract.updatePrice(nft.tokenId, weiPrice);
+      await tx.wait();
+      await loadMarketplaceData();
+      setEditingTokenId(null);
+      alert(`✅ Cập nhật giá NFT #${nft.tokenId} thành công!`);
+    } catch (e) {
+      console.error("saveNewPrice", e);
+      setError("Không thể cập nhật giá. Thử lại.");
+    }
+  };
+
   return (
     <div
       style={{
@@ -327,6 +452,79 @@ const Marketplace = () => {
               }}
             >
               {isConnecting ? "Đang kết nối..." : "🔗 Kết nối ví"}
+            </button>
+          </div>
+        </div>
+
+        {/* Filters Panel */}
+        <div
+          style={{
+            background: "white",
+            borderRadius: "12px",
+            padding: "1rem 1.25rem",
+            marginBottom: "1.25rem",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+            display: "grid",
+            gap: "0.75rem",
+          }}
+        >
+          <div style={{ fontWeight: 600, color: "#0ea5e9" }}>
+            🔍 Bộ lọc nâng cao
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gap: "0.75rem",
+              gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))",
+            }}
+          >
+            <input
+              placeholder="Model"
+              value={filterModel}
+              onChange={(e) => setFilterModel(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Màu"
+              value={filterColor}
+              onChange={(e) => setFilterColor(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Năm"
+              value={filterYear}
+              onChange={(e) => setFilterYear(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Giá tối thiểu (ETH)"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Giá tối đa (ETH)"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <button onClick={loadMarketplaceData} style={filterButtonStyle}>
+              Áp dụng
+            </button>
+            <button
+              onClick={() => {
+                setFilterModel("");
+                setFilterColor("");
+                setFilterYear("");
+                setMinPrice("");
+                setMaxPrice("");
+                loadMarketplaceData();
+              }}
+              style={filterResetStyle}
+            >
+              Xóa lọc
             </button>
           </div>
         </div>
@@ -497,6 +695,30 @@ const Marketplace = () => {
                         nft.year || "(n/a)"
                       }`}</div>
                       <div>Người bán: {formatAddress(nft.seller)}</div>
+                      {nft.priceHistory && nft.priceHistory.length > 0 && (
+                        <div>
+                          <strong>Lịch sử giá:</strong>
+                          <ul
+                            style={{
+                              margin: "0.25rem 0 0",
+                              paddingLeft: "1rem",
+                            }}
+                          >
+                            {nft.priceHistory
+                              .slice(-3)
+                              .reverse()
+                              .map((h, idx) => (
+                                <li key={idx} style={{ fontSize: "0.75rem" }}>
+                                  {h.oldPriceEth} → {h.newPriceEth} ETH (
+                                  {new Date(
+                                    h.timestamp * 1000
+                                  ).toLocaleDateString()}
+                                  )
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
 
                     <div
@@ -545,6 +767,80 @@ const Marketplace = () => {
                           ? "Đang xử lý..."
                           : "Mua ngay"}
                       </button>
+                      {walletAddress &&
+                        walletAddress.toLowerCase() ===
+                          nft.seller.toLowerCase() &&
+                        (editingTokenId === nft.tokenId ? (
+                          <div
+                            style={{
+                              flex: 1,
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "0.4rem",
+                            }}
+                          >
+                            <input
+                              value={newPriceEth}
+                              onChange={(e) => setNewPriceEth(e.target.value)}
+                              placeholder="Giá mới ETH"
+                              style={{
+                                padding: "0.5rem",
+                                borderRadius: "6px",
+                                border: "1px solid #cbd5e1",
+                                fontSize: "0.75rem",
+                              }}
+                            />
+                            <div style={{ display: "flex", gap: "0.25rem" }}>
+                              <button
+                                onClick={() => saveNewPrice(nft)}
+                                style={{
+                                  flex: 1,
+                                  background: "#14b8a6",
+                                  color: "white",
+                                  border: "none",
+                                  borderRadius: "6px",
+                                  fontSize: "0.7rem",
+                                  padding: "0.4rem",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                Lưu
+                              </button>
+                              <button
+                                onClick={cancelEdit}
+                                style={{
+                                  flex: 1,
+                                  background: "#e2e8f0",
+                                  color: "#0f172a",
+                                  border: "none",
+                                  borderRadius: "6px",
+                                  fontSize: "0.7rem",
+                                  padding: "0.4rem",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                Huỷ
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => startEditPrice(nft)}
+                            style={{
+                              flex: 1,
+                              padding: "0.75rem",
+                              background: "#2563eb",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "8px",
+                              fontWeight: 600,
+                              fontSize: "0.75rem",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Sửa giá
+                          </button>
+                        ))}
                     </div>
                   </div>
                 </div>

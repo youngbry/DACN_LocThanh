@@ -288,6 +288,39 @@
   },
   {
     "type": "function",
+    "name": "getPriceHistory",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "tuple[]",
+        "name": "",
+        "components": [
+          {
+            "type": "uint256",
+            "name": "oldPrice"
+          },
+          {
+            "type": "uint256",
+            "name": "newPrice"
+          },
+          {
+            "type": "uint256",
+            "name": "timestamp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "function",
     "name": "isListed",
     "constant": true,
     "stateMutability": "view",
@@ -420,6 +453,37 @@
       {
         "type": "address",
         "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "priceHistory",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      },
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "oldPrice"
+      },
+      {
+        "type": "uint256",
+        "name": "newPrice"
+      },
+      {
+        "type": "uint256",
+        "name": "timestamp"
       }
     ]
   },

@@ -36,7 +36,7 @@ cd ..
 
 ### 2. Khởi động hệ thống
 
-```bash
+````bash
 # Terminal 1: Khởi động blockchain
 npx hardhat node
 
@@ -55,7 +55,42 @@ npx hardhat run scripts/backup-state.js --network localhost
 
 # Sau khi khởi động lại node (mất state), phục hồi
 npx hardhat run scripts/restore-state.js --network localhost
-```
+
+### 🔄 Xóa sạch toàn bộ dữ liệu (reset hoàn toàn)
+
+Nếu muốn quay về trạng thái hoàn toàn trống (xoá NFT, listing, lịch sử giá, khoá, v.v.):
+
+```bash
+# 1. Dừng các cửa sổ: Hardhat node, Auto Backup, Frontend, Server
+
+# 2. Xoá backup + lịch sử (giữ địa chỉ & ABI)
+node scripts/clear-local-data.js
+
+# (Tuỳ chọn) Xoá luôn file địa chỉ & ABI để buộc deploy lại
+node scripts/clear-local-data.js --full
+
+# 3. Khởi động lại node sạch
+npx hardhat node
+
+# 4. Deploy lại hợp đồng mới
+npx hardhat run scripts/deploy-and-update-web.js --network localhost
+
+# 5. Khởi động lại frontend & server
+cd web
+npm start
+# (server) cd ../server ; npm start
+````
+
+Sau khi làm các bước trên, toàn bộ:
+
+- NFT, listing, lịch sử giá on-chain cũ: MẤT (do chain mới)
+- backup-state.json & backup-history/: Đã xóa
+- (tuỳ chọn) địa chỉ & ABI cũ: xoá nếu dùng --full
+- Off-chain report (yêu cầu mở khoá) nếu lưu trong server: cần tự xoá file JSON tương ứng trong thư mục server (nếu muốn sạch tuyệt đối).
+
+Không chạy `restore-state.js` nếu bạn muốn bắt đầu hoàn toàn mới.
+
+````
 
 ### 3. Cấu hình ví
 
@@ -100,7 +135,7 @@ npx hardhat run scripts/restore-state.js --network localhost
 - getMotorbike(uint256 tokenId)
 - totalSupply()
 - Kế thừa ERC721 + Ownable
-```
+````
 
 ### MotorbikeMarketplace.sol
 

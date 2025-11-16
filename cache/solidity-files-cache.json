@@ -611,8 +611,8 @@
       ]
     },
     "C:\\Users\\admin\\source\\repos\\GIT yongbry\\DACN_LocThanh\\contracts\\MotorbikeMarketplace.sol": {
-      "lastModificationDate": 1763081269919,
-      "contentHash": "09f4d029622f886d3c71459f49fea38d",
+      "lastModificationDate": 1763273591043,
+      "contentHash": "8c86d93e1a06398847b653c199775750",
       "sourceName": "contracts/MotorbikeMarketplace.sol",
       "solcConfig": {
         "version": "0.8.20",
