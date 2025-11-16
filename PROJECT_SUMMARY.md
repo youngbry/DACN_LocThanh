@@ -46,11 +46,10 @@ npx hardhat run scripts/deploy-and-update-web.js --network localhost
 # Terminal 3: Khởi động frontend
 cd web
 npm start
-```
-
 # Terminal 4: chạy server
 
 cd "c:\Users\admin\source\repos\GIT yongbry\DACN_locThanh\server"; npm start
+```
 
 ### 3. Cấu hình ví
 

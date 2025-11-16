@@ -130,15 +130,7 @@ const UserDashboard = () => {
   if (!isConnected) {
     return (
       <div className="user-dashboard">
-        <div className="dashboard-header">
-          <button
-            onClick={() => window.history.back()}
-            className="back-btn"
-            title="Quay lại"
-          >
-            ← Quay lại
-          </button>
-        </div>
+        <div className="dashboard-header"></div>
         <div className="user-connect">
           <div className="connect-card">
             <h1>👤 User Dashboard</h1>
@@ -156,7 +148,7 @@ const UserDashboard = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+        background: "linear-gradient(135deg, #f8fafc 0%, #e6f7fb 100%)",
         padding: "2rem 0",
       }}
     >
@@ -188,7 +180,7 @@ const UserDashboard = () => {
                 fontSize: "2.5rem",
                 fontWeight: "800",
                 marginBottom: "0.5rem",
-                background: "linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)",
+                background: "linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -224,8 +216,8 @@ const UserDashboard = () => {
               style={{
                 fontFamily: "Monaco, monospace",
                 fontSize: "0.875rem",
-                color: "#1e293b",
-                background: "#f1f5f9",
+                color: "#0f172a",
+                background: "#eef6fb",
                 padding: "0.5rem",
                 borderRadius: "8px",
                 marginBottom: "0.5rem",
@@ -241,7 +233,7 @@ const UserDashboard = () => {
                 gap: "0.5rem",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#059669",
+                color: "#0ea5e9",
               }}
             >
               <div
@@ -283,7 +275,7 @@ const UserDashboard = () => {
               style={{
                 fontSize: "2.5rem",
                 fontWeight: "800",
-                color: "#2563eb",
+                color: "#0ea5e9",
                 marginBottom: "0.5rem",
               }}
             >
@@ -318,7 +310,7 @@ const UserDashboard = () => {
               style={{
                 fontSize: "2.5rem",
                 fontWeight: "800",
-                color: "#2563eb",
+                color: "#0ea5e9",
                 marginBottom: "0.5rem",
               }}
             >
@@ -376,7 +368,7 @@ const UserDashboard = () => {
               onMouseOver={(e) => {
                 e.target.style.transform = "translateY(-4px)";
                 e.target.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.1)";
-                e.target.style.borderColor = "#2563eb";
+                e.target.style.borderColor = "#0ea5e9";
               }}
               onMouseOut={(e) => {
                 e.target.style.transform = "none";
@@ -384,7 +376,7 @@ const UserDashboard = () => {
                 e.target.style.borderColor = "transparent";
               }}
             >
-              <div style={{ fontSize: "3rem", flexShrink: 0 }}>�️</div>
+              <div style={{ fontSize: "3rem", flexShrink: 0 }}>🏍️</div>
               <div>
                 <h3
                   style={{
@@ -426,7 +418,7 @@ const UserDashboard = () => {
               onMouseOver={(e) => {
                 e.target.style.transform = "translateY(-4px)";
                 e.target.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.1)";
-                e.target.style.borderColor = "#2563eb";
+                e.target.style.borderColor = "#0ea5e9";
               }}
               onMouseOut={(e) => {
                 e.target.style.transform = "none";
@@ -480,7 +472,7 @@ const UserDashboard = () => {
                 width: "3rem",
                 height: "3rem",
                 border: "3px solid #e2e8f0",
-                borderTop: "3px solid #2563eb",
+                borderTop: "3px solid #0ea5e9",
                 borderRadius: "50%",
                 animation: "spin 1s linear infinite",
                 marginBottom: "1rem",
@@ -580,7 +572,7 @@ const UserDashboard = () => {
                       style={{
                         fontSize: "1.25rem",
                         fontWeight: "700",
-                        color: "#1e293b",
+                        color: "#0f172a",
                         marginBottom: "1rem",
                       }}
                     >
@@ -644,7 +636,7 @@ const UserDashboard = () => {
                         style={{
                           flex: 1,
                           padding: "0.75rem",
-                          background: "#2563eb",
+                          background: "#0ea5e9",
                           color: "white",
                           textDecoration: "none",
                           borderRadius: "8px",
@@ -654,10 +646,10 @@ const UserDashboard = () => {
                           transition: "all 0.2s ease",
                         }}
                         onMouseOver={(e) => {
-                          e.target.style.background = "#1d4ed8";
+                          e.target.style.background = "#0284c7";
                         }}
                         onMouseOut={(e) => {
-                          e.target.style.background = "#2563eb";
+                          e.target.style.background = "#0ea5e9";
                         }}
                       >
                         Chi tiết
@@ -667,23 +659,23 @@ const UserDashboard = () => {
                         style={{
                           flex: 1,
                           padding: "0.75rem",
-                          background: "#f8fafc",
-                          color: "#64748b",
+                          background: "#f0f9ff",
+                          color: "#0c4a6e",
                           textDecoration: "none",
                           borderRadius: "8px",
                           textAlign: "center",
                           fontWeight: "600",
                           fontSize: "0.875rem",
-                          border: "1px solid #e2e8f0",
+                          border: "1px solid #bae6fd",
                           transition: "all 0.2s ease",
                         }}
                         onMouseOver={(e) => {
-                          e.target.style.background = "#e2e8f0";
-                          e.target.style.color = "#1e293b";
+                          e.target.style.background = "#e0f2fe";
+                          e.target.style.color = "#075985";
                         }}
                         onMouseOut={(e) => {
-                          e.target.style.background = "#f8fafc";
-                          e.target.style.color = "#64748b";
+                          e.target.style.background = "#f0f9ff";
+                          e.target.style.color = "#0c4a6e";
                         }}
                       >
                         Bán

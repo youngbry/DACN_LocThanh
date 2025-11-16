@@ -1,0 +1,453 @@
+/* ==== Futuristic User Dashboard Theme ==== */
+:root {
+  --user-bg1: #0f172a;
+  --user-bg2: #1e293b;
+  --user-accent1: #6366f1;
+  --user-accent2: #06b6d4;
+  --user-success: #10b981;
+  --user-gradient: linear-gradient(
+    135deg,
+    var(--user-accent1) 0%,
+    var(--user-accent2) 100%
+  );
+  --user-card-bg: rgba(255, 255, 255, 0.06);
+  --user-border: rgba(255, 255, 255, 0.15);
+}
+
+.user-dashboard {
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 34px 34px 90px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+.user-dashboard::before,
+.user-dashboard::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(circle at 18% 22%, #1e3a8a33, transparent 60%),
+    radial-gradient(circle at 78% 72%, #0d948833, transparent 65%),
+    linear-gradient(120deg, var(--user-bg1), var(--user-bg2));
+}
+.user-dashboard::after {
+  z-index: -1;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  mask: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4));
+  animation: gridFloat 22s linear infinite;
+}
+@keyframes gridFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  padding: 28px 35px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 55%, #0d3b66 100%);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+  color: #f8fafc;
+}
+.user-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.6),
+    rgba(6, 182, 212, 0.6)
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.2;
+  pointer-events: none;
+}
+.user-header::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle at center,
+    rgba(99, 102, 241, 0.5),
+    transparent 70%
+  );
+  animation: pulseGlow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pulseGlow {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+}
+
+.user-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 2.3em;
+  letter-spacing: 0.6px;
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.35),
+    0 0 14px rgba(255, 255, 255, 0.18);
+}
+.user-header p {
+  margin: 0;
+  font-size: 1.05em;
+  color: #cbd5e1;
+  letter-spacing: 0.3px;
+}
+
+.user-wallet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.user-wallet-label {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+}
+.user-wallet-address {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  border: 1px solid var(--user-border);
+}
+.user-wallet-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: var(--user-success);
+}
+.user-wallet-status span {
+  width: 8px;
+  height: 8px;
+  background: var(--user-success);
+  border-radius: 50%;
+  animation: pulseDot 2.2s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+  }
+}
+
+.user-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+  margin-bottom: 50px;
+}
+.user-stat-card {
+  background: var(--user-card-bg);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  padding: 32px 34px;
+  border-radius: 22px;
+  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--user-border);
+  position: relative;
+  overflow: hidden;
+  transition: 0.4s ease;
+}
+.user-stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--user-gradient);
+}
+.user-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px -12px rgba(0, 0, 0, 0.6);
+}
+.user-stat-icon {
+  font-size: 3.6em;
+}
+.user-stat-number {
+  font-size: 2.8em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.user-stat-label {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.8em;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+}
+
+.quick-actions {
+  margin-bottom: 55px;
+}
+.quick-actions h2 {
+  margin: 0 0 34px 0;
+  font-size: 1.9em;
+  text-align: center;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+.quick-actions h2::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  width: 160px;
+  height: 4px;
+  background: var(--user-gradient);
+  transform: translateX(-50%);
+  border-radius: 4px;
+  box-shadow: 0 0 12px -2px var(--user-accent2);
+}
+.quick-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+}
+.quick-action-card {
+  background: var(--user-card-bg);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  padding: 30px 32px;
+  border-radius: 22px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--user-border);
+  position: relative;
+  overflow: hidden;
+  transition: 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.quick-action-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 85% 15%,
+    rgba(6, 182, 212, 0.5),
+    transparent 60%
+  );
+  opacity: 0.25;
+  pointer-events: none;
+}
+.quick-action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 55px -15px rgba(0, 0, 0, 0.65);
+  border-color: var(--user-accent2);
+}
+.quick-action-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25em;
+  font-weight: 600;
+  color: #ffffff;
+}
+.quick-action-card p {
+  margin: 0;
+  font-size: 0.85em;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+.quick-action-icon {
+  font-size: 3em;
+}
+
+.user-nft-section h2 {
+  margin: 0 0 34px 0;
+  font-size: 1.9em;
+  text-align: center;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+.user-nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+}
+.user-nft-card {
+  background: var(--user-card-bg);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-radius: 24px;
+  box-shadow: 0 15px 50px -15px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  border: 1px solid var(--user-border);
+  position: relative;
+  transition: 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.user-nft-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--user-gradient);
+}
+.user-nft-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px -18px rgba(0, 0, 0, 0.7);
+}
+.user-nft-banner {
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  background: var(--user-gradient);
+  color: #fff;
+}
+.user-nft-content {
+  padding: 26px 26px 30px;
+}
+.user-nft-title {
+  margin: 0 0 18px 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #ffffff;
+}
+.nft-spec-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78em;
+  padding: 4px 0;
+}
+.nft-spec-row span.label {
+  color: #94a3b8;
+}
+.nft-spec-row span.value {
+  font-weight: 600;
+  color: #e2e8f0;
+  font-family: monospace;
+}
+.user-nft-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.user-nft-btn {
+  flex: 1;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: 0.35s ease;
+  text-decoration: none;
+  text-align: center;
+}
+.user-nft-btn.primary {
+  background: var(--user-gradient);
+  color: #fff;
+  box-shadow: 0 8px 30px -10px rgba(6, 182, 212, 0.55);
+}
+.user-nft-btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 55px -15px rgba(6, 182, 212, 0.6);
+}
+.user-nft-btn.secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  border: 1px solid var(--user-border);
+}
+.user-nft-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px);
+}
+
+.no-nft {
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--user-card-bg);
+  border-radius: 26px;
+  border: 1px solid var(--user-border);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+.no-nft h2 {
+  font-size: 2em;
+  margin: 0 0 14px 0;
+  font-weight: 600;
+  color: #ffffff;
+}
+.no-nft p {
+  margin: 0 0 26px 0;
+  font-size: 0.95em;
+  color: #94a3b8;
+}
+
+@media (max-width: 780px) {
+  .user-header {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .user-wallet {
+    align-items: center;
+  }
+  .quick-action-grid {
+    grid-template-columns: 1fr;
+  }
+  .user-nft-grid {
+    grid-template-columns: 1fr;
+  }
+}
