@@ -1,450 +1,316 @@
-/* === Futuristic Dark Glass Theme: Marketplace === */
+/* =========================================================
+   MOTORBIKE NFT — MARKETPLACE THEME (Dashboard Synchronized)
+   Style: Navy Blue + Cyan + Glassmorphism + Soft Glow
+========================================================= */
+
 :root {
-  --mk-bg-gradient: linear-gradient(
-    135deg,
-    #0a0f1c 0%,
-    #0d1628 40%,
-    #041026 70%,
-    #020b18 100%
-  );
-  --mk-accent-start: #6366f1;
-  --mk-accent-mid: #3b82f6;
-  --mk-accent-end: #06b6d4;
-  --mk-success-start: #22c55e;
-  --mk-success-end: #16a34a;
-  --mk-danger-start: #f97316;
-  --mk-danger-end: #ea580c;
-  --mk-glass-bg: rgba(255, 255, 255, 0.06);
-  --mk-glass-bg-alt: rgba(255, 255, 255, 0.08);
-  --mk-glass-border: rgba(255, 255, 255, 0.14);
-  --mk-text-primary: #ffffff;
-  --mk-text-secondary: #b8c7ff;
-  --mk-text-faint: #94a3b8;
-  --mk-shadow-soft: 0 4px 18px -4px rgba(0, 0, 0, 0.45);
-  --mk-shadow-hover: 0 8px 30px -6px rgba(0, 0, 0, 0.55);
-  --mk-radius-sm: 8px;
-  --mk-radius-md: 16px;
-  --mk-radius-lg: 24px;
-  --mk-transition: 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
-  --mk-gradient-accent: linear-gradient(
-    135deg,
-    var(--mk-accent-start) 0%,
-    var(--mk-accent-mid) 45%,
-    var(--mk-accent-end) 100%
-  );
-  --mk-gradient-success: linear-gradient(
-    135deg,
-    var(--mk-success-start) 0%,
-    var(--mk-success-end) 85%
-  );
-  --mk-gradient-danger: linear-gradient(
-    135deg,
-    var(--mk-danger-start) 0%,
-    var(--mk-danger-end) 85%
-  );
+  --mk-navy-1: #071a33;
+  --mk-navy-2: #0c2648;
+  --mk-navy-3: #0f2d55;
+  --mk-navy-4: #13386b;
+
+  --mk-blue: #3b82f6;
+  --mk-cyan: #06b6d4;
+  --mk-cyan-light: #5ee8ff;
+
+  --mk-text-primary: #e8f0ff;
+  --mk-text-secondary: #96a9c9;
+  --mk-text-muted: #6b7c99;
+
+  --mk-glass-1: rgba(255, 255, 255, 0.06);
+  --mk-glass-2: rgba(255, 255, 255, 0.09);
+  --mk-border: rgba(255, 255, 255, 0.12);
+
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.55);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.65);
+
+  --mk-radius-md: 14px;
+  --mk-radius-lg: 22px;
+
+  --mk-transition: 0.28s ease;
 }
+
+/* ===========================
+   MAIN BACKGROUND — NAVY BLUE
+=========================== */
 
 .marketplace {
   min-height: 100vh;
-  background: var(--mk-bg-gradient);
-  color: var(--mk-text-primary);
   padding: 48px 32px 80px;
+  background: linear-gradient(
+    135deg,
+    var(--mk-navy-1) 0%,
+    var(--mk-navy-2) 35%,
+    var(--mk-navy-3) 70%,
+    #001428 100%
+  );
   position: relative;
   overflow: hidden;
-}
-.marketplace::before,
-.marketplace::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-.marketplace::before {
-  background: radial-gradient(
-      circle at 18% 28%,
-      rgba(79, 70, 229, 0.28),
-      transparent 62%
-    ),
-    radial-gradient(
-      circle at 82% 72%,
-      rgba(14, 165, 233, 0.25),
-      transparent 60%
-    ),
-    radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.08), transparent 70%);
-  filter: blur(70px) saturate(140%);
-}
-.marketplace::after {
-  background: linear-gradient(
-    to top,
-    rgba(0, 10, 20, 0.85),
-    rgba(0, 0, 0, 0.15)
-  );
-  mix-blend-mode: overlay;
-}
-.marketplace-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 1400px;
-  margin: 0 auto;
+  color: var(--mk-text-primary);
 }
 
-.marketplace-header {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin: 0 0 44px;
-  padding: 38px 40px 36px;
-  border: 1px solid var(--mk-glass-border);
-  border-radius: var(--mk-radius-lg);
-  background: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.04) 55%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-  backdrop-filter: blur(26px) saturate(160%);
-  box-shadow: var(--mk-shadow-soft), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
-  overflow: hidden;
-  position: relative;
-}
-.marketplace-header::before {
+.marketplace::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.18),
-    rgba(255, 255, 255, 0) 65%
+
+  /* sọc nghiêng giống dashboard */
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255,255,255,0.03) 0px,
+    rgba(255,255,255,0.03) 2px,
+    transparent 2px,
+    transparent 10px
   );
-  opacity: 0.35;
-  mix-blend-mode: overlay;
+  opacity: 0.4;
+  pointer-events: none;
 }
+
+/* ===========================
+   LAYOUT WRAPPER
+=========================== */
+.marketplace-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* ===========================
+   HEADER — GLASS NAVY
+=========================== */
+
+.marketplace-header {
+  background: var(--mk-glass-1);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  padding: 38px 40px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+}
+
 .marketplace-header h1 {
   margin: 0 0 12px;
-  font-size: clamp(2.2rem, 4.2vw, 2.9rem);
   font-weight: 800;
-  letter-spacing: 0.5px;
-  background: linear-gradient(120deg, #fff 10%, #c7d2fe 45%, #93c5fd 85%);
+  font-size: 2.4rem;
+  background: linear-gradient(135deg, #ffffff, #b8d8ff);
   -webkit-background-clip: text;
   color: transparent;
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
 }
+
 .marketplace-header p {
   margin: 0;
-  font-size: 1.04rem;
   color: var(--mk-text-secondary);
 }
-.header-status {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
+
+/* ===========================
+   STATUS + BUTTONS
+=========================== */
+
 .wallet-status {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: var(--mk-text-secondary);
+  letter-spacing: 0.5px;
 }
 .wallet-connected strong {
-  color: var(--mk-text-primary);
+  color: var(--mk-cyan);
 }
 .wallet-disconnected {
-  color: var(--mk-text-faint);
+  color: var(--mk-text-muted);
 }
 
 .marketplace-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
+  margin-top: 20px;
 }
+
+/* BUTTON BASE */
 .market-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 28px 13px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.7px;
-  border: none;
+  padding: 14px 28px;
   border-radius: 50px;
+  border: none;
+  font-weight: 600;
   cursor: pointer;
-  text-decoration: none;
-  isolation: isolate;
-  overflow: hidden;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
   transition: var(--mk-transition);
-  backdrop-filter: blur(12px);
 }
-.market-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    110deg,
-    rgba(255, 255, 255, 0.35),
-    rgba(255, 255, 255, 0) 65%
-  );
-  opacity: 0;
-  transition: var(--mk-transition);
-  mix-blend-mode: overlay;
-}
+
+/* REFRESH BUTTON */
 .market-btn.refresh {
-  background: linear-gradient(135deg, #334155, #1e293b);
-  color: #fff;
-  box-shadow: 0 6px 18px -4px rgba(30, 41, 59, 0.55);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--mk-border);
+  color: var(--mk-text-secondary);
 }
-.market-btn.connect,
-.market-btn.primary {
-  background: var(--mk-gradient-accent);
-  color: #fff;
-  box-shadow: 0 6px 20px -4px rgba(59, 130, 246, 0.55);
+.market-btn.refresh:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-3px);
 }
-.market-btn.secondary {
-  background: linear-gradient(135deg, #475569 0%, #334155 85%);
+
+/* CONNECT / PRIMARY */
+.market-btn.primary,
+.market-btn.connect {
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: #fff;
-  box-shadow: 0 6px 18px -4px rgba(30, 41, 59, 0.55);
 }
+.market-btn.primary:hover,
+.market-btn.connect:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--mk-shadow-hover);
+}
+
+/* BUY BUTTON */
 .market-btn.buy {
-  background: var(--mk-gradient-success);
+  background: linear-gradient(135deg, var(--mk-cyan), #22c55e);
   color: #fff;
-  box-shadow: 0 6px 18px -4px rgba(34, 197, 94, 0.55);
 }
-.market-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+.market-btn.buy:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--mk-shadow-hover);
 }
-.market-btn:hover:not(:disabled) {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 34px -6px rgba(0, 0, 0, 0.55);
-}
-.market-btn:hover:not(:disabled)::after {
-  opacity: 0.55;
-}
-.market-btn:active:not(:disabled) {
-  transform: translateY(-1px);
-}
+
+/* ===========================
+   ERROR BANNER
+=========================== */
 
 .error-banner {
-  margin: 0 0 30px;
   padding: 16px 22px;
-  border-radius: 18px;
-  background: linear-gradient(
-    135deg,
-    rgba(220, 38, 38, 0.18),
-    rgba(153, 27, 27, 0.55)
-  );
-  color: #fff;
+  border-radius: var(--mk-radius-md);
+  background: rgba(240, 68, 56, 0.28);
+  border: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 30px;
+  color: #ffdcdc;
   font-weight: 600;
-  letter-spacing: 0.4px;
-  box-shadow: 0 8px 30px -10px rgba(153, 27, 27, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.loading-state {
-  min-height: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  color: var(--mk-text-secondary);
-  font-weight: 500;
-}
-.loading-spinner {
-  width: 56px;
-  height: 56px;
-  border: 4px solid rgba(255, 255, 255, 0.15);
-  border-top: 4px solid var(--mk-accent-mid);
-  border-radius: 50%;
-  animation: mkSpin 1s linear infinite;
-}
-@keyframes mkSpin {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/* ===========================
+   EMPTY STATE
+=========================== */
 
 .empty-market {
-  text-align: center;
-  padding: 86px 38px 88px;
-  background: var(--mk-glass-bg-alt);
-  border: 1px solid var(--mk-glass-border);
-  backdrop-filter: blur(28px) saturate(160%);
+  padding: 80px 38px;
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
+  text-align: center;
   box-shadow: var(--mk-shadow-soft);
-  margin: 32px 0 40px;
 }
+
 .empty-icon {
-  font-size: 4.4rem;
-  margin-bottom: 24px;
-  filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.55));
+  font-size: 4.5rem;
+  margin-bottom: 22px;
 }
+
 .empty-market h2 {
-  margin: 0 0 18px;
+  margin: 0 0 12px;
   font-size: 1.7rem;
   font-weight: 700;
-  letter-spacing: 0.4px;
-  color: var(--mk-text-primary);
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.28);
 }
+
 .empty-market p {
-  margin: 0 0 30px;
-  font-size: 0.96rem;
+  margin-bottom: 26px;
   color: var(--mk-text-secondary);
 }
 
+/* ===========================
+   NFT GRID
+=========================== */
+
 .market-section {
-  margin-top: 10px;
+  margin-top: 40px;
 }
+
 .section-title {
-  margin: 0 0 30px;
+  margin: 0 0 24px;
   font-size: 1.55rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #fff;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
 }
+
 .market-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 30px;
+  gap: 26px;
 }
 
+/* ===========================
+   NFT CARD
+=========================== */
+
 .market-card {
-  background: var(--mk-glass-bg-alt);
-  border: 1px solid var(--mk-glass-border);
-  backdrop-filter: blur(26px) saturate(160%);
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
+  backdrop-filter: blur(18px);
   box-shadow: var(--mk-shadow-soft);
   overflow: hidden;
-  position: relative;
   transition: var(--mk-transition);
 }
-.market-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    150deg,
-    rgba(255, 255, 255, 0.14),
-    rgba(255, 255, 255, 0) 55%
-  );
-  pointer-events: none;
-}
+
 .market-card:hover {
   transform: translateY(-6px);
+  border-color: rgba(255,255,255,0.25);
   box-shadow: var(--mk-shadow-hover);
-  border-color: rgba(255, 255, 255, 0.22);
 }
+
+/* CARD BANNER */
 .market-card-banner {
   height: 200px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   font-size: 4rem;
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: #fff;
-  background: var(--mk-gradient-accent);
-  position: relative;
 }
-.market-card-banner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    140deg,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0) 70%
-  );
-  mix-blend-mode: overlay;
-}
+
+/* CARD CONTENT */
 .market-card-content {
-  padding: 26px 26px 24px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
-.market-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
+
 .market-card-title {
   margin: 0;
-  font-size: 1.18rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #fff;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.22);
 }
+
 .market-price {
-  font-size: 1.12rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #22c55e;
-  text-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
+  color: var(--mk-cyan-light);
 }
+
+/* SPECS */
 .market-specs {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
+
 .spec-row {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  font-size: 0.75rem;
-  letter-spacing: 0.8px;
-}
-.spec-row .label {
-  text-transform: uppercase;
-  font-weight: 600;
+  font-size: 0.78rem;
   color: var(--mk-text-secondary);
 }
+
 .spec-row .value {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
   color: var(--mk-text-primary);
-  background: rgba(255, 255, 255, 0.07);
-  padding: 6px 10px 5px;
-  border-radius: 8px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  font-size: 0.78rem;
+  background: rgba(255,255,255,0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace;
 }
+
+/* ACTIONS BELOW CARD */
 .market-actions {
   display: flex;
   gap: 12px;
 }
 
-@media (max-width: 900px) {
-  .market-grid {
-    grid-template-columns: 1fr;
-  }
-  .marketplace {
-    padding: 42px 24px 70px;
-  }
-  .marketplace-header {
-    padding: 34px 30px 32px;
-  }
-}
-@media (hover: none) {
-  .market-btn:hover:not(:disabled) {
-    transform: none;
-    box-shadow: var(--mk-shadow-soft);
-  }
-  .market-btn:hover:not(:disabled)::after {
-    opacity: 0;
-  }
-}
-@supports not (backdrop-filter: blur(10px)) {
-  .marketplace-header,
-  .empty-market,
-  .market-card {
-    background: rgba(18, 25, 39, 0.85);
-  }
-}
