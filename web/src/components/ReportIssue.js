@@ -142,64 +142,53 @@ const ReportIssue = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #f8fafc 0%, #e6f7fb 100%)",
-        padding: "2rem 0",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 1.5rem",
-        }}
-      >
-        <div className="report-issue">
-          {/* Header card styled like UserDashboard/MyNFTs */}
-          <div
-            style={{
-              background: "white",
-              borderRadius: "16px",
-              padding: "2rem",
-              marginBottom: "2rem",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "1.5rem",
-            }}
-          >
-            <div>
-              <h1
-                style={{
-                  fontSize: "2.5rem",
-                  fontWeight: "800",
-                  marginBottom: "0.5rem",
-                  background:
-                    "linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                📢 Báo cáo sự cố
-              </h1>
-              <p
-                style={{
-                  color: "#64748b",
-                  fontSize: "1.125rem",
-                  margin: 0,
-                }}
-              >
-                Gửi vấn đề bạn gặp phải cho admin. Không cần ví, không tốn gas.
-              </p>
-            </div>
+    <div className="report-issue">
+      <div className="report-container">
+        {/* Header card styled like UserDashboard/MyNFTs */}
+        <div
+          style={{
+            background: "rgba(255, 255, 255, 0.85)",
+            borderRadius: "16px",
+            padding: "2rem",
+            marginBottom: "2rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1.5rem",
+            backdropFilter: "blur(18px)",
+            border: "1px solid rgba(148, 163, 184, 0.2)"
+          }}
+        >
+          <div>
+            <h1
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "800",
+                marginBottom: "0.5rem",
+                background:
+                  "linear-gradient(135deg, #1e40af 0%, #0891b2 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              📢 Báo cáo sự cố
+            </h1>
+            <p
+              style={{
+                color: "#475569",
+                fontSize: "1.125rem",
+                margin: 0,
+              }}
+            >
+              Gửi vấn đề bạn gặp phải cho admin. Không cần ví, không tốn gas.
+            </p>
           </div>
+        </div>
 
-          <form className="report-form" onSubmit={submit}>
+        <form className="report-form" onSubmit={submit}>
             <div className="form-row">
               <div className="form-group">
                 <label>Loại báo cáo</label>
@@ -421,7 +410,6 @@ const ReportIssue = () => {
               </div>
             </div>
           )}
-        </div>
       </div>
     </div>
   );

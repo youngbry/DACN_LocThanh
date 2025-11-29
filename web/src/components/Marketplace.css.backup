@@ -1,27 +1,28 @@
 /* =========================================================
-   MARKETPLACE — NAVY BLUE THEME (No Stripes)
+   MOTORBIKE NFT — MARKETPLACE THEME (Dashboard Synchronized)
+   Style: Navy Blue + Cyan + Glassmorphism + Soft Glow
 ========================================================= */
 
 :root {
-  /* Light mode colors with soft cyan tint */
-  --mk-bg-1: #eff8fb;
-  --mk-bg-2: #e0f2f7;
-  --mk-bg-3: #d1ecf1;
+  --mk-navy-1: #071a33;
+  --mk-navy-2: #0c2648;
+  --mk-navy-3: #0f2d55;
+  --mk-navy-4: #13386b;
 
-  --mk-blue: #2563eb;
-  --mk-cyan: #0891b2;
-  --mk-cyan-dark: #0e7490;
+  --mk-blue: #3b82f6;
+  --mk-cyan: #06b6d4;
+  --mk-cyan-light: #5ee8ff;
 
-  --mk-text-primary: #1e293b;
-  --mk-text-secondary: #475569;
-  --mk-text-muted: #64748b;
+  --mk-text-primary: #e8f0ff;
+  --mk-text-secondary: #96a9c9;
+  --mk-text-muted: #6b7c99;
 
-  --mk-glass-1: rgba(255, 255, 255, 0.7);
-  --mk-glass-2: rgba(255, 255, 255, 0.85);
-  --mk-border: rgba(148, 163, 184, 0.2);
+  --mk-glass-1: rgba(255, 255, 255, 0.06);
+  --mk-glass-2: rgba(255, 255, 255, 0.09);
+  --mk-border: rgba(255, 255, 255, 0.12);
 
-  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.12);
-  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.18);
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.55);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.65);
 
   --mk-radius-md: 14px;
   --mk-radius-lg: 22px;
@@ -30,21 +31,39 @@
 }
 
 /* ===========================
-   MAIN BACKGROUND
+   MAIN BACKGROUND — NAVY BLUE
 =========================== */
+
 .marketplace {
   min-height: 100vh;
   padding: 48px 32px 80px;
   background: linear-gradient(
     135deg,
-    var(--mk-bg-1) 0%,
-    var(--mk-bg-2) 35%,
-    var(--mk-bg-3) 70%,
-    #c5e7ed 100%
+    var(--mk-navy-1) 0%,
+    var(--mk-navy-2) 35%,
+    var(--mk-navy-3) 70%,
+    #001428 100%
   );
   position: relative;
   overflow: hidden;
   color: var(--mk-text-primary);
+}
+
+.marketplace::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  /* sọc nghiêng giống dashboard */
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255,255,255,0.03) 0px,
+    rgba(255,255,255,0.03) 2px,
+    transparent 2px,
+    transparent 10px
+  );
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 /* ===========================
@@ -58,8 +77,9 @@
 }
 
 /* ===========================
-   HEADER
+   HEADER — GLASS NAVY
 =========================== */
+
 .marketplace-header {
   background: var(--mk-glass-1);
   border: 1px solid var(--mk-border);
@@ -74,7 +94,7 @@
   margin: 0 0 12px;
   font-weight: 800;
   font-size: 2.4rem;
-  background: linear-gradient(135deg, #1e40af, #0891b2);
+  background: linear-gradient(135deg, #ffffff, #b8d8ff);
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -87,16 +107,15 @@
 /* ===========================
    STATUS + BUTTONS
 =========================== */
+
 .wallet-status {
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
-
 .wallet-connected strong {
   color: var(--mk-cyan);
 }
-
 .wallet-disconnected {
   color: var(--mk-text-muted);
 }
@@ -108,6 +127,7 @@
   margin-top: 20px;
 }
 
+/* BUTTON BASE */
 .market-btn {
   padding: 14px 28px;
   border-radius: 50px;
@@ -119,34 +139,34 @@
   transition: var(--mk-transition);
 }
 
+/* REFRESH BUTTON */
 .market-btn.refresh {
   background: rgba(255,255,255,0.06);
   border: 1px solid var(--mk-border);
   color: var(--mk-text-secondary);
 }
-
 .market-btn.refresh:hover {
   background: rgba(255,255,255,0.12);
   transform: translateY(-3px);
 }
 
+/* CONNECT / PRIMARY */
 .market-btn.primary,
 .market-btn.connect {
   background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: #fff;
 }
-
 .market-btn.primary:hover,
 .market-btn.connect:hover {
   transform: translateY(-3px);
   box-shadow: var(--mk-shadow-hover);
 }
 
+/* BUY BUTTON */
 .market-btn.buy {
   background: linear-gradient(135deg, var(--mk-cyan), #22c55e);
   color: #fff;
 }
-
 .market-btn.buy:hover {
   transform: translateY(-3px);
   box-shadow: var(--mk-shadow-hover);
@@ -155,6 +175,7 @@
 /* ===========================
    ERROR BANNER
 =========================== */
+
 .error-banner {
   padding: 16px 22px;
   border-radius: var(--mk-radius-md);
@@ -168,6 +189,7 @@
 /* ===========================
    EMPTY STATE
 =========================== */
+
 .empty-market {
   padding: 80px 38px;
   background: var(--mk-glass-2);
@@ -196,6 +218,7 @@
 /* ===========================
    NFT GRID
 =========================== */
+
 .market-section {
   margin-top: 40px;
 }
@@ -215,6 +238,7 @@
 /* ===========================
    NFT CARD
 =========================== */
+
 .market-card {
   background: var(--mk-glass-2);
   border: 1px solid var(--mk-border);
@@ -231,6 +255,7 @@
   box-shadow: var(--mk-shadow-hover);
 }
 
+/* CARD BANNER */
 .market-card-banner {
   height: 200px;
   display: flex;
@@ -241,6 +266,7 @@
   color: #fff;
 }
 
+/* CARD CONTENT */
 .market-card-content {
   padding: 24px;
   display: flex;
@@ -260,6 +286,7 @@
   color: var(--mk-cyan-light);
 }
 
+/* SPECS */
 .market-specs {
   display: flex;
   flex-direction: column;
@@ -281,7 +308,9 @@
   font-family: "JetBrains Mono", monospace;
 }
 
+/* ACTIONS BELOW CARD */
 .market-actions {
   display: flex;
   gap: 12px;
 }
+

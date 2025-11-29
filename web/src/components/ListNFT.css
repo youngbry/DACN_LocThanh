@@ -1,133 +1,167 @@
-/* ListNFT Styles */
+/* =========================================================
+   LIST NFT — MARKETPLACE THEME (Navy Blue + Glassmorphism)
+========================================================= */
+
+:root {
+  /* Light mode colors with soft cyan tint */
+  --mk-bg-1: #eff8fb;
+  --mk-bg-2: #e0f2f7;
+  --mk-bg-3: #d1ecf1;
+
+  --mk-blue: #2563eb;
+  --mk-cyan: #0891b2;
+  --mk-cyan-dark: #0e7490;
+
+  --mk-text-primary: #1e293b;
+  --mk-text-secondary: #475569;
+  --mk-text-muted: #64748b;
+
+  --mk-glass-1: rgba(255, 255, 255, 0.7);
+  --mk-glass-2: rgba(255, 255, 255, 0.85);
+  --mk-border: rgba(148, 163, 184, 0.2);
+
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.12);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.18);
+
+  --mk-radius-md: 14px;
+  --mk-radius-lg: 22px;
+
+  --mk-transition: 0.28s ease;
+}
+
+/* ===========================
+   MAIN CONTAINER
+=========================== */
 .list-nft {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
+  min-height: 100vh;
+  padding: 48px 32px 80px;
+  background: linear-gradient(
+    135deg,
+    var(--mk-bg-1) 0%,
+    var(--mk-bg-2) 35%,
+    var(--mk-bg-3) 70%,
+    #c5e7ed 100%
+  );
+  position: relative;
+  overflow: hidden;
+  color: var(--mk-text-primary);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Back button styles */
-.back-btn {
-  background: #4a5568;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 20px;
-  transition: background-color 0.3s ease;
+
+
+/* INNER WRAPPER */
+.list-nft > * {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
 }
 
-.back-btn:hover {
-  background: #2d3748;
-}
-
-/* Small variant for footer back button */
-.back-btn.small {
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 14px;
-}
-
+/* ===========================
+   HEADER
+=========================== */
 .list-nft-header {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
-.list-nft-loading {
+.list-nft-header h1 {
+  margin: 0 0 16px;
+  font-size: 2.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1e40af, #0891b2);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.info-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
+  color: white;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* ===========================
+   LOADING & ERROR STATES
+=========================== */
+.list-nft-loading,
+.list-nft-error {
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
-  color: #666;
+  text-align: center;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #007bff;
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top: 4px solid var(--mk-cyan);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.list-nft-error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  text-align: center;
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .error-icon {
-  font-size: 4em;
+  font-size: 4rem;
   margin-bottom: 20px;
 }
 
 .list-nft-error h2 {
-  color: #dc3545;
+  color: #fca5a5;
   margin-bottom: 15px;
+  font-size: 1.8rem;
 }
 
-.list-nft-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.list-nft-header h1 {
-  font-size: 2.5em;
-  color: #2c3e50;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.info-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
-  color: white;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 0.9em;
-  font-weight: 500;
-}
-
+/* ===========================
+   CONTENT GRID
+=========================== */
 .list-nft-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-top: 30px;
+  gap: 32px;
+  margin-top: 40px;
+  margin-bottom: 32px;
 }
 
-.nft-preview-section h3,
-.listing-form-section h3 {
-  color: #2c3e50;
-  margin-bottom: 20px;
-  font-size: 1.4em;
-  border-bottom: 2px solid #3498db;
-  padding-bottom: 10px;
+/* ===========================
+   NFT PREVIEW
+=========================== */
+.nft-preview-section {
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  padding: 32px;
+}
+
+.nft-preview-section h3 {
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mk-text-primary);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--mk-cyan);
 }
 
 .nft-preview-card {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border: 2px solid #e9ecef;
+  background: var(--mk-glass-1);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-md);
+  padding: 24px;
 }
 
 .preview-header {
@@ -138,28 +172,32 @@
 }
 
 .preview-id {
-  font-weight: bold;
-  color: #3498db;
-  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--mk-cyan-light);
+  font-size: 1.2rem;
 }
 
 .preview-year {
-  background: #f8f9fa;
-  color: #495057;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 0.9em;
-  font-weight: 500;
+  background: rgba(255,255,255,0.1);
+  color: var(--mk-text-secondary);
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .preview-model {
-  color: #2c3e50;
-  margin-bottom: 20px;
-  font-size: 1.3em;
-  font-weight: 600;
+  margin: 0 0 24px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--mk-text-primary);
+  text-align: center;
 }
 
 .preview-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -167,8 +205,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #f1f3f4;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .preview-item:last-child {
@@ -176,209 +214,249 @@
 }
 
 .preview-label {
-  font-weight: 500;
-  color: #6c757d;
+  font-size: 0.9rem;
+  color: var(--mk-text-secondary);
+  font-weight: 600;
 }
 
 .preview-value {
-  color: #2c3e50;
-  font-weight: 500;
+  color: var(--mk-text-primary);
+  background: rgba(255,255,255,0.08);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 0.85rem;
 }
 
 .current-owner {
-  background: #e3f2fd;
-  padding: 15px;
-  border-radius: 10px;
-  border-left: 4px solid #2196f3;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: var(--mk-radius-md);
+  padding: 16px;
+  margin-top: 20px;
 }
 
 .owner-label {
   display: block;
-  font-size: 0.85em;
-  color: #1976d2;
-  margin-bottom: 5px;
-  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--mk-cyan-light);
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .owner-address {
-  font-family: "Courier New", monospace;
-  font-weight: bold;
-  color: #0d47a1;
-  font-size: 0.9em;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-weight: 700;
+  color: var(--mk-text-primary);
+  word-break: break-all;
 }
 
+/* ===========================
+   LISTING FORM
+=========================== */
 .listing-form-section {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  height: fit-content;
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  padding: 32px;
 }
 
+.listing-form-section h3 {
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mk-text-primary);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--mk-cyan);
+}
+
+/* ===========================
+   APPROVAL SECTION
+=========================== */
 .approval-section {
   text-align: center;
-  padding: 30px 20px;
+  padding: 40px 24px;
 }
 
 .approval-info {
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 }
 
 .approval-info h4 {
-  color: #e67e22;
-  margin-bottom: 10px;
-  font-size: 1.2em;
+  color: #fbbf24;
+  margin: 0 0 12px;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 .approval-info p {
-  color: #7f8c8d;
-  line-height: 1.5;
+  color: var(--mk-text-secondary);
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 .approve-btn {
-  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  background: linear-gradient(135deg, #f59e0b, #f97316);
   color: white;
   border: none;
-  padding: 15px 30px;
-  border-radius: 25px;
-  font-weight: bold;
+  padding: 16px 36px;
+  border-radius: 50px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.1em;
-  display: flex;
+  transition: var(--mk-transition);
+  font-size: 1.05rem;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 auto;
+  gap: 12px;
 }
 
 .approve-btn:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(230, 126, 34, 0.3);
+  box-shadow: var(--mk-shadow-hover);
 }
 
 .approve-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* ===========================
+   PRICING FORM
+=========================== */
 .pricing-form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .form-group label {
+  color: var(--mk-text-primary);
   font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 8px;
-  font-size: 1.1em;
+  font-size: 1.05rem;
 }
 
 .form-group input {
-  padding: 15px;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  font-size: 1.1em;
-  transition: all 0.3s ease;
+  padding: 14px 16px;
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-md);
+  font-size: 1rem;
+  background: rgba(255,255,255,0.05);
+  color: var(--mk-text-primary);
+  transition: var(--mk-transition);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: var(--mk-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+  background: rgba(255,255,255,0.08);
 }
 
 .form-hint {
-  color: #6c757d;
-  font-size: 0.85em;
-  margin-top: 5px;
+  color: var(--mk-text-muted);
+  font-size: 0.85rem;
 }
 
+/* ===========================
+   INFO BOX
+=========================== */
 .info-box {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 10px;
+  background: var(--mk-glass-1);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-md);
   padding: 20px;
   display: flex;
-  gap: 15px;
+  gap: 16px;
 }
 
 .info-icon {
-  font-size: 1.5em;
+  font-size: 1.8rem;
+  color: var(--mk-cyan-light);
   flex-shrink: 0;
 }
 
+.info-content {
+  flex: 1;
+}
+
 .info-content h4 {
-  color: #495057;
-  margin-bottom: 10px;
-  font-size: 1em;
+  color: var(--mk-text-primary);
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .info-content ul {
   margin: 0;
   padding-left: 20px;
-  color: #6c757d;
+  color: var(--mk-text-secondary);
 }
 
 .info-content li {
-  margin-bottom: 5px;
-  line-height: 1.4;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
+/* ===========================
+   FORM ACTIONS
+=========================== */
 .form-actions {
   display: flex;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 16px;
 }
 
 .action-btn {
   flex: 1;
-  padding: 15px 25px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 14px;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.1em;
+  transition: var(--mk-transition);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .action-btn.cancel {
-  background: #6c757d;
-  color: white;
+  background: rgba(255,255,255,0.08);
+  color: var(--mk-text-secondary);
+  border: 1px solid var(--mk-border);
 }
 
-.action-btn.cancel:hover {
-  background: #5a6268;
+.action-btn.cancel:hover:not(:disabled) {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
   text-decoration: none;
-  color: white;
-  transform: translateY(-2px);
 }
 
 .action-btn.list {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: white;
 }
 
 .action-btn.list:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-}
-
-.action-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
+  transform: translateY(-3px);
+  box-shadow: var(--mk-shadow-hover);
 }
 
 .btn-spinner {
@@ -390,66 +468,64 @@
   animation: spin 1s linear infinite;
 }
 
+/* ===========================
+   BACK BUTTON
+=========================== */
 .back-btn {
-  background: #6c757d;
-  color: white;
-  text-decoration: none;
-  padding: 12px 25px;
-  border-radius: 25px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  margin-top: 20px;
   display: inline-block;
+  padding: 12px 24px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.06);
+  color: var(--mk-text-secondary);
+  border: 1px solid var(--mk-border);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--mk-transition);
+  margin-top: 20px;
 }
 
 .back-btn:hover {
-  background: #5a6268;
-  text-decoration: none;
-  color: white;
+  background: rgba(255,255,255,0.12);
   transform: translateY(-2px);
+  text-decoration: none;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
   .list-nft {
-    padding: 15px;
+    padding: 32px 20px 60px;
   }
 
   .list-nft-header h1 {
-    font-size: 2em;
+    font-size: 2rem;
   }
 
   .list-nft-content {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
 
-  .nft-preview-card,
-  .listing-form-section {
-    padding: 20px;
-  }
-
+  .preview-header,
   .form-actions {
     flex-direction: column;
+    gap: 12px;
   }
 
   .approval-section {
-    padding: 20px 15px;
+    padding: 30px 20px;
   }
 }
 
 @media (max-width: 480px) {
   .list-nft-header h1 {
-    font-size: 1.8em;
-  }
-
-  .preview-header {
-    flex-direction: column;
-    gap: 10px;
+    font-size: 1.8rem;
   }
 
   .action-btn {
     padding: 12px 20px;
-    font-size: 1em;
+    font-size: 0.95rem;
   }
 }

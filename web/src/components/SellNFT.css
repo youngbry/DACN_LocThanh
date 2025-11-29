@@ -1,152 +1,184 @@
+/* =========================================================
+   SELL NFT — MARKETPLACE THEME (Navy Blue + Glassmorphism)
+========================================================= */
+
+:root {
+  /* Light mode colors with soft cyan tint */
+  --mk-bg-1: #eff8fb;
+  --mk-bg-2: #e0f2f7;
+  --mk-bg-3: #d1ecf1;
+
+  --mk-blue: #2563eb;
+  --mk-cyan: #0891b2;
+  --mk-cyan-dark: #0e7490;
+
+  --mk-text-primary: #1e293b;
+  --mk-text-secondary: #475569;
+  --mk-text-muted: #64748b;
+
+  --mk-glass-1: rgba(255, 255, 255, 0.7);
+  --mk-glass-2: rgba(255, 255, 255, 0.85);
+  --mk-border: rgba(148, 163, 184, 0.2);
+
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.12);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.18);
+
+  --mk-radius-md: 14px;
+  --mk-radius-lg: 22px;
+
+  --mk-transition: 0.28s ease;
+}
+
+/* ===========================
+   MAIN CONTAINER
+=========================== */
 .sell-nft {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
+  min-height: 100vh;
+  padding: 48px 32px 80px;
+  background: linear-gradient(
+    135deg,
+    var(--mk-bg-1) 0%,
+    var(--mk-bg-2) 35%,
+    var(--mk-bg-3) 70%,
+    #c5e7ed 100%
+  );
+  position: relative;
+  overflow: hidden;
+  color: var(--mk-text-primary);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Back button styles */
-.back-btn {
-  background: #4a5568;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 20px;
-  transition: background-color 0.3s ease;
+
+
+/* INNER WRAPPER */
+.sell-nft > * {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
 }
 
-.back-btn:hover {
-  background: #2d3748;
-}
-
-/* Small variant for footer back button */
-.back-btn.small {
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 14px;
-}
-
+/* ===========================
+   HEADER
+=========================== */
 .sell-nft-header {
+  background: var(--mk-glass-1);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  padding: 32px 36px;
+  margin-bottom: 36px;
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.sell-nft-loading {
+.sell-nft-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1e40af, #0891b2);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.warning-badge {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ===========================
+   LOADING & ERROR STATES
+=========================== */
+.sell-nft-loading,
+.sell-nft-error {
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
-  color: #666;
+  text-align: center;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #007bff;
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top: 4px solid var(--mk-cyan);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.sell-nft-error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  text-align: center;
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .error-icon {
-  font-size: 4em;
+  font-size: 4rem;
   margin-bottom: 20px;
 }
 
 .sell-nft-error h2 {
-  color: #dc3545;
+  color: #fca5a5;
   margin-bottom: 15px;
+  font-size: 1.8rem;
 }
 
 .sell-nft-error p {
-  color: #6c757d;
+  color: var(--mk-text-secondary);
   margin-bottom: 30px;
 }
 
-.sell-nft-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #e9ecef;
-}
-
-.sell-nft-header h1 {
-  color: #2c3e50;
-  margin: 0;
-}
-
-.warning-badge {
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-weight: bold;
-  font-size: 0.9em;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
+/* ===========================
+   CONTENT GRID
+=========================== */
 .sell-nft-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 32px;
+  margin-bottom: 32px;
 }
 
+/* ===========================
+   NFT PREVIEW
+=========================== */
 .nft-preview-section {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  height: fit-content;
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  padding: 32px;
 }
 
 .nft-preview-section h3 {
-  color: #2c3e50;
-  margin: 0 0 20px 0;
-  font-size: 1.3em;
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mk-text-primary);
 }
 
 .nft-preview-card {
-  background: #f8f9fa;
-  padding: 25px;
-  border-radius: 15px;
-  border-left: 4px solid #667eea;
+  background: var(--mk-glass-1);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-md);
+  padding: 24px;
 }
 
 .preview-header {
@@ -157,28 +189,28 @@
 }
 
 .preview-id {
-  background: #667eea;
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: white;
   padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 0.9em;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .preview-year {
-  background: #6c757d;
-  color: white;
+  background: rgba(255,255,255,0.1);
+  color: var(--mk-text-secondary);
   padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 0.9em;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .preview-model {
-  color: #2c3e50;
-  margin: 0 0 20px 0;
-  font-size: 1.5em;
-  font-weight: bold;
+  margin: 0 0 24px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--mk-text-primary);
   text-align: center;
 }
 
@@ -193,8 +225,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #dee2e6;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .preview-item:last-child {
@@ -202,125 +234,132 @@
 }
 
 .preview-label {
-  color: #6c757d;
-  font-weight: 500;
-  font-size: 0.95em;
+  font-size: 0.9rem;
+  color: var(--mk-text-secondary);
+  font-weight: 600;
 }
 
 .preview-value {
-  color: #2c3e50;
-  font-weight: bold;
-  font-family: monospace;
-  background: white;
-  padding: 5px 10px;
+  color: var(--mk-text-primary);
+  background: rgba(255,255,255,0.08);
+  padding: 6px 12px;
   border-radius: 6px;
-  font-size: 0.9em;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 0.85rem;
 }
 
 .current-owner {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 15px;
-  border-top: 2px solid #dee2e6;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: var(--mk-radius-md);
+  padding: 16px;
+  margin-top: 20px;
 }
 
 .owner-label {
-  color: #6c757d;
-  font-size: 0.9em;
-  font-weight: 500;
+  display: block;
+  font-size: 0.85rem;
+  color: var(--mk-cyan-light);
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .owner-address {
-  color: #2c3e50;
-  font-weight: bold;
-  font-family: monospace;
-  background: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  text-align: center;
-  border: 1px solid #dee2e6;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-weight: 700;
+  color: var(--mk-text-primary);
+  word-break: break-all;
 }
 
+/* ===========================
+   TRANSFER FORM
+=========================== */
 .transfer-form-section {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  height: fit-content;
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  padding: 32px;
 }
 
 .transfer-form-section h3 {
-  color: #2c3e50;
-  margin: 0 0 25px 0;
-  font-size: 1.3em;
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mk-text-primary);
 }
 
 .transfer-form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .form-group label {
-  color: #2c3e50;
+  color: var(--mk-text-primary);
   font-weight: 600;
-  font-size: 0.95em;
+  font-size: 1rem;
 }
 
 .form-group input {
-  padding: 15px;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  font-size: 0.95em;
-  font-family: monospace;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
+  padding: 14px 16px;
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-md);
+  font-size: 0.95rem;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  background: rgba(255,255,255,0.05);
+  color: var(--mk-text-primary);
+  transition: var(--mk-transition);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--mk-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+  background: rgba(255,255,255,0.08);
 }
 
 .form-group input.error {
-  border-color: #dc3545;
-  background: #fff5f5;
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .form-group input:disabled {
-  background: #e9ecef;
-  color: #6c757d;
+  background: rgba(255,255,255,0.02);
+  color: var(--mk-text-muted);
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .error-message {
-  color: #dc3545;
-  font-size: 0.85em;
+  color: #fca5a5;
+  font-size: 0.85rem;
   font-weight: 500;
-  margin-top: 5px;
 }
 
+/* ===========================
+   WARNING BOX
+=========================== */
 .warning-box {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  border: 2px solid #ffc107;
-  border-radius: 15px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--mk-radius-md);
   padding: 20px;
   display: flex;
-  gap: 15px;
+  gap: 16px;
 }
 
 .warning-icon {
-  font-size: 2em;
-  color: #856404;
+  font-size: 2rem;
+  color: #fbbf24;
+  flex-shrink: 0;
 }
 
 .warning-content {
@@ -328,89 +367,74 @@
 }
 
 .warning-content h4 {
-  color: #856404;
-  margin: 0 0 15px 0;
-  font-size: 1.1em;
+  color: #fbbf24;
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
 .warning-content ul {
-  color: #856404;
+  color: var(--mk-text-secondary);
   margin: 0;
   padding-left: 20px;
 }
 
 .warning-content li {
   margin-bottom: 8px;
-  font-size: 0.95em;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
+/* ===========================
+   FORM ACTIONS
+=========================== */
 .form-actions {
   display: flex;
-  gap: 15px;
+  gap: 14px;
   margin-top: 10px;
 }
 
 .action-btn {
   flex: 1;
-  padding: 15px 25px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 14px;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1em;
+  transition: var(--mk-transition);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  text-decoration: none;
+  text-align: center;
 }
 
 .action-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
-  transform: none !important;
 }
 
 .action-btn.cancel {
-  background: #6c757d;
-  color: white;
+  background: rgba(255,255,255,0.08);
+  color: var(--mk-text-secondary);
+  border: 1px solid var(--mk-border);
 }
 
 .action-btn.cancel:hover:not(:disabled) {
-  background: #5a6268;
-  transform: translateY(-2px);
-  text-decoration: none;
-  color: white;
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
 }
 
 .action-btn.transfer {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: white;
 }
 
 .action-btn.transfer:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-}
-
-.back-btn {
-  background: #6c757d;
-  color: white;
-  padding: 12px 25px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-
-.back-btn:hover {
-  background: #5a6268;
-  transform: translateY(-2px);
-  text-decoration: none;
-  color: white;
+  transform: translateY(-3px);
+  box-shadow: var(--mk-shadow-hover);
 }
 
 .btn-spinner {
@@ -422,39 +446,54 @@
   animation: spin 1s linear infinite;
 }
 
-@media (max-width: 768px) {
+/* ===========================
+   BACK BUTTON
+=========================== */
+.back-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.06);
+  color: var(--mk-text-secondary);
+  border: 1px solid var(--mk-border);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--mk-transition);
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
   .sell-nft {
-    padding: 15px;
+    padding: 32px 20px 60px;
   }
 
   .sell-nft-header {
     flex-direction: column;
-    gap: 15px;
     text-align: center;
   }
 
   .sell-nft-content {
     grid-template-columns: 1fr;
-    gap: 25px;
   }
 
-  .preview-item {
+  .preview-item,
+  .form-actions {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .preview-value {
-    align-self: stretch;
-    text-align: center;
+    gap: 12px;
   }
 
   .warning-box {
     flex-direction: column;
     text-align: center;
-  }
-
-  .form-actions {
-    flex-direction: column;
   }
 }
