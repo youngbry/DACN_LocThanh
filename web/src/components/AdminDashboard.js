@@ -465,6 +465,9 @@ const AdminDashboard = () => {
         <div className="admin-actions">
           <h3>🛠️ Quản lý hệ thống</h3>
           <div className="action-buttons">
+            <Link to="/admin/batch" className="action-btn">
+              📦 Đăng ký hàng loạt
+            </Link>
             <Link to="/admin/nfts" className="action-btn">
               📋 Quản lý tất cả NFT
             </Link>

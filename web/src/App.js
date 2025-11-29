@@ -12,6 +12,7 @@ import "./App.css";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminNFTManagement from "./components/AdminNFTManagement";
 import AdminReports from "./components/AdminReports";
+import AdminBatchRegister from "./components/AdminBatchRegister";
 import UserDashboard from "./components/UserDashboard";
 import NFTDetail from "./components/NFTDetail";
 import SellNFT from "./components/SellNFT";
@@ -104,6 +105,7 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/nfts" element={<AdminNFTManagement />} />
             <Route path="/admin/reports" element={<AdminReports />} />
+            <Route path="/admin/batch" element={<AdminBatchRegister />} />
 
             {/* User Routes */}
             <Route path="/user" element={<UserDashboard />} />

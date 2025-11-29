@@ -129,12 +129,10 @@ const NFTDetail = () => {
 
       const filtered = data
         .filter(
-          (r) =>
-            String(r.tokenId) === String(tid) && r.category === "unlock"
+          (r) => String(r.tokenId) === String(tid) && r.category === "unlock"
         )
         .sort((a, b) => {
-          if (a.status !== b.status)
-            return a.status === "open" ? -1 : 1;
+          if (a.status !== b.status) return a.status === "open" ? -1 : 1;
           return b.createdAt - a.createdAt;
         });
 
@@ -207,7 +205,9 @@ const NFTDetail = () => {
     return (
       <div className="nftdetail-notfound">
         <h2>❌ NFT không tồn tại</h2>
-        <Link to="/" className="back-btn">← Về Dashboard</Link>
+        <Link to="/" className="back-btn">
+          ← Về Dashboard
+        </Link>
       </div>
     );
 
@@ -226,9 +226,7 @@ const NFTDetail = () => {
           ) : (
             <span className="badge viewer">👁 Xem</span>
           )}
-          {nft.locked && (
-            <span className="badge locked">🔒 Đã khóa</span>
-          )}
+          {nft.locked && <span className="badge locked">🔒 Đã khóa</span>}
         </div>
       </div>
 
@@ -304,9 +302,7 @@ const NFTDetail = () => {
                     <div className="report-top">
                       <span className="rid">#R{r.id}</span>
                       <span className={`r-status ${r.status}`}>
-                        {r.status === "open"
-                          ? "⏳ Chờ xử lý"
-                          : "✔ Đã xử lý"}
+                        {r.status === "open" ? "⏳ Chờ xử lý" : "✔ Đã xử lý"}
                       </span>
                     </div>
                     <p>{r.message}</p>
@@ -346,9 +342,7 @@ const NFTDetail = () => {
                   <span>{formatAddr(h.to)}</span>
                 </div>
 
-                <div className="tx">
-                  TX: {h.tx.slice(0, 10)}...
-                </div>
+                <div className="tx">TX: {h.tx.slice(0, 10)}...</div>
               </div>
             </div>
           ))}
@@ -357,8 +351,12 @@ const NFTDetail = () => {
 
       {/* FOOTER */}
       <div className="nftdetail-footer">
-        <Link to="/my-nfts" className="btn back">← NFT của tôi</Link>
-        <Link to="/" className="btn home">🏠 Dashboard</Link>
+        <Link to="/my-nfts" className="btn back">
+          ← NFT của tôi
+        </Link>
+        <Link to="/" className="btn home">
+          🏠 Dashboard
+        </Link>
       </div>
 
       {/* REPORT MODAL */}
@@ -392,9 +390,7 @@ const NFTDetail = () => {
               </button>
             </div>
 
-            {reportMessage && (
-              <p className="report-status">{reportMessage}</p>
-            )}
+            {reportMessage && <p className="report-status">{reportMessage}</p>}
           </div>
         </div>
       )}

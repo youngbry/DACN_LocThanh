@@ -1,0 +1,26 @@
+[
+  {
+    "recipientAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "vin": "RLHPC4508P5123456",
+    "engineNumber": "PC45E-5123456",
+    "model": "Honda Winner X 150",
+    "color": "Đen nhám",
+    "year": "2023"
+  },
+  {
+    "recipientAddress": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "vin": "RLHPC4508P5123457",
+    "engineNumber": "PC45E-5123457",
+    "model": "Yamaha Exciter 155",
+    "color": "Xanh dương",
+    "year": "2024"
+  },
+  {
+    "recipientAddress": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+    "vin": "RLHSV2503P5789012",
+    "engineNumber": "SV25E-5789012",
+    "model": "Honda SH 150i",
+    "color": "Trắng",
+    "year": "2023"
+  }
+]
