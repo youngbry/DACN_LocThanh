@@ -20,6 +20,8 @@ import Marketplace from "./components/Marketplace";
 import MyNFTs from "./components/MyNFTs";
 import TransferNFT from "./components/TransferNFT";
 import ReportIssue from "./components/ReportIssue";
+import ChatWidget from "./components/chatbot/ChatWidget";
+import Footer from "./components/Footer.css";
 
 // Header with navigation links for user pages
 const Navigation = () => {
@@ -132,6 +134,10 @@ function App() {
           </Routes>
         </main>
       </div>
+
+      {/* 💬 Chat AI Widget (nổi ở góc phải trang) */}
+      <ChatWidget />
+      
     </Router>
   );
 }
