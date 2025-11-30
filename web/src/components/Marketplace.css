@@ -20,8 +20,8 @@
   --mk-glass-2: rgba(255, 255, 255, 0.85);
   --mk-border: rgba(148, 163, 184, 0.2);
 
-  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.12);
-  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.18);
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0, 0, 0, 0.12);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0, 0, 0, 0.18);
 
   --mk-radius-md: 14px;
   --mk-radius-lg: 22px;
@@ -120,13 +120,13 @@
 }
 
 .market-btn.refresh {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--mk-border);
   color: var(--mk-text-secondary);
 }
 
 .market-btn.refresh:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   transform: translateY(-3px);
 }
 
@@ -159,7 +159,7 @@
   padding: 16px 22px;
   border-radius: var(--mk-radius-md);
   background: rgba(240, 68, 56, 0.28);
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   margin-bottom: 30px;
   color: #ffdcdc;
   font-weight: 600;
@@ -227,7 +227,7 @@
 
 .market-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(255,255,255,0.25);
+  border-color: rgba(255, 255, 255, 0.25);
   box-shadow: var(--mk-shadow-hover);
 }
 
@@ -275,7 +275,7 @@
 
 .spec-row .value {
   color: var(--mk-text-primary);
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   padding: 6px 10px;
   border-radius: 6px;
   font-family: "JetBrains Mono", monospace;

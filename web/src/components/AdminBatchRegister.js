@@ -9,6 +9,7 @@ function AdminBatchRegister() {
   const [status, setStatus] = useState("");
   const [progress, setProgress] = useState({ current: 0, total: 0 });
   const [isProcessing, setIsProcessing] = useState(false);
+  const [useAutoMode, setUseAutoMode] = useState(true); // Toggle auto/manual mode
 
   // Xử lý upload file
   const handleFileUpload = (e) => {
@@ -134,7 +135,59 @@ function AdminBatchRegister() {
       .filter((v) => v !== null);
   };
 
-  // Mint hàng loạt
+  // Mint hàng loạt (Auto mode - qua API)
+  const handleAutoMint = async () => {
+    if (vehicles.length === 0) {
+      setStatus("❌ Không có dữ liệu để mint");
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      setProgress({ current: 0, total: vehicles.length });
+      setStatus("⏳ Đang gửi yêu cầu đến server tự động...");
+
+      const response = await fetch("http://localhost:3002/api/batch-mint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vehicles }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message || "Batch mint failed");
+      }
+
+      // Update progress
+      setProgress({ current: data.summary.total, total: data.summary.total });
+
+      const { success, skipped, errors } = data.summary;
+      setStatus(
+        `🎉 Hoàn tất! Thành công: ${success}, Bỏ qua: ${skipped}, Lỗi: ${errors}`
+      );
+
+      // Display results
+      displayResults(data.results);
+
+      console.log("📊 Kết quả từ server:", data);
+    } catch (err) {
+      console.error("Lỗi auto batch mint:", err);
+      setStatus(
+        `❌ Lỗi: ${err.message}. Đảm bảo server batch-mint đang chạy (npm run batch-mint)`
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Mint hàng loạt (Manual mode - qua MetaMask)
   const handleBatchMint = async () => {
     if (vehicles.length === 0) {
       setStatus("❌ Không có dữ liệu để mint");
@@ -205,25 +258,14 @@ function AdminBatchRegister() {
 
           const receipt = await tx.wait();
 
-          // Lấy token ID từ event
-          let tokenId = null;
-          const mintEvent = receipt.logs.find(
-            (log) =>
-              log.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase()
-          );
-          if (mintEvent && mintEvent.topics && mintEvent.topics[3]) {
-            tokenId = parseInt(mintEvent.topics[3], 16);
-          }
-
           results.push({
             index: i + 1,
             status: "✅ SUCCESS",
-            tokenId,
-            txHash: tx.hash,
+            txHash: receipt.hash,
             vehicle,
           });
         } catch (err) {
-          console.error(`Lỗi mint xe ${i + 1}:`, err);
+          console.error(err);
           results.push({
             index: i + 1,
             status: "❌ ERROR",
@@ -231,27 +273,17 @@ function AdminBatchRegister() {
             vehicle,
           });
         }
-
-        // Delay nhỏ giữa các transaction để tránh nonce issues
+        // delay
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
-      // Tổng kết
-      const success = results.filter((r) => r.status === "✅ SUCCESS").length;
-      const skipped = results.filter((r) => r.status === "❌ SKIP").length;
-      const errors = results.filter((r) => r.status === "❌ ERROR").length;
-
       setStatus(
-        `🎉 Hoàn tất! Thành công: ${success}, Bỏ qua: ${skipped}, Lỗi: ${errors}`
+        `✅ Hoàn tất! Thành công: ${
+          results.filter((r) => r.status.includes("SUCCESS")).length
+        }`
       );
-
-      // Log chi tiết
-      console.log("📊 Kết quả batch mint:", results);
-
-      // Hiển thị kết quả chi tiết
       displayResults(results);
     } catch (err) {
-      console.error("Lỗi batch mint:", err);
       setStatus(`❌ Lỗi: ${err.message}`);
     } finally {
       setIsProcessing(false);
@@ -281,7 +313,13 @@ function AdminBatchRegister() {
               (r) => `
             <tr>
               <td style="border: 1px solid #ddd; padding: 8px;">${r.index}</td>
-              <td style="border: 1px solid #ddd; padding: 8px;">${r.status}</td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${
+                r.status.includes("SUCCESS")
+                  ? "✅ SUCCESS"
+                  : r.status.includes("SKIP")
+                  ? "❌ SKIP"
+                  : "❌ ERROR"
+              }</td>
               <td style="border: 1px solid #ddd; padding: 8px;">${
                 r.vehicle.vin
               }</td>
@@ -361,19 +399,44 @@ function AdminBatchRegister() {
               </div>
             ))}
             {vehicles.length > 5 && (
-              <p className="muted">... và {vehicles.length - 5} xe khác</p>
+              <div className="more-items">
+                ...và {vehicles.length - 5} xe khác
+              </div>
             )}
           </div>
         </div>
       )}
 
       <div className="action-section">
+        <div className="mode-toggle">
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              checked={useAutoMode}
+              onChange={() => setUseAutoMode(true)}
+              disabled={isProcessing}
+            />
+            <span>🤖 Tự động (Không cần xác nhận ví)</span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              checked={!useAutoMode}
+              onChange={() => setUseAutoMode(false)}
+              disabled={isProcessing}
+            />
+            <span>👤 Thủ công (Xác nhận từng giao dịch)</span>
+          </label>
+        </div>
+
         <button
           className="btn primary"
-          onClick={handleBatchMint}
+          onClick={useAutoMode ? handleAutoMint : handleBatchMint}
           disabled={vehicles.length === 0 || isProcessing}
         >
-          {isProcessing ? "⏳ Đang xử lý..." : "🚀 Bắt đầu mint hàng loạt"}
+          {isProcessing ? "⏳ Đang xử lý..." : "🚀 Bắt đầu Mint"}
         </button>
       </div>
 
@@ -399,14 +462,19 @@ function AdminBatchRegister() {
             tính năng Data → Text to Columns (Delimiter = Comma).
           </li>
           <li>
-            <strong>JSON format:</strong> Array of objects với các field trên
+            <strong>Chế độ tự động:</strong> Server tự động ký transaction,
+            không cần xác nhận ví. Yêu cầu chạy server:{" "}
+            <code>cd server && npm run batch-mint</code>
+          </li>
+          <li>
+            <strong>Chế độ thủ công:</strong> Sử dụng ví MetaMask/Rabby, cần xác
+            nhận từng transaction
           </li>
           <li>Hệ thống tự động bỏ qua các xe đã có VIN hoặc số máy trùng</li>
           <li>Mỗi transaction sẽ delay 500ms để tránh lỗi nonce</li>
           <li>
             Khuyến nghị lưu CSV với encoding UTF-8 để hiển thị tiếng Việt đúng
           </li>
-          <li>Bạn cần ký xác nhận từng transaction trong ví</li>
         </ul>
       </div>
     </div>

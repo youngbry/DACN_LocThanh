@@ -68,7 +68,62 @@
 }
 
 .action-section {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+}
+
+.mode-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px 20px;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #cbd5e0;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.mode-toggle label:hover {
+  border-color: #4299e1;
+  background: #edf2f7;
+}
+
+.mode-toggle input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.mode-toggle input[type="radio"]:checked + span {
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.mode-toggle label:has(input:checked) {
+  background: #bee3f8;
+  border-color: #3182ce;
+}
+
+.auto-mode-note {
+  background: #d1ecf1;
+  border: 1px solid #0c5460;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #0c5460;
+  font-size: 0.9em;
+  margin: 0;
 }
 
 .progress-section {

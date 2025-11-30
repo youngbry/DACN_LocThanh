@@ -50,6 +50,10 @@ npm start
 
 cd "c:\Users\admin\source\repos\GIT yongbry\DACN_locThanh\server"; npm start
 
+# Terminal 5: chạy server tự động mint NFT
+.\start-batch-mint-server.bat
+# Terminal 6: xem list block đã tạo
+npx hardhat run scripts/view-blocks.js --network localhost
 # Backup trước khi tắt node
 npx hardhat run scripts/backup-state.js --network localhost
 

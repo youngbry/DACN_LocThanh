@@ -20,8 +20,8 @@
   --mk-glass-2: rgba(255, 255, 255, 0.85);
   --mk-border: rgba(148, 163, 184, 0.2);
 
-  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.12);
-  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.18);
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0, 0, 0, 0.12);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0, 0, 0, 0.18);
 
   --mk-radius-md: 14px;
   --mk-radius-lg: 22px;
@@ -128,7 +128,7 @@
   padding: 12px 14px;
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-md);
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--mk-text-primary);
   font-size: 0.95rem;
   transition: var(--mk-transition);
@@ -140,7 +140,7 @@
   outline: none;
   border-color: var(--mk-cyan);
   box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .form-group textarea {
@@ -232,7 +232,7 @@
   padding: 12px 14px;
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-md);
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--mk-text-primary);
   font-size: 0.95rem;
 }
@@ -366,7 +366,7 @@
 }
 
 .my-report-body .msg {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   padding: 12px;
   border-radius: var(--mk-radius-md);
   border: 1px solid var(--mk-border);

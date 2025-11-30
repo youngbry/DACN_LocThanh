@@ -17,8 +17,8 @@
   --mk-glass-2: rgba(255, 255, 255, 0.85);
   --mk-border: rgba(148, 163, 184, 0.2);
 
-  --mk-shadow-soft: 0 8px 24px -6px rgba(0,0,0,0.12);
-  --mk-shadow-hover: 0 16px 40px -8px rgba(0,0,0,0.18);
+  --mk-shadow-soft: 0 8px 24px -6px rgba(0, 0, 0, 0.12);
+  --mk-shadow-hover: 0 16px 40px -8px rgba(0, 0, 0, 0.18);
 
   --mk-radius-md: 14px;
   --mk-radius-lg: 22px;
@@ -124,8 +124,15 @@
 }
 
 @keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.6); opacity: 0.4; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+  }
 }
 
 /* STATS */
@@ -288,7 +295,7 @@
   justify-content: space-between;
   font-size: 0.85em;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .nft-spec-row:last-of-type {

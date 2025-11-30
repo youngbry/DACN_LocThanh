@@ -158,7 +158,7 @@ const ReportIssue = () => {
             flexWrap: "wrap",
             gap: "1.5rem",
             backdropFilter: "blur(18px)",
-            border: "1px solid rgba(148, 163, 184, 0.2)"
+            border: "1px solid rgba(148, 163, 184, 0.2)",
           }}
         >
           <div>
@@ -167,8 +167,7 @@ const ReportIssue = () => {
                 fontSize: "2.5rem",
                 fontWeight: "800",
                 marginBottom: "0.5rem",
-                background:
-                  "linear-gradient(135deg, #1e40af 0%, #0891b2 100%)",
+                background: "linear-gradient(135deg, #1e40af 0%, #0891b2 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -189,227 +188,217 @@ const ReportIssue = () => {
         </div>
 
         <form className="report-form" onSubmit={submit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Loại báo cáo</label>
-                <select
-                  name="category"
-                  value={form.category}
-                  onChange={onChange}
-                >
-                  <option value="unlock">Yêu cầu mở khóa NFT</option>
-                  <option value="listing">Vấn đề đăng bán/mua</option>
-                  <option value="mint">Vấn đề đăng ký xe</option>
-                  <option value="other">Khác</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Token ID (nếu có)</label>
-                <input
-                  name="tokenId"
-                  value={form.tokenId}
-                  onChange={onChange}
-                  placeholder="VD: 12"
-                />
-              </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Loại báo cáo</label>
+              <select name="category" value={form.category} onChange={onChange}>
+                <option value="unlock">Yêu cầu mở khóa NFT</option>
+                <option value="listing">Vấn đề đăng bán/mua</option>
+                <option value="mint">Vấn đề đăng ký xe</option>
+                <option value="other">Khác</option>
+              </select>
             </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label>Tiêu đề</label>
-                <input
-                  name="subject"
-                  value={form.subject}
-                  onChange={onChange}
-                  placeholder="Tóm tắt ngắn gọn"
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group full">
-                <label>Nội dung báo cáo *</label>
-                <textarea
-                  name="message"
-                  value={form.message}
-                  onChange={onChange}
-                  placeholder="Mô tả chi tiết vấn đề bạn gặp phải..."
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label>Tên liên hệ</label>
-                <input
-                  name="name"
-                  value={form.name}
-                  onChange={onChange}
-                  placeholder="Tên của bạn"
-                />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  name="email"
-                  value={form.email}
-                  onChange={onChange}
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
-
-            <div className="form-actions">
-              <button
-                type="submit"
-                className="submit-btn"
-                disabled={submitting}
-              >
-                {submitting ? "⏳ Đang gửi..." : "📨 Gửi báo cáo"}
-              </button>
-            </div>
-
-            {status && (
-              <div
-                className={`status ${
-                  status.startsWith("✅") ? "success" : "error"
-                }`}
-              >
-                {status}
-              </div>
-            )}
-          </form>
-
-          <div className="report-lookup">
-            <h2>🔎 Tra cứu phản hồi</h2>
-            <form onSubmit={lookup} className="lookup-form">
+            <div className="form-group">
+              <label>Token ID (nếu có)</label>
               <input
-                placeholder="Nhập mã báo cáo (ví dụ: từ thông báo sau khi gửi)"
-                value={lookupId}
-                onChange={(e) => setLookupId(e.target.value)}
+                name="tokenId"
+                value={form.tokenId}
+                onChange={onChange}
+                placeholder="VD: 12"
               />
-              <button type="submit" className="submit-btn">
-                Tra cứu
-              </button>
-            </form>
-            {lookupStatus && (
-              <div
-                className={`status ${
-                  lookupStatus.startsWith("✅") ? "success" : "error"
-                }`}
-              >
-                {lookupStatus}
-              </div>
-            )}
-            {lookupResult && (
-              <div className="lookup-result">
-                <div>
-                  <strong>Mã:</strong> {lookupResult.id}
-                </div>
-                <div>
-                  <strong>Trạng thái:</strong>{" "}
-                  {lookupResult.status === "resolved"
-                    ? "Đã xử lý"
-                    : "Chưa xử lý"}
-                </div>
-                {lookupResult.tokenId && (
-                  <div>
-                    <strong>Token:</strong> #{lookupResult.tokenId}
-                  </div>
-                )}
-                <div>
-                  <strong>Loại:</strong> {lookupResult.category}
-                </div>
-                <div>
-                  <strong>Gửi lúc:</strong>{" "}
-                  {new Date(lookupResult.createdAt).toLocaleString("vi-VN")}
-                </div>
-                {lookupResult.status === "resolved" && (
-                  <div className="lookup-admin-note">
-                    <strong>Phản hồi từ admin:</strong>
-                    <div>{lookupResult.adminNote || "(Không có ghi chú)"}</div>
-                    {lookupResult.unlockDecision === true && (
-                      <div>🔓 NFT đã được mở khóa</div>
-                    )}
-                    {lookupResult.unlockDecision === false && (
-                      <div>🔒 NFT tiếp tục bị khóa</div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+            </div>
           </div>
 
-          {trackedIds.length > 0 && (
-            <div className="my-reports">
-              <h2>🗂️ Báo cáo của bạn</h2>
-              <p>Danh sách các báo cáo bạn đã gửi gần đây. Tự động cập nhật.</p>
-              <div className="my-reports-list">
-                {myReports.map((r) => (
-                  <div
-                    key={r.id}
-                    className={`my-report-card ${
-                      r.status === "resolved" ? "resolved" : "pending"
-                    }`}
-                  >
-                    <div className="my-report-header">
-                      <span className="rid">#R{r.id}</span>
-                      {r.tokenId && (
-                        <span className="rtoken">NFT #{r.tokenId}</span>
-                      )}
-                      <span
-                        className={`rstatus ${
-                          r.status === "resolved" ? "resolved" : "pending"
-                        }`}
-                      >
-                        {r.status === "resolved"
-                          ? "✅ Đã xử lý"
-                          : "⏳ Chưa xử lý"}
-                      </span>
-                      <button
-                        className="remove-btn"
-                        title="Bỏ theo dõi"
-                        onClick={() => removeTrackedId(r.id)}
-                      >
-                        ✖
-                      </button>
-                    </div>
-                    <div className="my-report-body">
-                      <div>
-                        <strong>Loại:</strong> {r.category}
-                      </div>
-                      <div>
-                        <strong>Gửi lúc:</strong>{" "}
-                        {r.createdAt
-                          ? new Date(r.createdAt).toLocaleString("vi-VN")
-                          : "-"}
-                      </div>
-                      {r.subject && (
-                        <div>
-                          <strong>Tiêu đề:</strong> {r.subject}
-                        </div>
-                      )}
-                      <div className="msg">
-                        <strong>Nội dung:</strong> {r.message}
-                      </div>
-                      {r.status === "resolved" && (
-                        <div className="admin-reply">
-                          <strong>Phản hồi từ admin:</strong>
-                          <div>{r.adminNote || "(Không có ghi chú)"}</div>
-                          {r.unlockDecision === true && (
-                            <div>🔓 NFT đã được mở khóa</div>
-                          )}
-                          {r.unlockDecision === false && (
-                            <div>🔒 NFT tiếp tục bị khóa</div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Tiêu đề</label>
+              <input
+                name="subject"
+                value={form.subject}
+                onChange={onChange}
+                placeholder="Tóm tắt ngắn gọn"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group full">
+              <label>Nội dung báo cáo *</label>
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={onChange}
+                placeholder="Mô tả chi tiết vấn đề bạn gặp phải..."
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Tên liên hệ</label>
+              <input
+                name="name"
+                value={form.name}
+                onChange={onChange}
+                placeholder="Tên của bạn"
+              />
+            </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                name="email"
+                value={form.email}
+                onChange={onChange}
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="submit-btn" disabled={submitting}>
+              {submitting ? "⏳ Đang gửi..." : "📨 Gửi báo cáo"}
+            </button>
+          </div>
+
+          {status && (
+            <div
+              className={`status ${
+                status.startsWith("✅") ? "success" : "error"
+              }`}
+            >
+              {status}
             </div>
           )}
+        </form>
+
+        <div className="report-lookup">
+          <h2>🔎 Tra cứu phản hồi</h2>
+          <form onSubmit={lookup} className="lookup-form">
+            <input
+              placeholder="Nhập mã báo cáo (ví dụ: từ thông báo sau khi gửi)"
+              value={lookupId}
+              onChange={(e) => setLookupId(e.target.value)}
+            />
+            <button type="submit" className="submit-btn">
+              Tra cứu
+            </button>
+          </form>
+          {lookupStatus && (
+            <div
+              className={`status ${
+                lookupStatus.startsWith("✅") ? "success" : "error"
+              }`}
+            >
+              {lookupStatus}
+            </div>
+          )}
+          {lookupResult && (
+            <div className="lookup-result">
+              <div>
+                <strong>Mã:</strong> {lookupResult.id}
+              </div>
+              <div>
+                <strong>Trạng thái:</strong>{" "}
+                {lookupResult.status === "resolved" ? "Đã xử lý" : "Chưa xử lý"}
+              </div>
+              {lookupResult.tokenId && (
+                <div>
+                  <strong>Token:</strong> #{lookupResult.tokenId}
+                </div>
+              )}
+              <div>
+                <strong>Loại:</strong> {lookupResult.category}
+              </div>
+              <div>
+                <strong>Gửi lúc:</strong>{" "}
+                {new Date(lookupResult.createdAt).toLocaleString("vi-VN")}
+              </div>
+              {lookupResult.status === "resolved" && (
+                <div className="lookup-admin-note">
+                  <strong>Phản hồi từ admin:</strong>
+                  <div>{lookupResult.adminNote || "(Không có ghi chú)"}</div>
+                  {lookupResult.unlockDecision === true && (
+                    <div>🔓 NFT đã được mở khóa</div>
+                  )}
+                  {lookupResult.unlockDecision === false && (
+                    <div>🔒 NFT tiếp tục bị khóa</div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {trackedIds.length > 0 && (
+          <div className="my-reports">
+            <h2>🗂️ Báo cáo của bạn</h2>
+            <p>Danh sách các báo cáo bạn đã gửi gần đây. Tự động cập nhật.</p>
+            <div className="my-reports-list">
+              {myReports.map((r) => (
+                <div
+                  key={r.id}
+                  className={`my-report-card ${
+                    r.status === "resolved" ? "resolved" : "pending"
+                  }`}
+                >
+                  <div className="my-report-header">
+                    <span className="rid">#R{r.id}</span>
+                    {r.tokenId && (
+                      <span className="rtoken">NFT #{r.tokenId}</span>
+                    )}
+                    <span
+                      className={`rstatus ${
+                        r.status === "resolved" ? "resolved" : "pending"
+                      }`}
+                    >
+                      {r.status === "resolved"
+                        ? "✅ Đã xử lý"
+                        : "⏳ Chưa xử lý"}
+                    </span>
+                    <button
+                      className="remove-btn"
+                      title="Bỏ theo dõi"
+                      onClick={() => removeTrackedId(r.id)}
+                    >
+                      ✖
+                    </button>
+                  </div>
+                  <div className="my-report-body">
+                    <div>
+                      <strong>Loại:</strong> {r.category}
+                    </div>
+                    <div>
+                      <strong>Gửi lúc:</strong>{" "}
+                      {r.createdAt
+                        ? new Date(r.createdAt).toLocaleString("vi-VN")
+                        : "-"}
+                    </div>
+                    {r.subject && (
+                      <div>
+                        <strong>Tiêu đề:</strong> {r.subject}
+                      </div>
+                    )}
+                    <div className="msg">
+                      <strong>Nội dung:</strong> {r.message}
+                    </div>
+                    {r.status === "resolved" && (
+                      <div className="admin-reply">
+                        <strong>Phản hồi từ admin:</strong>
+                        <div>{r.adminNote || "(Không có ghi chú)"}</div>
+                        {r.unlockDecision === true && (
+                          <div>🔓 NFT đã được mở khóa</div>
+                        )}
+                        {r.unlockDecision === false && (
+                          <div>🔒 NFT tiếp tục bị khóa</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
