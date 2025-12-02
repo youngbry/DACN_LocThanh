@@ -1,6 +1,7 @@
 /* =========================================================
    MY NFTs — LIGHT MODE THEME
    Style: Light Background + Blue/Cyan + Glassmorphism
+   Matches Marketplace.css
 ========================================================= */
 
 :root {
@@ -33,7 +34,7 @@
 /* ===========================
    MAIN CONTAINER
 =========================== */
-.my-nfts-container {
+.mynft-container {
   min-height: 100vh;
   padding: 48px 32px 80px;
   background: linear-gradient(
@@ -48,8 +49,26 @@
   color: var(--mk-text-primary);
 }
 
+.mynft-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at 18% 28%,
+      rgba(79, 70, 229, 0.15),
+      transparent 62%
+    ),
+    radial-gradient(
+      circle at 82% 72%,
+      rgba(14, 165, 233, 0.15),
+      transparent 60%
+    );
+  filter: blur(70px) saturate(140%);
+  pointer-events: none;
+}
+
 /* INNER WRAPPER - Max Width */
-.my-nfts-container > * {
+.mynft-container > * {
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
@@ -60,7 +79,7 @@
 /* ===========================
    HEADER
 =========================== */
-.mynft-header {
+.mynft-header-card {
   background: var(--mk-glass-1);
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
@@ -75,7 +94,7 @@
   gap: 24px;
 }
 
-.mynft-header h1 {
+.mynft-header-card h1 {
   margin: 0 0 12px;
   font-weight: 800;
   font-size: 2.4rem;
@@ -84,7 +103,7 @@
   color: transparent;
 }
 
-.mynft-header p {
+.mynft-header-card p {
   margin: 0;
   color: var(--mk-text-secondary);
   font-size: 1.125rem;
@@ -93,7 +112,7 @@
 /* ===========================
    WALLET INFO
 =========================== */
-.mynft-wallet {
+.mynft-wallet-box {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -114,6 +133,7 @@
   padding: 8px 16px;
   border-radius: 8px;
   font-weight: 600;
+  border: 1px solid rgba(14, 116, 144, 0.2);
 }
 
 .wallet-status {
@@ -135,7 +155,7 @@
 /* ===========================
    LOADING STATE
 =========================== */
-.my-nfts-loading {
+.mynft-loading-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -143,15 +163,15 @@
   justify-content: center;
   background: linear-gradient(
     135deg,
-    var(--mk-navy-1) 0%,
-    var(--mk-navy-2) 35%,
-    var(--mk-navy-3) 70%,
-    #001428 100%
+    var(--mk-bg-1) 0%,
+    var(--mk-bg-2) 35%,
+    var(--mk-bg-3) 70%,
+    #c5e7ed 100%
   );
   color: var(--mk-text-primary);
 }
 
-.spinner {
+.mynft-spinner {
   width: 50px;
   height: 50px;
   border: 4px solid rgba(0, 0, 0, 0.1);
@@ -170,7 +190,7 @@
   }
 }
 
-.my-nfts-loading p {
+.mynft-loading-wrapper p {
   color: var(--mk-text-secondary);
   font-size: 1.1rem;
 }
@@ -178,22 +198,22 @@
 /* ===========================
    CONNECT WALLET STATE
 =========================== */
-.my-nfts-connect {
+.mynft-connect-wrapper {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(
     135deg,
-    var(--mk-navy-1) 0%,
-    var(--mk-navy-2) 35%,
-    var(--mk-navy-3) 70%,
-    #001428 100%
+    var(--mk-bg-1) 0%,
+    var(--mk-bg-2) 35%,
+    var(--mk-bg-3) 70%,
+    #c5e7ed 100%
   );
   padding: 20px;
 }
 
-.connect-card {
+.mynft-connect-card {
   background: var(--mk-glass-2);
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
@@ -204,7 +224,7 @@
   max-width: 480px;
 }
 
-.connect-card h2 {
+.mynft-connect-card h2 {
   margin: 0 0 16px;
   font-size: 2.2rem;
   font-weight: 800;
@@ -213,13 +233,13 @@
   color: transparent;
 }
 
-.connect-card p {
+.mynft-connect-card p {
   margin: 0 0 32px;
   color: var(--mk-text-secondary);
   font-size: 1.1rem;
 }
 
-.connect-btn {
+.mynft-btn.connect {
   padding: 16px 36px;
   border-radius: 50px;
   border: none;
@@ -231,7 +251,7 @@
   transition: var(--mk-transition);
 }
 
-.connect-btn:hover {
+.mynft-btn.connect:hover {
   transform: translateY(-3px);
   box-shadow: var(--mk-shadow-hover);
 }
@@ -239,7 +259,7 @@
 /* ===========================
    EMPTY STATE
 =========================== */
-.no-nfts {
+.mynft-empty {
   background: var(--mk-glass-2);
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
@@ -250,20 +270,20 @@
   margin-bottom: 40px;
 }
 
-.no-nfts-icon {
+.empty-icon {
   font-size: 5rem;
   margin-bottom: 24px;
   opacity: 0.6;
 }
 
-.no-nfts h3 {
+.mynft-empty h3 {
   margin: 0 0 12px;
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--mk-text-primary);
 }
 
-.no-nfts p {
+.mynft-empty p {
   margin: 0;
   color: var(--mk-text-secondary);
   font-size: 1.1rem;
@@ -271,22 +291,18 @@
 
 /* ===========================
    NFT GRID
-/* ===========================
-   NFT GRID
 =========================== */
-.nfts-grid {
+.mynft-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 26px;
   margin-bottom: 40px;
 }
-*
-  ===========================
-  NFT
-  CARD
-  ===========================
-  */
-  .nft-card {
+
+/* ===========================
+   NFT CARD
+=========================== */
+.mynft-card {
   background: var(--mk-glass-2);
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
@@ -294,16 +310,18 @@
   box-shadow: var(--mk-shadow-soft);
   overflow: hidden;
   transition: var(--mk-transition);
+  display: flex;
+  flex-direction: column;
 }
 
-.nft-card:hover {
+.mynft-card:hover {
   transform: translateY(-6px);
   border-color: rgba(255, 255, 255, 0.25);
   box-shadow: var(--mk-shadow-hover);
 }
 
 /* CARD BANNER */
-.nft-card-banner {
+.mynft-banner {
   height: 200px;
   display: flex;
   align-items: center;
@@ -314,20 +332,23 @@
 }
 
 /* CARD CONTENT */
-.nft-card-content {
+.mynft-content {
   padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.nft-card-header {
+/* Top Info (ID, Year, Locked) */
+.mynft-top {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.nft-id {
+.mynft-top .id {
   background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   border: none;
   padding: 8px 14px;
@@ -337,7 +358,7 @@
   color: white;
 }
 
-.nft-year {
+.mynft-top .year {
   background: rgba(100, 116, 139, 0.15);
   padding: 8px 14px;
   border-radius: 50px;
@@ -346,7 +367,7 @@
   color: var(--mk-text-secondary);
 }
 
-.nft-locked {
+.mynft-top .locked {
   background: linear-gradient(135deg, #ef4444, #f97316);
   color: white;
   padding: 8px 14px;
@@ -355,7 +376,7 @@
   font-weight: 700;
 }
 
-.nft-title {
+.mynft-content .model {
   margin: 0 0 20px;
   font-size: 1.3rem;
   font-weight: 700;
@@ -365,32 +386,32 @@
 /* ===========================
    DETAILS
 =========================== */
-.nft-details {
+.details {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.detail-row {
+.details .row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.detail-row:last-child {
+.details .row:last-child {
   border-bottom: none;
 }
 
-.detail-row .label {
+.details .row .label {
   font-size: 0.85rem;
   color: var(--mk-text-secondary);
   font-weight: 600;
 }
 
-.detail-row .value {
+.details .row .value {
   color: var(--mk-text-primary);
   background: rgba(148, 163, 184, 0.15);
   padding: 6px 12px;
@@ -402,12 +423,13 @@
 /* ===========================
    ACTIONS
 =========================== */
-.nft-actions {
+.actions {
   display: flex;
   gap: 12px;
+  margin-top: auto;
 }
 
-.nft-btn {
+.mynft-btn {
   flex: 1;
   padding: 12px 18px;
   border-radius: 10px;
@@ -421,28 +443,28 @@
   display: inline-block;
 }
 
-.nft-btn.primary {
+.mynft-btn.primary {
   background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: white;
 }
 
-.nft-btn.primary:hover {
+.mynft-btn.primary:hover {
   transform: translateY(-3px);
   box-shadow: var(--mk-shadow-hover);
 }
 
-.nft-btn.secondary {
+.mynft-btn.secondary {
   background: rgba(148, 163, 184, 0.15);
   color: var(--mk-cyan-dark);
   border: 1px solid var(--mk-border);
 }
 
-.nft-btn.secondary:hover {
+.mynft-btn.secondary:hover {
   background: rgba(148, 163, 184, 0.25);
   border-color: rgba(148, 163, 184, 0.35);
 }
 
-.nft-btn.disabled {
+.mynft-btn.disabled {
   background: rgba(100, 116, 139, 0.1);
   color: var(--mk-text-muted);
   border: 1px solid rgba(148, 163, 184, 0.2);
@@ -460,7 +482,7 @@
   margin-top: 40px;
 }
 
-.refresh-btn {
+.mynft-btn.refresh {
   padding: 14px 28px;
   border-radius: 50px;
   border: none;
@@ -470,64 +492,45 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: var(--mk-transition);
+  flex: 0 0 auto;
 }
 
-.refresh-btn:hover {
+.mynft-btn.refresh:hover {
   transform: translateY(-3px);
   box-shadow: var(--mk-shadow-hover);
-}
-
-.back-btn {
-  padding: 14px 28px;
-  border-radius: 50px;
-  border: 1px solid var(--mk-border);
-  background: rgba(148, 163, 184, 0.15);
-  color: var(--mk-text-secondary);
-  font-weight: 700;
-  font-size: 0.9rem;
-  text-decoration: none;
-  cursor: pointer;
-  transition: var(--mk-transition);
-  display: inline-block;
-  text-align: center;
-}
-
-.back-btn:hover {
-  background: rgba(148, 163, 184, 0.25);
-  transform: translateY(-3px);
 }
 
 /* ===========================
    RESPONSIVE
 =========================== */
 @media (max-width: 900px) {
-  .my-nfts-container {
+  .mynft-container {
     padding: 32px 20px 60px;
   }
 
-  .mynft-header {
+  .mynft-header-card {
     padding: 28px 24px;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .mynft-wallet {
+  .mynft-wallet-box {
     align-items: flex-start;
   }
 
-  .nfts-grid {
+  .mynft-grid {
     grid-template-columns: 1fr;
   }
 
-  .mynft-header h1 {
+  .mynft-header-card h1 {
     font-size: 2rem;
   }
 
-  .connect-card {
+  .mynft-connect-card {
     padding: 40px 30px;
   }
 
-  .no-nfts {
+  .mynft-empty {
     padding: 60px 24px;
   }
 }

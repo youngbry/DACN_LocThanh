@@ -30,8 +30,7 @@ npm install
 
 # Frontend
 cd web
-npm install
-cd ..
+
 ```
 
 ### 2. Khởi động hệ thống

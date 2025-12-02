@@ -1,5 +1,5 @@
 /* =========================================================
-   MARKETPLACE — NAVY BLUE THEME (No Stripes)
+   MARKETPLACE — LIGHT MODE THEME (No Stripes)
 ========================================================= */
 
 :root {
@@ -27,6 +27,9 @@
   --mk-radius-lg: 22px;
 
   --mk-transition: 0.28s ease;
+  
+  /* Gradients */
+  --mk-gradient-success: linear-gradient(135deg, #22c55e 0%, #16a34a 85%);
 }
 
 /* ===========================
@@ -34,6 +37,7 @@
 =========================== */
 .marketplace {
   min-height: 100vh;
+  color: var(--mk-text-primary);
   padding: 48px 32px 80px;
   background: linear-gradient(
     135deg,
@@ -44,7 +48,30 @@
   );
   position: relative;
   overflow: hidden;
-  color: var(--mk-text-primary);
+}
+
+.marketplace::before,
+.marketplace::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.marketplace::before {
+  background: radial-gradient(
+      circle at 18% 28%,
+      rgba(79, 70, 229, 0.15),
+      transparent 62%
+    ),
+    radial-gradient(
+      circle at 82% 72%,
+      rgba(14, 165, 233, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.05), transparent 70%);
+  filter: blur(70px) saturate(140%);
 }
 
 /* ===========================
@@ -81,6 +108,7 @@
 
 .marketplace-header p {
   margin: 0;
+  font-size: 1.04rem;
   color: var(--mk-text-secondary);
 }
 
@@ -88,13 +116,15 @@
    STATUS + BUTTONS
 =========================== */
 .wallet-status {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--mk-text-secondary);
 }
 
 .wallet-connected strong {
-  color: var(--mk-cyan);
+  color: var(--mk-text-primary);
 }
 
 .wallet-disconnected {
@@ -104,29 +134,38 @@
 .marketplace-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 16px;
   margin-top: 20px;
 }
 
 .market-btn {
-  padding: 14px 28px;
-  border-radius: 50px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px 13px;
   font-size: 0.82rem;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  isolation: isolate;
+  overflow: hidden;
   transition: var(--mk-transition);
+  backdrop-filter: blur(12px);
 }
 
 .market-btn.refresh {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.4);
   border: 1px solid var(--mk-border);
   color: var(--mk-text-secondary);
 }
 
 .market-btn.refresh:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.6);
   transform: translateY(-3px);
 }
 
@@ -134,6 +173,7 @@
 .market-btn.connect {
   background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: #fff;
+  box-shadow: 0 6px 18px -4px rgba(30, 41, 59, 0.2);
 }
 
 .market-btn.primary:hover,
@@ -143,8 +183,9 @@
 }
 
 .market-btn.buy {
-  background: linear-gradient(135deg, var(--mk-cyan), #22c55e);
+  background: var(--mk-gradient-success);
   color: #fff;
+  box-shadow: 0 6px 18px -4px rgba(34, 197, 94, 0.3);
 }
 
 .market-btn.buy:hover {
@@ -156,40 +197,48 @@
    ERROR BANNER
 =========================== */
 .error-banner {
+  margin: 0 0 30px;
   padding: 16px 22px;
   border-radius: var(--mk-radius-md);
-  background: rgba(240, 68, 56, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(240, 68, 56, 0.1);
+  border: 1px solid rgba(240, 68, 56, 0.2);
   margin-bottom: 30px;
-  color: #ffdcdc;
+  color: #b91c1c;
   font-weight: 600;
+  letter-spacing: 0.4px;
 }
 
 /* ===========================
    EMPTY STATE
 =========================== */
 .empty-market {
-  padding: 80px 38px;
+  text-align: center;
+  padding: 86px 38px 88px;
   background: var(--mk-glass-2);
   border: 1px solid var(--mk-border);
+  backdrop-filter: blur(28px) saturate(160%);
   border-radius: var(--mk-radius-lg);
-  text-align: center;
   box-shadow: var(--mk-shadow-soft);
+  margin: 32px 0 40px;
 }
 
 .empty-icon {
-  font-size: 4.5rem;
-  margin-bottom: 22px;
+  font-size: 4.4rem;
+  margin-bottom: 24px;
+  opacity: 0.6;
 }
 
 .empty-market h2 {
-  margin: 0 0 12px;
+  margin: 0 0 18px;
   font-size: 1.7rem;
   font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--mk-text-primary);
 }
 
 .empty-market p {
-  margin-bottom: 26px;
+  margin: 0 0 30px;
+  font-size: 0.96rem;
   color: var(--mk-text-secondary);
 }
 
@@ -197,19 +246,21 @@
    NFT GRID
 =========================== */
 .market-section {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .section-title {
-  margin: 0 0 24px;
+  margin: 0 0 30px;
   font-size: 1.55rem;
   font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--mk-text-primary);
 }
 
 .market-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 26px;
+  gap: 30px;
 }
 
 /* ===========================
@@ -218,70 +269,102 @@
 .market-card {
   background: var(--mk-glass-2);
   border: 1px solid var(--mk-border);
+  backdrop-filter: blur(26px) saturate(160%);
   border-radius: var(--mk-radius-lg);
-  backdrop-filter: blur(18px);
   box-shadow: var(--mk-shadow-soft);
   overflow: hidden;
+  position: relative;
   transition: var(--mk-transition);
 }
 
 .market-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
   box-shadow: var(--mk-shadow-hover);
 }
 
 .market-card-banner {
   height: 200px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   font-size: 4rem;
-  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   color: #fff;
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
+  position: relative;
 }
 
 .market-card-content {
-  padding: 24px;
+  padding: 26px 26px 24px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+}
+
+.market-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .market-card-title {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.18rem;
   font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--mk-text-primary);
 }
 
 .market-price {
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   font-weight: 700;
-  color: var(--mk-cyan-light);
+  color: #16a34a;
 }
 
 .market-specs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .spec-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.78rem;
+  gap: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 0.8px;
+}
+
+.spec-row .label {
+  text-transform: uppercase;
+  font-weight: 600;
   color: var(--mk-text-secondary);
 }
 
 .spec-row .value {
   color: var(--mk-text-primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(148, 163, 184, 0.15);
   padding: 6px 10px;
   border-radius: 6px;
   font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 0.78rem;
 }
 
 .market-actions {
   display: flex;
   gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .market-grid {
+    grid-template-columns: 1fr;
+  }
+  .marketplace {
+    padding: 42px 24px 70px;
+  }
+  .marketplace-header {
+    padding: 34px 30px 32px;
+  }
 }

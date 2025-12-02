@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+
 import {
   MARKETPLACE_ADDRESS,
   MARKETPLACE_ABI,
@@ -860,6 +861,7 @@ const Marketplace = () => {
       `,
         }}
       />
+ 
     </div>
   );
 };

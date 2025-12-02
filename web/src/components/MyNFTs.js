@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+
 import {
   CONTRACT_ADDRESS,
   ABI as CONTRACT_ABI,
@@ -92,8 +93,8 @@ const MyNFTs = () => {
   // Loading UI
   if (loading) {
     return (
-      <div className="my-nfts-loading">
-        <div className="spinner"></div>
+      <div className="mynft-loading-wrapper">
+        <div className="mynft-spinner"></div>
         <p>Đang tải NFT của bạn...</p>
       </div>
     );
@@ -102,11 +103,11 @@ const MyNFTs = () => {
   // Not connected
   if (!isConnected) {
     return (
-      <div className="my-nfts-connect">
-        <div className="connect-card">
+      <div className="mynft-connect-wrapper">
+        <div className="mynft-connect-card">
           <h2>🏍️ NFT của tôi</h2>
           <p>Kết nối ví để xem NFT bạn sở hữu</p>
-          <button className="connect-btn" onClick={connectWallet}>
+          <button className="mynft-btn connect" onClick={connectWallet}>
             Kết nối ví
           </button>
         </div>
@@ -115,16 +116,16 @@ const MyNFTs = () => {
   }
 
   return (
-    <div className="my-nfts-container">
+    <div className="mynft-container">
 
       {/* HEADER */}
-      <div className="mynft-header">
+      <div className="mynft-header-card">
         <div>
           <h1>🏍️ NFT của tôi</h1>
           <p>Danh sách tài sản NFT xe máy bạn đang sở hữu</p>
         </div>
 
-        <div className="mynft-wallet">
+        <div className="mynft-wallet-box">
           <div className="wallet-label">Ví đã kết nối</div>
           <div className="wallet-address">
             {userAddress.slice(0, 8)}...{userAddress.slice(-6)}
@@ -138,28 +139,26 @@ const MyNFTs = () => {
 
       {/* NFT GRID */}
       {myNFTs.length === 0 ? (
-        <div className="no-nfts">
-          <div className="no-nfts-icon">🏍️</div>
+        <div className="mynft-empty">
+          <div className="empty-icon">🏍️</div>
           <h3>Bạn chưa sở hữu NFT nào</h3>
           <p>Hãy đăng ký xe hoặc mua NFT từ Marketplace.</p>
         </div>
       ) : (
-        <div className="nfts-grid">
+        <div className="mynft-grid">
           {myNFTs.map((nft) => (
-            <div className="nft-card" key={nft.tokenId}>
+            <div className="mynft-card" key={nft.tokenId}>
 
-              <div className="nft-card-banner">
-                🏍️
-              </div>
+              <div className="mynft-banner">🏍️</div>
 
-              <div className="nft-card-content">
-                <div className="nft-card-header">
-                  <span className="nft-id">#{nft.tokenId}</span>
-                  <span className="nft-year">{nft.year}</span>
+              <div className="mynft-content">
+                <div className="mynft-top">
+                  <span className="id">#{nft.tokenId}</span>
+                  <span className="year">{nft.year}</span>
 
                   {nft.locked && (
                     <span
-                      className="nft-locked"
+                      className="locked"
                       title={nft.lockReason || "NFT đang bị khóa"}
                     >
                       🔒 Locked
@@ -167,42 +166,39 @@ const MyNFTs = () => {
                   )}
                 </div>
 
-                <h3 className="nft-title">{nft.model}</h3>
+                <h3 className="model">{nft.model}</h3>
 
-                <div className="nft-details">
-                  <div className="detail-row">
+                <div className="details">
+                  <div className="row">
                     <span className="label">VIN</span>
                     <span className="value">{nft.vin}</span>
                   </div>
 
-                  <div className="detail-row">
+                  <div className="row">
                     <span className="label">Số máy</span>
                     <span className="value">{nft.engineNumber}</span>
                   </div>
 
-                  <div className="detail-row">
+                  <div className="row">
                     <span className="label">Màu</span>
                     <span className="value">{nft.color}</span>
                   </div>
                 </div>
 
-                <div className="nft-actions">
-                  <Link
-                    to={`/user/nft/${nft.tokenId}`}
-                    className="nft-btn primary"
-                  >
+                <div className="actions">
+                  <Link to={`/user/nft/${nft.tokenId}`} className="mynft-btn primary">
                     👁️ Chi tiết
                   </Link>
 
                   {!nft.locked ? (
                     <Link
                       to={`/user/sell/${nft.tokenId}`}
-                      className="nft-btn secondary"
+                      className="mynft-btn secondary"
                     >
                       💸 Chuyển nhượng
                     </Link>
                   ) : (
-                    <button className="nft-btn disabled" disabled>
+                    <button className="mynft-btn disabled" disabled>
                       🔒 Đã khóa
                     </button>
                   )}
@@ -214,11 +210,13 @@ const MyNFTs = () => {
         </div>
       )}
 
+      {/* REFRESH BUTTON */}
       <div className="mynft-footer">
-        <button className="refresh-btn" onClick={loadMyNFTs}>
+        <button className="mynft-btn refresh" onClick={loadMyNFTs}>
           🔄 Làm mới
         </button>
       </div>
+
     </div>
   );
 };

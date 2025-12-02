@@ -1,4 +1,9 @@
-/* ==== Light Cyan User Dashboard Theme ==== */
+/* =========================================================
+   USER DASHBOARD — LIGHT MODE THEME
+   Style: Light Background + Blue/Cyan + Glassmorphism
+   Matches Marketplace.css
+========================================================= */
+
 :root {
   /* Light mode colors with soft cyan tint */
   --mk-bg-1: #eff8fb;
@@ -26,6 +31,9 @@
   --mk-transition: 0.28s ease;
 }
 
+/* ===========================
+   MAIN BACKGROUND
+=========================== */
 .user-dashboard {
   min-height: 100vh;
   padding: 48px 32px 80px;
@@ -39,36 +47,57 @@
   position: relative;
   overflow: hidden;
   color: var(--mk-text-primary);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.user-dashboard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at 18% 28%,
+      rgba(79, 70, 229, 0.15),
+      transparent 62%
+    ),
+    radial-gradient(
+      circle at 82% 72%,
+      rgba(14, 165, 233, 0.15),
+      transparent 60%
+    );
+  filter: blur(70px) saturate(140%);
+  pointer-events: none;
+}
+
+/* Inner wrapper */
 .user-dashboard > * {
+  position: relative;
+  z-index: 2;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
-  position: relative;
-  z-index: 1;
 }
 
-/* HEADER */
+/* ===========================
+   HEADER
+=========================== */
 .user-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 40px;
-  padding: 32px 36px;
-  border-radius: var(--mk-radius-lg);
   background: var(--mk-glass-1);
   border: 1px solid var(--mk-border);
-  box-shadow: var(--mk-shadow-soft);
+  border-radius: var(--mk-radius-lg);
+  padding: 38px 40px;
+  margin-bottom: 40px;
   backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 24px;
 }
 
 .user-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 2.3em;
+  margin: 0 0 12px;
   font-weight: 800;
+  font-size: 2.4rem;
   background: linear-gradient(135deg, #1e40af, #0891b2);
   -webkit-background-clip: text;
   color: transparent;
@@ -76,10 +105,11 @@
 
 .user-header p {
   margin: 0;
-  font-size: 1.05em;
   color: var(--mk-text-secondary);
+  font-size: 1.1rem;
 }
 
+/* WALLET INFO */
 .user-wallet {
   display: flex;
   flex-direction: column;
@@ -88,31 +118,28 @@
 }
 
 .user-wallet-label {
-  font-size: 0.75em;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: 0.85rem;
   color: var(--mk-text-muted);
+  font-weight: 600;
 }
 
 .user-wallet-address {
-  font-family: monospace;
-  background: rgba(255, 255, 255, 0.5);
-  padding: 8px 14px;
-  border-radius: var(--mk-radius-md);
-  font-size: 0.9em;
-  border: 1px solid var(--mk-border);
-  color: var(--mk-text-primary);
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 1rem;
+  color: var(--mk-cyan-dark);
+  background: rgba(14, 116, 144, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
   font-weight: 600;
+  border: 1px solid rgba(14, 116, 144, 0.2);
 }
 
 .user-wallet-status {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.85em;
-  font-weight: 600;
-  color: #10b981;
+  font-size: 0.85rem;
+  color: var(--mk-text-secondary);
 }
 
 .user-wallet-status span {
@@ -120,152 +147,182 @@
   height: 8px;
   background: #10b981;
   border-radius: 50%;
-  animation: pulseDot 2.2s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
 }
 
-@keyframes pulseDot {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.6);
-    opacity: 0.4;
-  }
-}
-
-/* STATS */
+/* ===========================
+   STATS CARDS
+=========================== */
 .user-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px;
-  margin-bottom: 50px;
+  gap: 24px;
+  margin-bottom: 40px;
 }
 
 .user-stat-card {
   background: var(--mk-glass-2);
-  backdrop-filter: blur(18px);
-  padding: 32px 34px;
-  border-radius: var(--mk-radius-lg);
-  box-shadow: var(--mk-shadow-soft);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
   border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  padding: 30px;
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  text-align: center;
   transition: var(--mk-transition);
 }
 
 .user-stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.5);
   box-shadow: var(--mk-shadow-hover);
 }
 
 .user-stat-icon {
-  font-size: 3.6em;
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  opacity: 0.8;
 }
 
 .user-stat-number {
-  font-size: 2.8em;
+  font-size: 2.8rem;
   font-weight: 800;
+  color: var(--mk-text-primary);
+  margin-bottom: 8px;
   background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .user-stat-label {
-  text-transform: uppercase;
+  font-size: 0.9rem;
   font-weight: 700;
-  font-size: 0.85em;
-  letter-spacing: 0.5px;
   color: var(--mk-text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-/* QUICK ACTIONS */
+/* ===========================
+   QUICK ACTIONS
+=========================== */
 .quick-actions {
-  margin-bottom: 55px;
+  margin-bottom: 40px;
 }
 
 .quick-actions h2 {
-  margin: 0 0 34px 0;
-  font-size: 1.9em;
-  text-align: center;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 24px;
   color: var(--mk-text-primary);
 }
 
 .quick-action-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 24px;
 }
 
 .quick-action-card {
   background: var(--mk-glass-2);
-  backdrop-filter: blur(18px);
-  padding: 30px 32px;
+  border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
+  padding: 24px 30px;
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
   text-decoration: none;
+  color: inherit;
   display: flex;
   align-items: center;
-  gap: 22px;
-  box-shadow: var(--mk-shadow-soft);
-  border: 1px solid var(--mk-border);
+  gap: 24px;
   transition: var(--mk-transition);
 }
 
 .quick-action-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--mk-shadow-hover);
+  transform: translateY(-5px);
   border-color: var(--mk-cyan);
+  box-shadow: 0 0 20px rgba(8, 145, 178, 0.15);
+}
+
+.quick-action-icon {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.4);
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--mk-border);
 }
 
 .quick-action-card h3 {
-  margin: 0 0 8px 0;
-  font-size: 1.25em;
+  margin: 0 0 8px;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--mk-text-primary);
 }
 
 .quick-action-card p {
   margin: 0;
-  font-size: 0.9em;
-  line-height: 1.5;
   color: var(--mk-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-.quick-action-icon {
-  font-size: 3em;
-}
-
-/* NFT SECTION */
-.user-nft-section h2 {
-  margin: 0 0 34px 0;
-  font-size: 1.9em;
+/* ===========================
+   NO NFT BOX
+=========================== */
+.no-nft {
+  background: var(--mk-glass-2);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-lg);
+  padding: 60px 40px;
   text-align: center;
-  font-weight: 800;
+  backdrop-filter: blur(18px);
+  box-shadow: var(--mk-shadow-soft);
+  margin-top: 40px;
+}
+
+.no-nft h2 {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  color: var(--mk-text-primary);
+}
+
+.no-nft p {
+  color: var(--mk-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+/* ===========================
+   NFT LIST SECTION
+=========================== */
+.user-nft-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 24px;
   color: var(--mk-text-primary);
 }
 
 .user-nft-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 26px;
 }
 
 .user-nft-card {
   background: var(--mk-glass-2);
-  backdrop-filter: blur(18px);
+  border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg);
+  backdrop-filter: blur(18px);
   box-shadow: var(--mk-shadow-soft);
   overflow: hidden;
-  border: 1px solid var(--mk-border);
   transition: var(--mk-transition);
 }
 
 .user-nft-card:hover {
   transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.5);
   box-shadow: var(--mk-shadow-hover);
 }
 
@@ -275,8 +332,8 @@
   align-items: center;
   justify-content: center;
   font-size: 4rem;
-  background: linear-gradient(135deg, #e0f2f7, #c5e7ed);
-  color: var(--mk-text-primary);
+  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
+  color: #fff;
 }
 
 .user-nft-content {
@@ -284,8 +341,8 @@
 }
 
 .user-nft-title {
-  margin: 0 0 16px 0;
-  font-size: 1.3em;
+  margin: 0 0 20px;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--mk-text-primary);
 }
@@ -293,8 +350,8 @@
 .nft-spec-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85em;
-  padding: 6px 0;
+  align-items: center;
+  padding: 10px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -302,94 +359,82 @@
   border-bottom: none;
 }
 
-.nft-spec-row span.label {
-  color: var(--mk-text-muted);
-}
-
-.nft-spec-row span.value {
+.nft-spec-row .label {
+  font-size: 0.85rem;
+  color: var(--mk-text-secondary);
   font-weight: 600;
-  color: var(--mk-text-primary);
-  font-family: monospace;
 }
 
+.nft-spec-row .value {
+  color: var(--mk-text-primary);
+  background: rgba(148, 163, 184, 0.15);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+}
+
+/* ACTIONS */
 .user-nft-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .user-nft-btn {
   flex: 1;
-  padding: 12px 14px;
+  padding: 12px 18px;
+  border-radius: 10px;
   border: none;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.9em;
-  cursor: pointer;
-  transition: var(--mk-transition);
+  font-weight: 700;
+  font-size: 0.875rem;
   text-decoration: none;
   text-align: center;
+  cursor: pointer;
+  transition: var(--mk-transition);
+  display: inline-block;
 }
 
 .user-nft-btn.primary {
   background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  color: white;
 }
 
 .user-nft-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  transform: translateY(-3px);
+  box-shadow: var(--mk-shadow-hover);
 }
 
 .user-nft-btn.secondary {
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--mk-text-primary);
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--mk-cyan-dark);
   border: 1px solid var(--mk-border);
 }
 
 .user-nft-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
+  background: rgba(148, 163, 184, 0.25);
+  border-color: rgba(148, 163, 184, 0.35);
 }
 
-.no-nft {
-  text-align: center;
-  padding: 60px 40px;
-  background: var(--mk-glass-2);
-  border-radius: var(--mk-radius-lg);
-  border: 1px solid var(--mk-border);
-  backdrop-filter: blur(18px);
-  box-shadow: var(--mk-shadow-soft);
-}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .user-dashboard {
+    padding: 32px 20px 60px;
+  }
 
-.no-nft h2 {
-  font-size: 2em;
-  margin: 0 0 14px 0;
-  font-weight: 700;
-  color: var(--mk-text-primary);
-}
-
-.no-nft p {
-  margin: 0 0 26px 0;
-  font-size: 1em;
-  color: var(--mk-text-secondary);
-}
-
-@media (max-width: 780px) {
   .user-header {
+    padding: 28px 24px;
     flex-direction: column;
-    text-align: center;
-    align-items: center;
+    align-items: stretch;
   }
+
   .user-wallet {
-    align-items: center;
-    margin-top: 16px;
+    align-items: flex-start;
   }
-  .quick-action-grid {
-    grid-template-columns: 1fr;
-  }
-  .user-nft-grid {
+
+  .user-nft-grid,
+  .quick-action-grid,
+  .user-stats {
     grid-template-columns: 1fr;
   }
 }
