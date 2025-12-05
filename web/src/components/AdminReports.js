@@ -5,7 +5,7 @@ import {
   CONTRACT_ADDRESS,
   ABI as CONTRACT_ABI,
 } from "../blockchain/MotorbikeNFT";
-import "./AdminReports.css";
+import "./AdminReports.css"; // Đảm bảo CSS đúng
 
 const AdminReports = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -18,16 +18,17 @@ const AdminReports = () => {
 
   useEffect(() => {
     init();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const init = async () => {
     try {
       setLoading(true);
-      if (typeof window.ethereum === "undefined") return;
+      if (!window.ethereum) return;
+
       const provider = new ethers.BrowserProvider(window.ethereum);
       const accounts = await provider.send("eth_requestAccounts", []);
-      if (!accounts || accounts.length === 0) return;
+      if (!accounts.length) return;
+
       const user = accounts[0];
       setAdminAddress(user);
 
@@ -36,12 +37,14 @@ const AdminReports = () => {
         CONTRACT_ABI,
         provider
       );
+
       const owner = await contract.owner();
       const isOwner = owner.toLowerCase() === user.toLowerCase();
       setIsAdmin(isOwner);
-      if (isOwner) await loadReports();
+
+      if (isOwner) loadReports();
     } catch (err) {
-      console.error("Lỗi khởi tạo AdminReports:", err);
+      console.error("Init error:", err);
     } finally {
       setLoading(false);
     }
@@ -52,75 +55,62 @@ const AdminReports = () => {
       setLoadingReports(true);
       const res = await fetch("/api/reports");
       const list = await res.json();
-      const normalized = (list || []).map((r) => ({
-        id: r.id,
-        tokenId: r.tokenId != null ? String(r.tokenId) : null,
-        subject: r.subject,
-        message: r.message,
-        category: r.category,
-        contact: r.contact || {},
-        wallet: r.wallet || null,
-        status: r.status,
-        resolved: r.status === "resolved",
-        createdAt: r.createdAt,
-        updatedAt: r.updatedAt,
-        adminNote: r.adminNote || "",
-        resolvedBy: r.resolvedBy || null,
-        resolvedAt: r.resolvedAt || null,
-        unlockRequested: !!r.unlockRequested,
-        unlockDecision: r.unlockDecision,
-      }));
-      setReports(normalized);
+
+      setReports(
+        (list || []).map((r) => ({
+          ...r,
+          resolved: r.status === "resolved",
+        }))
+      );
     } catch (err) {
-      console.error("Lỗi load báo cáo:", err);
+      console.error("Load report error:", err);
     } finally {
       setLoadingReports(false);
     }
   };
 
-  const sendReply = async (reportId) => {
+  const sendReply = async (id) => {
     try {
-      setPending((p) => ({ ...p, ["report_" + reportId]: true }));
-      const note = (noteMap[reportId] || "").trim() || "Phản hồi từ admin";
-      await fetch(`/api/reports/${reportId}`, {
+      setPending((p) => ({ ...p, ["report_" + id]: true }));
+
+      const note = noteMap[id]?.trim() || "Phản hồi từ admin";
+
+      await fetch(`/api/reports/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           status: "resolved",
           adminNote: note,
-          resolvedBy: adminAddress || "admin",
+          resolvedBy: adminAddress,
         }),
       });
+
       await loadReports();
-      setNoteMap((m) => ({ ...m, [reportId]: "" }));
-      alert(`✅ Đã gửi phản hồi cho báo cáo #${reportId}`);
+      setNoteMap((m) => ({ ...m, [id]: "" }));
+
+      alert(`Đã phản hồi báo cáo #${id}`);
     } catch (err) {
-      console.error("Lỗi xử lý báo cáo:", err);
-      alert("❌ Lỗi xử lý báo cáo: " + (err?.message || "Không rõ lỗi"));
+      alert("Lỗi xử lý báo cáo");
     } finally {
-      setPending((p) => ({ ...p, ["report_" + reportId]: undefined }));
+      setPending((p) => ({ ...p, ["report_" + id]: false }));
     }
   };
 
   if (loading) {
     return (
-      <div className="admin-reports">
-        <div className="loading-section">
-          <div className="spinner"></div>
-          <p>Đang tải dữ liệu báo cáo...</p>
-        </div>
+      <div className="admin-reports loading-page">
+        <div className="spinner"></div>
       </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <div className="admin-reports">
-        <div className="access-denied">
-          <h2>🚫 Truy cập bị từ chối</h2>
-          <p>Bạn không có quyền admin để xem trang này.</p>
-          <Link to="/admin" className="back-btn">
-            ← Quay về Admin Dashboard
+      <div className="admin-reports denied">
+        <div className="denied-card">
+          <h2>🚫 Bạn không có quyền truy cập</h2>
+          <Link to="/admin" className="btn-back">
+            ← Quay về Dashboard
           </Link>
         </div>
       </div>
@@ -129,29 +119,45 @@ const AdminReports = () => {
 
   return (
     <div className="admin-reports">
-      <div className="reports-header">
-        <button
-          onClick={() => window.history.back()}
-          className="back-btn"
-          title="Quay lại"
-        >
-          ← Quay lại
+      {/* Top bar */}
+      <div className="reports-topbar">
+        <Link to="/admin" className="top-btn back">
+          ← Quay lại Admin Dashboard
+        </Link>
+        <button className="top-btn refresh" onClick={loadReports}>
+          🔄 Làm mới
         </button>
-        <h1>📢 Báo cáo từ người dùng</h1>
-        <div className="header-actions">
-          <button onClick={loadReports} className="refresh-btn">
-            🔄 Làm mới
-          </button>
+      </div>
+
+      {/* Header */}
+      <div className="reports-header-card">
+        <div className="reports-title">
+          <span className="title-icon">📢</span>
+          <div>
+            <h1>Báo cáo từ người dùng</h1>
+            <p>Theo dõi và xử lý các phản hồi từ hệ thống.</p>
+          </div>
+        </div>
+
+        <div className="admin-wallet-box">
+          <div className="label">Admin</div>
+          <div className="address">
+            {adminAddress.slice(0, 8)}...{adminAddress.slice(-4)}
+          </div>
+          <div className="status">
+            <span></span> Verified
+          </div>
         </div>
       </div>
 
-      <div className="reports-section">
+      {/* Report List */}
+      <div className="reports-list-wrapper">
         {loadingReports ? (
           <div className="loading-reports">
-            <div className="spinner"></div>Đang tải báo cáo...
+            <div className="spinner"></div> Đang tải...
           </div>
         ) : reports.length === 0 ? (
-          <p className="no-reports">Chưa có báo cáo nào.</p>
+          <div className="empty-box">Chưa có báo cáo nào.</div>
         ) : (
           <div className="reports-list">
             {reports.map((r) => (
@@ -159,74 +165,63 @@ const AdminReports = () => {
                 key={r.id}
                 className={`report-card ${r.resolved ? "resolved" : "pending"}`}
               >
-                <div className="report-header">
-                  <span className="report-id">#R{r.id}</span>
-                  {r.tokenId && (
-                    <span className="report-token">NFT #{r.tokenId}</span>
-                  )}
-                  <span
-                    className={`report-status ${
-                      r.resolved ? "resolved" : "pending"
-                    }`}
-                  >
-                    {r.resolved ? "✅ Đã xử lý" : "⏳ Chưa xử lý"}
+                <div className="report-card-header">
+                  <span className="rid">#R{r.id}</span>
+                  {r.tokenId && <span className="rtoken">NFT #{r.tokenId}</span>}
+                  <span className={`rstatus ${r.resolved ? "ok" : "wait"}`}>
+                    {r.resolved ? "Đã xử lý" : "Chưa xử lý"}
                   </span>
                 </div>
 
-                <div className="report-body">
-                  <div className="report-field">
-                    <strong>Thời gian:</strong>{" "}
-                    {new Date(r.createdAt).toLocaleString("vi-VN")}
-                  </div>
-                  <div className="report-field">
-                    <strong>Thể loại:</strong> {r.category}
-                  </div>
+                <div className="report-card-body">
+                  <p>
+                    <strong>Danh mục: </strong>
+                    {r.category}
+                  </p>
                   {r.subject && (
-                    <div className="report-field">
-                      <strong>Tiêu đề:</strong> {r.subject}
-                    </div>
+                    <p>
+                      <strong>Tiêu đề: </strong>
+                      {r.subject}
+                    </p>
                   )}
-                  <div className="report-reason">
-                    <strong>Nội dung:</strong> {r.message}
-                  </div>
-                  {(r.contact?.email || r.contact?.phone) && (
-                    <div className="report-field">
-                      <strong>Liên hệ:</strong> {r.contact?.email || ""}{" "}
-                      {r.contact?.phone ? `(${r.contact.phone})` : ""}
-                    </div>
+                  <p>
+                    <strong>Nội dung: </strong>
+                    {r.message}
+                  </p>
+
+                  {r.contact?.email && (
+                    <p>
+                      <strong>Email: </strong> {r.contact.email}
+                    </p>
                   )}
-                  {r.wallet && (
-                    <div className="report-field">
-                      <strong>Ví:</strong>{" "}
-                      {`${r.wallet.slice(0, 6)}...${r.wallet.slice(-4)}`}
-                    </div>
-                  )}
+
+                  <p>
+                    <strong>Thời gian: </strong>
+                    {new Date(r.createdAt).toLocaleString("vi-VN")}
+                  </p>
+
                   {r.resolved && (
-                    <div className="report-admin-note">
-                      <strong>Ghi chú admin:</strong> {r.adminNote || "(Không)"}{" "}
-                      {r.unlockDecision === true && (
-                        <span className="unlock-tag">🔓 Đã mở khóa</span>
-                      )}
+                    <div className="admin-note-box">
+                      <strong>Phản hồi admin: </strong>
+                      <div>{r.adminNote || "(Không có ghi chú)"}</div>
                     </div>
                   )}
                 </div>
 
                 {!r.resolved && (
                   <div className="report-actions">
-                    <div className="admin-note">
-                      <label>Lời nhắn gửi người dùng</label>
-                      <textarea
-                        placeholder="Nhập ghi chú phản hồi cho người dùng"
-                        value={noteMap[r.id] || ""}
-                        onChange={(e) =>
-                          setNoteMap((m) => ({ ...m, [r.id]: e.target.value }))
-                        }
-                      />
-                    </div>
+                    <textarea
+                      placeholder="Nhập ghi chú gửi người dùng..."
+                      value={noteMap[r.id] || ""}
+                      onChange={(e) =>
+                        setNoteMap((m) => ({ ...m, [r.id]: e.target.value }))
+                      }
+                    />
+
                     <button
-                      className="action-btn primary"
-                      onClick={() => sendReply(r.id)}
+                      className="btn-send"
                       disabled={pending["report_" + r.id]}
+                      onClick={() => sendReply(r.id)}
                     >
                       📨 Gửi phản hồi
                     </button>

@@ -1,370 +1,164 @@
 /* =========================================================
-   MARKETPLACE — LIGHT MODE THEME (No Stripes)
+   MARKETPLACE – FILTER ĐỒNG BỘ VỚI MyNFTs
 ========================================================= */
 
-:root {
-  /* Light mode colors with soft cyan tint */
-  --mk-bg-1: #eff8fb;
-  --mk-bg-2: #e0f2f7;
-  --mk-bg-3: #d1ecf1;
-
-  --mk-blue: #2563eb;
-  --mk-cyan: #0891b2;
-  --mk-cyan-dark: #0e7490;
-
-  --mk-text-primary: #1e293b;
-  --mk-text-secondary: #475569;
-  --mk-text-muted: #64748b;
-
-  --mk-glass-1: rgba(255, 255, 255, 0.7);
-  --mk-glass-2: rgba(255, 255, 255, 0.85);
-  --mk-border: rgba(148, 163, 184, 0.2);
-
-  --mk-shadow-soft: 0 8px 24px -6px rgba(0, 0, 0, 0.12);
-  --mk-shadow-hover: 0 16px 40px -8px rgba(0, 0, 0, 0.18);
-
-  --mk-radius-md: 14px;
-  --mk-radius-lg: 22px;
-
-  --mk-transition: 0.28s ease;
-  
-  /* Gradients */
-  --mk-gradient-success: linear-gradient(135deg, #22c55e 0%, #16a34a 85%);
+/* Card chứa bộ lọc */
+.market-filters-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1rem 1.5rem 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e2e8f0;
 }
 
-/* ===========================
-   MAIN BACKGROUND
-=========================== */
-.marketplace {
-  min-height: 100vh;
-  color: var(--mk-text-primary);
-  padding: 48px 32px 80px;
-  background: linear-gradient(
-    135deg,
-    var(--mk-bg-1) 0%,
-    var(--mk-bg-2) 35%,
-    var(--mk-bg-3) 70%,
-    #c5e7ed 100%
-  );
-  position: relative;
-  overflow: hidden;
+/* Tiêu đề "Bộ lọc nâng cao" */
+.market-filters-title {
+  font-weight: 700;
+  color: #0ea5e9;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
 }
 
-.marketplace::before,
-.marketplace::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+/* Grid input bộ lọc */
+.market-filters-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  margin-bottom: 0.75rem;
 }
 
-.marketplace::before {
-  background: radial-gradient(
-      circle at 18% 28%,
-      rgba(79, 70, 229, 0.15),
-      transparent 62%
-    ),
-    radial-gradient(
-      circle at 82% 72%,
-      rgba(14, 165, 233, 0.15),
-      transparent 60%
-    ),
-    radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.05), transparent 70%);
-  filter: blur(70px) saturate(140%);
+/* Style cho input – cả khi có class market-input
+   hoặc chỉ là input thường trong card */
+.market-filters-card input,
+.market-input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.85rem;
+  outline: none;
+  background: #f8fafc;
+  box-sizing: border-box;
 }
 
-/* ===========================
-   LAYOUT WRAPPER
-=========================== */
-.marketplace-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
+.market-input.small {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
 }
 
-/* ===========================
-   HEADER
-=========================== */
-.marketplace-header {
-  background: var(--mk-glass-1);
-  border: 1px solid var(--mk-border);
-  border-radius: var(--mk-radius-lg);
-  padding: 38px 40px;
-  margin-bottom: 40px;
-  backdrop-filter: blur(18px);
-  box-shadow: var(--mk-shadow-soft);
+.market-filters-card input:focus,
+.market-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.18);
+  background: #ffffff;
 }
 
-.marketplace-header h1 {
-  margin: 0 0 12px;
-  font-weight: 800;
-  font-size: 2.4rem;
-  background: linear-gradient(135deg, #1e40af, #0891b2);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.marketplace-header p {
-  margin: 0;
-  font-size: 1.04rem;
-  color: var(--mk-text-secondary);
-}
-
-/* ===========================
-   STATUS + BUTTONS
-=========================== */
-.wallet-status {
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: var(--mk-text-secondary);
-}
-
-.wallet-connected strong {
-  color: var(--mk-text-primary);
-}
-
-.wallet-disconnected {
-  color: var(--mk-text-muted);
-}
-
-.marketplace-actions {
+/* Nhóm nút Áp dụng / Xoá lọc / Làm mới dưới bộ lọc */
+.market-filters-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 20px;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
 }
 
-.market-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 28px 13px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.7px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  text-decoration: none;
-  isolation: isolate;
-  overflow: hidden;
-  transition: var(--mk-transition);
-  backdrop-filter: blur(12px);
+/* Tiêu đề phần "NFT đang bán (x)" */
+.market-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  color: #0f172a;
 }
 
-.market-btn.refresh {
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid var(--mk-border);
-  color: var(--mk-text-secondary);
-}
-
-.market-btn.refresh:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: translateY(-3px);
-}
-
-.market-btn.primary,
-.market-btn.connect {
-  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
-  color: #fff;
-  box-shadow: 0 6px 18px -4px rgba(30, 41, 59, 0.2);
-}
-
-.market-btn.primary:hover,
-.market-btn.connect:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--mk-shadow-hover);
-}
-
-.market-btn.buy {
-  background: var(--mk-gradient-success);
-  color: #fff;
-  box-shadow: 0 6px 18px -4px rgba(34, 197, 94, 0.3);
-}
-
-.market-btn.buy:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--mk-shadow-hover);
-}
-
-/* ===========================
-   ERROR BANNER
-=========================== */
-.error-banner {
-  margin: 0 0 30px;
-  padding: 16px 22px;
-  border-radius: var(--mk-radius-md);
-  background: rgba(240, 68, 56, 0.1);
-  border: 1px solid rgba(240, 68, 56, 0.2);
-  margin-bottom: 30px;
+/* Lỗi ở marketplace */
+.market-error {
+  margin-top: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.4);
   color: #b91c1c;
-  font-weight: 600;
-  letter-spacing: 0.4px;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
-/* ===========================
-   EMPTY STATE
-=========================== */
-.empty-market {
-  text-align: center;
-  padding: 86px 38px 88px;
-  background: var(--mk-glass-2);
-  border: 1px solid var(--mk-border);
-  backdrop-filter: blur(28px) saturate(160%);
-  border-radius: var(--mk-radius-lg);
-  box-shadow: var(--mk-shadow-soft);
-  margin: 32px 0 40px;
-}
-
-.empty-icon {
-  font-size: 4.4rem;
-  margin-bottom: 24px;
-  opacity: 0.6;
-}
-
-.empty-market h2 {
-  margin: 0 0 18px;
-  font-size: 1.7rem;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: var(--mk-text-primary);
-}
-
-.empty-market p {
-  margin: 0 0 30px;
-  font-size: 0.96rem;
-  color: var(--mk-text-secondary);
-}
-
-/* ===========================
-   NFT GRID
-=========================== */
-.market-section {
-  margin-top: 10px;
-}
-
-.section-title {
-  margin: 0 0 30px;
-  font-size: 1.55rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--mk-text-primary);
-}
-
+/* Grid dùng chung với .mynft-grid, chỉ thêm khoảng cách phía dưới */
 .market-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 30px;
+  margin-bottom: 1.5rem;
 }
 
-/* ===========================
-   NFT CARD
-=========================== */
-.market-card {
-  background: var(--mk-glass-2);
-  border: 1px solid var(--mk-border);
-  backdrop-filter: blur(26px) saturate(160%);
-  border-radius: var(--mk-radius-lg);
-  box-shadow: var(--mk-shadow-soft);
-  overflow: hidden;
-  position: relative;
-  transition: var(--mk-transition);
+/* Badge giá ở góc trên của card */
+.price-tag {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #ecfeff;
+  color: #0369a1;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
-.market-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: var(--mk-shadow-hover);
-}
-
-.market-card-banner {
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-  color: #fff;
-  background: linear-gradient(135deg, var(--mk-blue), var(--mk-cyan));
-  position: relative;
-}
-
-.market-card-content {
-  padding: 26px 26px 24px;
+/* Khối nhập & lưu giá mới khi người bán sửa giá */
+/* Wrapper for the edit buttons */
+.market-edit-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;  /* Ensures space between input and buttons */
+  width: 100%;  /* Make sure it takes up full available space */
+  padding: 5px 0;
 }
 
-.market-card-top {
+/* Edit buttons section */
+.market-edit-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  justify-content: space-between;  /* Spread buttons out */
+  gap: 15px;
+  flex-wrap: wrap;  /* Allow wrapping if space is tight */
 }
 
-.market-card-title {
-  margin: 0;
-  font-size: 1.18rem;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: var(--mk-text-primary);
+/* Ensure buttons have equal width and enough space */
+.mynft-btn.primary, .mynft-btn.secondary {
+  flex: 1;  /* Makes buttons take up equal space */
+  min-width: 120px; /* Minimum width for buttons to avoid overflow */
+  padding: 12px 20px;
+  font-size: 1em;
+  margin: 0;  /* Remove default margin */
 }
 
-.market-price {
-  font-size: 1.12rem;
-  font-weight: 700;
-  color: #16a34a;
+.mynft-btn {
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
-.market-specs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.mynft-btn:hover {
+  background-color: #4f9b99; /* Change background on hover */
 }
 
-.spec-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 0.75rem;
-  letter-spacing: 0.8px;
+.mynft-btn.secondary {
+  background-color: #e2e8f0; /* Lighter background for cancel button */
+  color: #1e293b;
 }
 
-.spec-row .label {
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--mk-text-secondary);
+.mynft-btn.primary {
+  background-color: #6366f1; /* Primary button color */
+  color: white;
 }
 
-.spec-row .value {
-  color: var(--mk-text-primary);
-  background: rgba(148, 163, 184, 0.15);
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
+
+/* Lịch sử giá phía dưới chi tiết NFT */
+.market-history {
+  margin-top: 0.6rem;
   font-size: 0.78rem;
+  color: #64748b;
 }
 
-.market-actions {
-  display: flex;
-  gap: 12px;
+.market-history ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1rem;
 }
 
-@media (max-width: 900px) {
-  .market-grid {
-    grid-template-columns: 1fr;
-  }
-  .marketplace {
-    padding: 42px 24px 70px;
-  }
-  .marketplace-header {
-    padding: 34px 30px 32px;
-  }
+/* Tuỳ chọn: chỉnh nhẹ khoảng cách cho riêng trang marketplace */
+.mynft-container.marketplace-page {
+  padding-top: 32px;
 }

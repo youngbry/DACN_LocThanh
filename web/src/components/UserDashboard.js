@@ -7,7 +7,7 @@ import {
   ABI as CONTRACT_ABI,
 } from "../blockchain/MotorbikeNFT";
 
-import "./UserDashboard.css"; // ⭐ IMPORT CSS MỚI
+import "./UserDashboard.css"; // ⭐ IMPORT CSS
 
 const UserDashboard = () => {
   const [userAddress, setUserAddress] = useState("");
@@ -110,7 +110,6 @@ const UserDashboard = () => {
 
   return (
     <div className="user-dashboard">
-
       {/* HEADER */}
       <div className="user-header">
         <div>
@@ -170,67 +169,52 @@ const UserDashboard = () => {
       </div>
 
       {/* NFT LIST */}
-      {loading ? (
-        <div className="no-nft">
-          <h2>⏳ Đang tải dữ liệu...</h2>
-        </div>
-      ) : myNFTs.length === 0 ? (
-        <div className="no-nft">
-          <h2>Bạn chưa có NFT nào</h2>
-          <p>Hãy truy cập Marketplace để mua NFT đầu tiên.</p>
-        </div>
-      ) : (
-        <div className="user-nft-section">
-          <h2>NFT của tôi ({myNFTs.length})</h2>
+{loading ? (
+  <div className="no-nft">
+    <h2>⏳ Đang tải dữ liệu...</h2>
+  </div>
+) : myNFTs.length === 0 ? (
+  <div className="no-nft">
+    <h2>Bạn chưa có NFT nào</h2>
+    <p>Hãy truy cập Marketplace để mua NFT đầu tiên.</p>
+  </div>
+) : (
+  <div className="user-nft-section">
+    <h2>NFT của tôi ({myNFTs.length})</h2>
 
-          <div className="user-nft-grid">
-            {myNFTs.map((nft) => (
-              <div className="user-nft-card" key={nft.tokenId}>
-                <div className="user-nft-banner">🏍️</div>
+    <div className="user-nft-grid">
+      {myNFTs.map((nft) => (
+        <div className="user-nft-card" key={nft.tokenId}>
+          {/* KHÔNG CÒN user-nft-banner */}
 
-                <div className="user-nft-content">
-                  <h3 className="user-nft-title">
-                    {nft.model} ({nft.year})
-                  </h3>
+          <div className="user-nft-content">
+            <div className="user-nft-info">
+              <span className="user-nft-id">#{nft.tokenId}</span>
+              <h3 className="user-nft-title">{nft.model}</h3>
+              
+            </div>
 
-                  <div className="nft-spec-row">
-                    <span className="label">VIN</span>
-                    <span className="value">{nft.vin}</span>
-                  </div>
+            <div className="user-nft-actions">
+              <Link
+                to={`/user/nft/${nft.tokenId}`}
+                className="user-nft-btn primary small"
+              >
+                Chi tiết
+              </Link>
 
-                  <div className="nft-spec-row">
-                    <span className="label">Số máy</span>
-                    <span className="value">{nft.engineNumber}</span>
-                  </div>
-
-                  <div className="nft-spec-row">
-                    <span className="label">Màu</span>
-                    <span className="value">{nft.color}</span>
-                  </div>
-
-                  <div className="user-nft-actions">
-                    <Link
-                      to={`/user/nft/${nft.tokenId}`}
-                      className="user-nft-btn primary"
-                    >
-                      Chi tiết
-                    </Link>
-
-                    <Link
-                      to={`/user/sell/${nft.tokenId}`}
-                      className="user-nft-btn secondary"
-                    >
-                      Bán
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
+              <Link
+                to={`/user/sell/${nft.tokenId}`}
+                className="user-nft-btn secondary small"
+              >
+                Bán
+              </Link>
+            </div>
           </div>
         </div>
-      )}
-
-
+      ))}
+    </div>
+  </div>
+)}
     </div>
   );
 };

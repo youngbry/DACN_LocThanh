@@ -337,6 +337,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
 /* Top Info (ID, Year, Locked) */
@@ -425,6 +426,7 @@
 =========================== */
 .actions {
   display: flex;
+  flex-direction: column; /* Đổi từ row thành column */
   gap: 12px;
   margin-top: auto;
 }

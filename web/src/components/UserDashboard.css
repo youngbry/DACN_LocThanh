@@ -438,3 +438,83 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* === NFT LIST – VERSION GỌN ĐẸP === */
+
+/* Ẩn banner cũ có icon & gradient */
+.user-nft-banner {
+  display: none;
+}
+
+/* Card NFT giống thẻ thống kê, gọn hơn */
+.user-nft-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 0.9rem 1.3rem;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+/* Bên trong card là 1 hàng: info bên trái, nút bên phải */
+.user-nft-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Khối thông tin NFT bên trái */
+.user-nft-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* Badge #ID nhỏ phía trên */
+.user-nft-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Tên xe nổi bật */
+.user-nft-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Năm sản xuất mờ hơn */
+.user-nft-year {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Nút bên phải */
+.user-nft-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+/* Version nhỏ của nút trong card */
+.user-nft-btn.small {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+/* Mobile: cho nút xuống dòng dưới */
+@media (max-width: 768px) {
+  .user-nft-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-nft-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
