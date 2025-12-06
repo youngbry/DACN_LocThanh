@@ -5,7 +5,6 @@
 /* chỉnh nhẹ khoảng cách riêng cho trang report */
 .mynft-container.report-page {
   padding-top: 32px;
-  background: #1e293b; /* Màu nền giống Admin Dashboard */
 }
 
 /* wrapper chung (để không đụng vào layout của MyNFTs) */
@@ -21,12 +20,12 @@
 /* =============== FORM GỬI BÁO CÁO =============== */
 
 .report-form {
-  background: #2a3b4c; /* Màu nền tối cho form */
+  background: #ffffff;
   border-radius: 16px;
   padding: 1.75rem 1.75rem 1.5rem;
   margin-top: 1.5rem;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-  border: 1px solid #475569; /* Màu viền nhẹ */
+  border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -53,7 +52,7 @@
 .form-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #ffffff; /* Màu chữ sáng */
+  color: #0f172a;
 }
 
 /* input/select/textarea đồng bộ style */
@@ -63,11 +62,10 @@
 .lookup-form input {
   padding: 0.55rem 0.75rem;
   border-radius: 10px;
-  border: 1px solid #475569; /* Màu viền tối */
+  border: 1px solid #cbd5e1;
   font-size: 0.9rem;
   outline: none;
-  background: #334155; /* Màu nền tối cho các input */
-  color: #ffffff; /* Màu chữ sáng */
+  background: #f8fafc;
   transition: 0.15s ease;
   box-sizing: border-box;
 }
@@ -85,9 +83,9 @@
 .form-group select:focus,
 .form-group textarea:focus,
 .lookup-form input:focus {
-  border-color: #2563eb; /* Viền màu xanh dương khi focus */
-  box-shadow: 0 0 0 1px rgba(38, 129, 255, 0.4);
-  background: #3b4a63; /* Nền khi focus */
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.18);
+  background: #ffffff;
 }
 
 /* Hàng nút gửi */
@@ -108,7 +106,7 @@
 .status.success {
   background: rgba(22, 163, 74, 0.1);
   border: 1px solid rgba(22, 163, 74, 0.4);
-  color: #16a34a;
+  color: #15803d;
 }
 
 .status.error {
@@ -121,18 +119,18 @@
 
 .report-lookup {
   margin-top: 1.75rem;
-  background: #2a3b4c; /* Màu nền tối */
+  background: #ffffff;
   border-radius: 16px;
   padding: 1.5rem 1.75rem 1.25rem;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
-  border: 1px solid #475569; /* Màu viền tối */
+  border: 1px solid #e2e8f0;
 }
 
 .report-lookup h2 {
   margin: 0 0 0.75rem;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #ffffff; /* Màu chữ sáng */
+  color: #0f172a;
 }
 
 .lookup-form {
@@ -156,11 +154,11 @@
 .lookup-result {
   margin-top: 0.75rem;
   border-radius: 12px;
-  background: #334155; /* Nền tối cho kết quả */
-  border: 1px solid #475569; /* Màu viền tối */
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   padding: 0.9rem 1rem;
   font-size: 0.9rem;
-  color: #ffffff; /* Màu chữ sáng */
+  color: #0f172a;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -169,7 +167,7 @@
 .lookup-admin-note {
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px dashed #475569;
+  border-top: 1px dashed #cbd5e1;
   font-size: 0.88rem;
 }
 
@@ -183,12 +181,12 @@
   margin: 0 0 0.25rem;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #ffffff; /* Màu chữ sáng */
+  color: #0f172a;
 }
 
 .my-reports p {
   margin: 0 0 0.9rem;
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.9rem;
 }
 
@@ -199,11 +197,11 @@
 }
 
 .my-report-card {
-  background: #2a3b4c; /* Màu nền tối cho thẻ báo cáo */
+  background: #ffffff;
   border-radius: 14px;
   padding: 0.85rem 0.95rem 0.9rem;
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
-  border: 1px solid #475569;
+  border: 1px solid #e2e8f0;
   font-size: 0.86rem;
   display: flex;
   flex-direction: column;
@@ -227,7 +225,7 @@
 
 .my-report-header .rid {
   font-weight: 700;
-  color: #ffffff; /* Màu chữ sáng */
+  color: #0f172a;
 }
 
 .my-report-header .rtoken {
@@ -268,7 +266,7 @@
 }
 
 .remove-btn:hover {
-  color: #ffffff; /* Màu chữ sáng khi hover */
+  color: #0f172a;
 }
 
 /* thân thẻ report */
@@ -276,7 +274,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  color: #ffffff; /* Màu chữ sáng */
+  color: #0f172a;
 }
 
 .my-report-body .msg {
@@ -286,9 +284,9 @@
 .admin-reply {
   margin-top: 0.4rem;
   padding-top: 0.4rem;
-  border-top: 1px dashed #475569;
+  border-top: 1px dashed #cbd5e1;
   font-size: 0.84rem;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 /* =============== RESPONSIVE =============== */
