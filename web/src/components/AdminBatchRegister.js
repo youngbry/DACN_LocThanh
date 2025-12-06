@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { ABI, CONTRACT_ADDRESS } from "../blockchain/MotorbikeNFT";
 import "./AdminBatchRegister.css";
 
 function AdminBatchRegister() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [vehicles, setVehicles] = useState([]);
   const [status, setStatus] = useState("");
@@ -362,6 +364,9 @@ function AdminBatchRegister() {
 
   return (
     <div className="admin-batch-register">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        ← Quay lại
+      </button>
       <h2>📦 Đăng ký NFT hàng loạt (Batch Registration)</h2>
       <p className="description">
         Upload file CSV hoặc JSON chứa danh sách xe máy để tự động mint nhiều

@@ -47,7 +47,7 @@ cd web
 npm start
 # Terminal 4: chạy server
 
-cd "c:\Users\admin\source\repos\GIT yongbry\DACN_locThanh\server"; npm start
+cd server; npm start
 
 # Terminal 5: chạy server tự động mint NFT
 .\start-batch-mint-server.bat
@@ -58,6 +58,8 @@ npx hardhat run scripts/backup-state.js --network localhost
 
 # Sau khi khởi động lại node (mất state), phục hồi
 npx hardhat run scripts/restore-state.js --network localhost
+# xem các block 
+npx hardhat run scripts/view-blocks.js --network localhost
 
 ### 🔄 Xóa sạch toàn bộ dữ liệu (reset hoàn toàn)
 
