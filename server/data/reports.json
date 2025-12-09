@@ -193,6 +193,26 @@
       "resolvedAt": 1763276245330,
       "unlockRequested": true,
       "unlockDecision": null
+    },
+    {
+      "id": "JJMAWgLb4f",
+      "subject": "NTF của tôi bị khóa không bán được",
+      "message": "cho tôi biết lý do tại sao NFT của tôi bị khóa tôi làm j đâu?",
+      "category": "unlock",
+      "tokenId": "1",
+      "contact": {
+        "name": "Nguyễn Thành Lộc",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "open",
+      "createdAt": 1765096744538,
+      "updatedAt": 1765096744538,
+      "adminNote": "",
+      "resolvedBy": null,
+      "resolvedAt": null,
+      "unlockRequested": true,
+      "unlockDecision": null
     }
   ]
 }

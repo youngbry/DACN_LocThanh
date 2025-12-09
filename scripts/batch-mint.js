@@ -53,7 +53,25 @@ async function main() {
 
   if (fs.existsSync(csvFile)) {
     console.log("📄 Đọc file:", csvFile);
-    vehicles = parseCSV(fs.readFileSync(csvFile, "utf-8"));
+    
+    // Đọc buffer và tự động nhận diện encoding (UTF-8 hoặc Windows-1258)
+    const buffer = fs.readFileSync(csvFile);
+    let content;
+    try {
+      const decoder = new TextDecoder("utf-8", { fatal: true });
+      content = decoder.decode(buffer);
+    } catch (e) {
+      console.log("⚠️ Phát hiện file không phải UTF-8, đang thử đọc bằng Windows-1258...");
+      try {
+        const decoder = new TextDecoder("windows-1258");
+        content = decoder.decode(buffer);
+      } catch (e2) {
+        // Fallback
+        content = buffer.toString("latin1");
+      }
+    }
+
+    vehicles = parseCSV(content);
   } else {
     console.error("❌ Không tìm thấy file vehicles.csv!");
     console.error("Tạo file mẫu vehicles.csv (dấu chấm phẩy ;):");

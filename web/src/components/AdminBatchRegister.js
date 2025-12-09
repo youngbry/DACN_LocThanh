@@ -23,14 +23,35 @@ function AdminBatchRegister() {
 
     reader.onload = (event) => {
       try {
-        const content = event.target.result;
+        const buffer = event.target.result;
+        let content = "";
+
+        // 1. Thử decode UTF-8 trước (chuẩn)
+        const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
+        try {
+          content = utf8Decoder.decode(buffer);
+        } catch (e) {
+          // 2. Nếu lỗi (do file lưu dạng ANSI/Excel cũ), thử decode Windows-1258 (Tiếng Việt)
+          console.warn(
+            "UTF-8 decoding failed, trying windows-1258 for Vietnamese support..."
+          );
+          try {
+            const win1258Decoder = new TextDecoder("windows-1258");
+            content = win1258Decoder.decode(buffer);
+          } catch (e2) {
+            // Fallback cuối cùng
+            const win1252Decoder = new TextDecoder("windows-1252");
+            content = win1252Decoder.decode(buffer);
+          }
+        }
+
         let parsed = [];
 
-        // Chỉ hỗ trợ CSV (dấu chấm phẩy ;)
-        if (uploadedFile.name.endsWith(".csv")) {
+        // Chỉ hỗ trợ CSV
+        if (uploadedFile.name.toLowerCase().endsWith(".csv")) {
           parsed = parseCSV(content);
         } else {
-          setStatus("❌ Chỉ hỗ trợ file .csv (dấu chấm phẩy ;)");
+          setStatus("❌ Chỉ hỗ trợ file .csv");
           return;
         }
 
@@ -45,7 +66,7 @@ function AdminBatchRegister() {
       }
     };
 
-    reader.readAsText(uploadedFile);
+    reader.readAsArrayBuffer(uploadedFile);
   };
 
   // Parse CSV to array of objects
