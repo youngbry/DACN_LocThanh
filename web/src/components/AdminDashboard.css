@@ -395,6 +395,7 @@
     var(--admin-accent1),
     var(--admin-accent2)
   );
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;

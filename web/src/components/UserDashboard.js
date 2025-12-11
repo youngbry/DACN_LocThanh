@@ -14,6 +14,7 @@ const UserDashboard = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [myNFTs, setMyNFTs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [aliases, setAliases] = useState({}); // State lưu tên gợi nhớ
 
   const [stats, setStats] = useState({
     myNFTCount: 0,
@@ -36,6 +37,12 @@ const UserDashboard = () => {
           const userAddr = accounts[0];
           setUserAddress(userAddr);
           setIsConnected(true);
+
+          // Load tên gợi nhớ từ LocalStorage
+          const savedAliases = localStorage.getItem(`nft_aliases_${userAddr}`);
+          if (savedAliases) {
+            setAliases(JSON.parse(savedAliases));
+          }
 
           await loadUserNFTs(provider, userAddr);
         }
@@ -169,52 +176,69 @@ const UserDashboard = () => {
       </div>
 
       {/* NFT LIST */}
-{loading ? (
-  <div className="no-nft">
-    <h2>⏳ Đang tải dữ liệu...</h2>
-  </div>
-) : myNFTs.length === 0 ? (
-  <div className="no-nft">
-    <h2>Bạn chưa có NFT nào</h2>
-    <p>Hãy truy cập Marketplace để mua NFT đầu tiên.</p>
-  </div>
-) : (
-  <div className="user-nft-section">
-    <h2>NFT của tôi ({myNFTs.length})</h2>
+      {loading ? (
+        <div className="no-nft">
+          <h2>⏳ Đang tải dữ liệu...</h2>
+        </div>
+      ) : myNFTs.length === 0 ? (
+        <div className="no-nft">
+          <h2>Bạn chưa có NFT nào</h2>
+          <p>Hãy truy cập Marketplace để mua NFT đầu tiên.</p>
+        </div>
+      ) : (
+        <div className="user-nft-section">
+          <h2>NFT của tôi ({myNFTs.length})</h2>
 
-    <div className="user-nft-grid">
-      {myNFTs.map((nft) => (
-        <div className="user-nft-card" key={nft.tokenId}>
-          {/* KHÔNG CÒN user-nft-banner */}
+          <div className="user-nft-grid">
+            {myNFTs.map((nft) => (
+              <div className="user-nft-card" key={nft.tokenId}>
+                {/* KHÔNG CÒN user-nft-banner */}
 
-          <div className="user-nft-content">
-            <div className="user-nft-info">
-              <span className="user-nft-id">#{nft.tokenId}</span>
-              <h3 className="user-nft-title">{nft.model}</h3>
-              
-            </div>
+                <div className="user-nft-content">
+                  <div className="user-nft-info">
+                    <span className="user-nft-id">#{nft.tokenId}</span>
+                    <h3 className="user-nft-title">
+                      {aliases[nft.tokenId] ? (
+                        <>
+                          {aliases[nft.tokenId]}
+                          <span
+                            style={{
+                              fontSize: "0.8em",
+                              color: "#64748b",
+                              fontWeight: "normal",
+                              marginLeft: "6px",
+                            }}
+                          >
+                            ({nft.model})
+                          </span>
+                        </>
+                      ) : (
+                        nft.model
+                      )}
+                    </h3>
+                  </div>
 
-            <div className="user-nft-actions">
-              <Link
-                to={`/user/nft/${nft.tokenId}`}
-                className="user-nft-btn primary small"
-              >
-                Chi tiết
-              </Link>
+                  <div className="user-nft-actions">
+                    <Link
+                      to={`/user/nft/${nft.tokenId}`}
+                      className="user-nft-btn primary small"
+                    >
+                      Chi tiết
+                    </Link>
 
-              <Link
-                to={`/user/sell/${nft.tokenId}`}
-                className="user-nft-btn secondary small"
-              >
-                Bán
-              </Link>
-            </div>
+                    <Link
+                      to={`/user/sell/${nft.tokenId}`}
+                      className="user-nft-btn secondary small"
+                    >
+                      Bán
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };

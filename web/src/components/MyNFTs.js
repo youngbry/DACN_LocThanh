@@ -15,6 +15,11 @@ const MyNFTs = () => {
   const [userAddress, setUserAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
 
+  // State cho việc đổi tên hiển thị (Alias)
+  const [aliases, setAliases] = useState({});
+  const [editingId, setEditingId] = useState(null);
+  const [tempName, setTempName] = useState("");
+
   useEffect(() => {
     loadMyNFTs();
   }, []);
@@ -31,6 +36,12 @@ const MyNFTs = () => {
           const userAddr = accounts[0];
           setUserAddress(userAddr);
           setIsConnected(true);
+
+          // Load tên gợi nhớ từ LocalStorage
+          const savedAliases = localStorage.getItem(`nft_aliases_${userAddr}`);
+          if (savedAliases) {
+            setAliases(JSON.parse(savedAliases));
+          }
 
           const contract = new ethers.Contract(
             CONTRACT_ADDRESS,
@@ -90,6 +101,35 @@ const MyNFTs = () => {
     loadMyNFTs();
   };
 
+  // --- Xử lý đổi tên hiển thị (Alias) ---
+  const startEditing = (nft) => {
+    setEditingId(nft.tokenId);
+    // Nếu đã có tên riêng thì dùng, nếu chưa thì dùng model gốc
+    setTempName(aliases[nft.tokenId] || nft.model);
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setTempName("");
+  };
+
+  const saveAlias = () => {
+    if (editingId === null) return;
+
+    const newAliases = { ...aliases, [editingId]: tempName };
+    setAliases(newAliases);
+
+    // Lưu vào LocalStorage theo địa chỉ ví hiện tại
+    localStorage.setItem(
+      `nft_aliases_${userAddress}`,
+      JSON.stringify(newAliases)
+    );
+
+    setEditingId(null);
+    setTempName("");
+  };
+  // --------------------------------------
+
   // Loading UI
   if (loading) {
     return (
@@ -117,7 +157,6 @@ const MyNFTs = () => {
 
   return (
     <div className="mynft-container">
-
       {/* HEADER */}
       <div className="mynft-header-card">
         <div>
@@ -148,7 +187,6 @@ const MyNFTs = () => {
         <div className="mynft-grid">
           {myNFTs.map((nft) => (
             <div className="mynft-card" key={nft.tokenId}>
-
               <div className="mynft-banner">🏍️</div>
 
               <div className="mynft-content">
@@ -166,7 +204,101 @@ const MyNFTs = () => {
                   )}
                 </div>
 
-                <h3 className="model">{nft.model}</h3>
+                {/* Phần hiển thị tên có thể chỉnh sửa */}
+                {editingId === nft.tokenId ? (
+                  <div
+                    className="alias-edit-box"
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <input
+                      type="text"
+                      value={tempName}
+                      onChange={(e) => setTempName(e.target.value)}
+                      className="alias-input"
+                      autoFocus
+                      style={{
+                        width: "100%",
+                        padding: "5px",
+                        borderRadius: "4px",
+                        border: "1px solid #ccc",
+                        marginBottom: "5px",
+                      }}
+                    />
+                    <div style={{ display: "flex", gap: "5px" }}>
+                      <button
+                        onClick={saveAlias}
+                        style={{
+                          background: "#10b981",
+                          color: "white",
+                          border: "none",
+                          padding: "4px 8px",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        Lưu
+                      </button>
+                      <button
+                        onClick={cancelEditing}
+                        style={{
+                          background: "#ef4444",
+                          color: "white",
+                          border: "none",
+                          padding: "4px 8px",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    className="model-wrapper"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <h3 className="model" style={{ margin: 0 }}>
+                      {aliases[nft.tokenId] ? (
+                        <>
+                          {aliases[nft.tokenId]}
+                          <span
+                            style={{
+                              fontSize: "0.7rem",
+                              color: "#888",
+                              fontWeight: "normal",
+                              marginLeft: "5px",
+                            }}
+                          >
+                            ({nft.model})
+                          </span>
+                        </>
+                      ) : (
+                        nft.model
+                      )}
+                    </h3>
+                    <button
+                      onClick={() => startEditing(nft)}
+                      title="Đổi tên gợi nhớ"
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: "1rem",
+                        opacity: 0.6,
+                      }}
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                )}
 
                 <div className="details">
                   <div className="row">
@@ -186,7 +318,10 @@ const MyNFTs = () => {
                 </div>
 
                 <div className="actions">
-                  <Link to={`/user/nft/${nft.tokenId}`} className="mynft-btn primary">
+                  <Link
+                    to={`/user/nft/${nft.tokenId}`}
+                    className="mynft-btn primary"
+                  >
                     👁️ Chi tiết
                   </Link>
 
@@ -203,7 +338,6 @@ const MyNFTs = () => {
                     </button>
                   )}
                 </div>
-
               </div>
             </div>
           ))}
@@ -216,7 +350,6 @@ const MyNFTs = () => {
           🔄 Làm mới
         </button>
       </div>
-
     </div>
   );
 };

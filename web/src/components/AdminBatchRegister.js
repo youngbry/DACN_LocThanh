@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { ABI, CONTRACT_ADDRESS } from "../blockchain/MotorbikeNFT";
@@ -6,12 +6,27 @@ import "./AdminBatchRegister.css";
 
 function AdminBatchRegister() {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [vehicles, setVehicles] = useState([]);
   const [status, setStatus] = useState("");
   const [progress, setProgress] = useState({ current: 0, total: 0 });
   const [isProcessing, setIsProcessing] = useState(false);
   const [useAutoMode, setUseAutoMode] = useState(true); // Toggle auto/manual mode
+
+  // Reset form
+  const handleReset = () => {
+    setFile(null);
+    setVehicles([]);
+    setStatus("");
+    setProgress({ current: 0, total: 0 });
+    setIsProcessing(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    const resultDiv = document.getElementById("batch-results");
+    if (resultDiv) resultDiv.innerHTML = "";
+  };
 
   // Xử lý upload file
   const handleFileUpload = (e) => {
@@ -408,6 +423,7 @@ function AdminBatchRegister() {
           accept=".csv"
           onChange={handleFileUpload}
           disabled={isProcessing}
+          ref={fileInputRef}
         />
         {file && <p>File đã chọn: {file.name}</p>}
       </div>
@@ -457,21 +473,50 @@ function AdminBatchRegister() {
           </label>
         </div>
 
-        <button
-          className="btn primary"
-          onClick={useAutoMode ? handleAutoMint : handleBatchMint}
-          disabled={vehicles.length === 0 || isProcessing}
+        <div
+          className="action-buttons"
+          style={{ display: "flex", gap: "15px" }}
         >
-          {isProcessing ? "⏳ Đang xử lý..." : "🚀 Bắt đầu Mint"}
-        </button>
+          <button
+            className="btn primary"
+            onClick={useAutoMode ? handleAutoMint : handleBatchMint}
+            disabled={vehicles.length === 0 || isProcessing}
+            style={{ flex: 1 }}
+          >
+            {isProcessing ? "⏳ Đang xử lý..." : "🚀 Bắt đầu Mint"}
+          </button>
+
+          <button
+            className="btn secondary"
+            onClick={handleReset}
+            disabled={isProcessing}
+          >
+            🔄 Làm mới
+          </button>
+        </div>
       </div>
 
       {isProcessing && (
         <div className="progress-section">
           <h3>
-            Tiến độ: {progress.current}/{progress.total}
+            {useAutoMode
+              ? "⏳ Đang xử lý trên server (vui lòng chờ)..."
+              : `Tiến độ: ${progress.current}/${progress.total}`}
           </h3>
-          <progress value={progress.current} max={progress.total}></progress>
+          <div className="custom-progress-track">
+            <div
+              className={`custom-progress-fill ${
+                useAutoMode ? "indeterminate" : ""
+              }`}
+              style={{
+                width: `${
+                  progress.total > 0
+                    ? (progress.current / progress.total) * 100
+                    : 0
+                }%`,
+              }}
+            ></div>
+          </div>
         </div>
       )}
 
