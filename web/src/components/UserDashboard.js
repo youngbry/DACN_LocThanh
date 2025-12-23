@@ -7,6 +7,7 @@ import {
   ABI as CONTRACT_ABI,
 } from "../blockchain/MotorbikeNFT";
 
+import TransactionHistory from "./TransactionHistory"; // Import TransactionHistory
 import "./UserDashboard.css"; // ⭐ IMPORT CSS
 
 const UserDashboard = () => {
@@ -15,6 +16,8 @@ const UserDashboard = () => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [aliases, setAliases] = useState({}); // State lưu tên gợi nhớ
+  const [balance, setBalance] = useState("0"); // State lưu số dư ví
+  const [provider, setProvider] = useState(null); // State lưu provider
 
   const [stats, setStats] = useState({
     myNFTCount: 0,
@@ -37,6 +40,11 @@ const UserDashboard = () => {
           const userAddr = accounts[0];
           setUserAddress(userAddr);
           setIsConnected(true);
+          setProvider(provider); // Lưu provider để dùng cho TransactionHistory
+
+          // Lấy số dư ví
+          const balanceWei = await provider.getBalance(userAddr);
+          setBalance(ethers.formatEther(balanceWei));
 
           // Load tên gợi nhớ từ LocalStorage
           const savedAliases = localStorage.getItem(`nft_aliases_${userAddr}`);
@@ -140,6 +148,14 @@ const UserDashboard = () => {
       {/* STATS */}
       <div className="user-stats">
         <div className="user-stat-card">
+          <div className="user-stat-icon">💰</div>
+          <div className="user-stat-number">
+            {parseFloat(balance).toFixed(4)} ETH
+          </div>
+          <div className="user-stat-label">SỐ DƯ VÍ</div>
+        </div>
+
+        <div className="user-stat-card">
           <div className="user-stat-icon">🏍️</div>
           <div className="user-stat-number">{stats.myNFTCount}</div>
           <div className="user-stat-label">NFT CỦA TÔI</div>
@@ -238,6 +254,11 @@ const UserDashboard = () => {
             ))}
           </div>
         </div>
+      )}
+
+      {/* TRANSACTION HISTORY */}
+      {isConnected && provider && (
+        <TransactionHistory userAddress={userAddress} provider={provider} />
       )}
     </div>
   );

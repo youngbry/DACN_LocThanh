@@ -645,10 +645,10 @@
 }
 
 .spec-value {
-  color: #2d3748;
+  color: #ffffff;
   font-weight: bold;
   font-family: monospace;
-  background: #f7fafc;
+  background: rgba(255, 255, 255, 0.1);
   padding: 5px 10px;
   border-radius: 6px;
   font-size: 0.9em;

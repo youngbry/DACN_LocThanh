@@ -21,6 +21,8 @@ import Marketplace from "./components/Marketplace";
 import MyNFTs from "./components/MyNFTs";
 import TransferNFT from "./components/TransferNFT";
 import ReportIssue from "./components/ReportIssue";
+import HistoryPage from "./components/HistoryPage";
+import BlockExplorer from "./components/BlockExplorer";
 import ChatWidget from "./components/chatbot/ChatWidget";
 import Footer from "./components/Footer.css";
 
@@ -87,6 +89,12 @@ const Navigation = () => {
           <NavLink to="/report" style={linkStyle}>
             Báo cáo
           </NavLink>
+          <NavLink to="/history" style={linkStyle}>
+            Lịch sử
+          </NavLink>
+          <NavLink to="/explorer" style={linkStyle}>
+            Explorer
+          </NavLink>
         </div>
       </div>
     </nav>
@@ -118,6 +126,8 @@ function App() {
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/transfer" element={<TransferNFT />} />
             <Route path="/report" element={<ReportIssue />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/explorer" element={<BlockExplorer />} />
 
             {/* 404 - Not Found */}
             <Route
@@ -139,7 +149,6 @@ function App() {
 
       {/* 💬 Chat AI Widget (nổi ở góc phải trang) */}
       <ChatWidget />
-      
     </Router>
   );
 }

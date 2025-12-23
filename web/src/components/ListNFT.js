@@ -19,6 +19,20 @@ const ListNFT = () => {
   const [price, setPrice] = useState("");
   const [isApproved, setIsApproved] = useState(false);
 
+  // Hàm định dạng số với dấu chấm phân cách
+  const formatVND = (value) => {
+    if (!value) return "";
+    // Xóa tất cả ký tự không phải số
+    const number = value.replace(/\D/g, "");
+    // Định dạng với dấu chấm
+    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const handlePriceChange = (e) => {
+    const formatted = formatVND(e.target.value);
+    setPrice(formatted);
+  };
+
   useEffect(() => {
     loadNFTInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,7 +124,10 @@ const ListNFT = () => {
   };
 
   const listNFT = async () => {
-    if (!price || parseFloat(price) <= 0) {
+    // Lấy giá trị số thuần túy (xóa dấu chấm)
+    const rawPrice = price.replace(/\./g, "");
+    
+    if (!rawPrice || parseFloat(rawPrice) <= 0) {
       alert("Vui lòng nhập giá hợp lệ!");
       return;
     }
@@ -139,7 +156,7 @@ const ListNFT = () => {
       `⚠️ Xác nhận đăng bán NFT?\n\n` +
         `🏍️ Xe: ${nft.model}\n` +
         `🆔 VIN: ${nft.vin}\n` +
-        `💰 Giá: ${price} ETH\n\n` +
+        `💰 Giá: ${price} VND\n\n` +
         `NFT sẽ được hiển thị trên marketplace cho mọi người mua!`
     );
 
@@ -157,13 +174,13 @@ const ListNFT = () => {
       );
 
       console.log("Đang đăng bán NFT...");
-      const priceWei = ethers.parseEther(price);
-      const tx = await marketplaceContract.listNFT(tokenId, priceWei);
+      const priceVnd = Math.floor(parseFloat(rawPrice));
+      const tx = await marketplaceContract.listNFT(tokenId, priceVnd);
       await tx.wait();
 
       alert(
         `✅ Đăng bán NFT thành công!\n\n` +
-          `🏍️ NFT #${tokenId} đã được đăng bán với giá ${price} ETH\n` +
+          `🏍️ NFT #${tokenId} đã được đăng bán với giá ${price} VND\n` +
           `📋 Transaction: ${tx.hash}`
       );
 
@@ -279,19 +296,17 @@ const ListNFT = () => {
           ) : (
             <div className="pricing-form">
               <div className="form-group">
-                <label htmlFor="price">Giá bán (ETH) *</label>
+                <label htmlFor="price">Giá bán (VND) *</label>
                 <input
-                  type="number"
+                  type="text"
                   id="price"
                   value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder="0.1"
-                  step="0.001"
-                  min="0"
+                  onChange={handlePriceChange}
+                  placeholder="Ví dụ: 2.000.000"
                   disabled={listing}
                 />
                 <small className="form-hint">
-                  Nhập giá bán bằng ETH (ví dụ: 0.1)
+                  Nhập giá bán bằng VND. Giá sẽ tự quy đổi ra ETH khi thanh toán.
                 </small>
               </div>
 
@@ -301,9 +316,9 @@ const ListNFT = () => {
                   <h4>Lưu ý khi đăng bán:</h4>
                   <ul>
                     <li>NFT sẽ hiển thị trên marketplace công khai</li>
-                    <li>Mọi người có thể mua với giá bạn đặt</li>
+                    <li>Giá trị VND sẽ được giữ cố định</li>
+                    <li>Số ETH người mua trả sẽ thay đổi theo tỷ giá</li>
                     <li>Bạn có thể hủy đăng bán bất cứ lúc nào</li>
-                    <li>Khi có người mua, ETH sẽ chuyển vào ví của bạn</li>
                   </ul>
                 </div>
               </div>

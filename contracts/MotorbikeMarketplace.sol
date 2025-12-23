@@ -26,6 +26,9 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
 
     IERC721 public nftContract;
     
+    // Mock Oracle: Price of 1 ETH in VND (e.g., 60,000,000)
+    uint256 public ethVndPrice = 60000000; 
+
     // Mapping from tokenId to listing
     mapping(uint256 => Listing) public listings;
 
@@ -43,12 +46,28 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
     event NFTSold(uint256 indexed tokenId, address indexed seller, address indexed buyer, uint256 price);
     event NFTUnlisted(uint256 indexed tokenId, address indexed seller);
     event PriceUpdated(uint256 indexed tokenId, uint256 oldPrice, uint256 newPrice);
+    event EthVndPriceUpdated(uint256 oldPrice, uint256 newPrice);
 
     constructor(address _nftContract) Ownable(msg.sender) {
         nftContract = IERC721(_nftContract);
     }
 
-    // List NFT for sale
+    // Update the Mock Oracle price (Admin only)
+    function setEthVndPrice(uint256 _newPrice) external onlyOwner {
+        require(_newPrice > 0, "Price must be greater than 0");
+        uint256 oldPrice = ethVndPrice;
+        ethVndPrice = _newPrice;
+        emit EthVndPriceUpdated(oldPrice, _newPrice);
+    }
+
+    // Calculate ETH required for a VND price
+    function getRequiredEth(uint256 tokenId) public view returns (uint256) {
+        require(isListed[tokenId], "NFT not listed");
+        // Formula: (VND_Price * 10^18) / ETH_VND_Price
+        return (listings[tokenId].price * 1e18) / ethVndPrice;
+    }
+
+    // List NFT for sale (price is in VND)
     function listNFT(uint256 tokenId, uint256 price) external {
         require(nftContract.ownerOf(tokenId) == msg.sender, "You don't own this NFT");
         require(nftContract.getApproved(tokenId) == address(this) || 
@@ -109,7 +128,9 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
     function buyNFT(uint256 tokenId) external payable nonReentrant {
         require(isListed[tokenId], "NFT not listed");
         require(listings[tokenId].isActive, "Listing not active");
-        require(msg.value >= listings[tokenId].price, "Insufficient payment");
+        
+        uint256 requiredEth = getRequiredEth(tokenId);
+        require(msg.value >= requiredEth, "Insufficient payment (ETH)");
         require(msg.sender != listings[tokenId].seller, "Cannot buy your own NFT");
         require(!IMotorbikeNFT(address(nftContract)).locked(tokenId), "Token locked");
 
@@ -124,6 +145,11 @@ contract MotorbikeMarketplace is Ownable, ReentrancyGuard {
 
         // Transfer payment
         payable(listing.seller).transfer(msg.value);
+
+        // Refund excess ETH if any
+        if (msg.value > requiredEth) {
+            payable(msg.sender).transfer(msg.value - requiredEth);
+        }
 
         emit NFTSold(tokenId, listing.seller, msg.sender, listing.price);
     }

@@ -42,6 +42,23 @@ export const MARKETPLACE_ABI = [
   {
     "type": "event",
     "anonymous": false,
+    "name": "EthVndPriceUpdated",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "oldPrice",
+        "indexed": false
+      },
+      {
+        "type": "uint256",
+        "name": "newPrice",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
     "name": "NFTListed",
     "inputs": [
       {
@@ -157,6 +174,20 @@ export const MARKETPLACE_ABI = [
       }
     ],
     "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "ethVndPrice",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ]
   },
   {
     "type": "function",
@@ -320,6 +351,25 @@ export const MARKETPLACE_ABI = [
             "name": "timestamp"
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "getRequiredEth",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
       }
     ]
   },
@@ -497,6 +547,19 @@ export const MARKETPLACE_ABI = [
     "constant": false,
     "payable": false,
     "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "setEthVndPrice",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_newPrice"
+      }
+    ],
     "outputs": []
   },
   {

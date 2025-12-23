@@ -1,5 +1,4 @@
-
-const API_KEY = "AIzaSyB-IO5FxZjzdxaJ8jxpY4Db7pggPsZktSg"; // nhớ thay lại key của bạn
+const API_KEY = "AIzaSyAy0dLr2RxGs1xsLyuUzayEaUW812syaGI"; // nhớ thay lại key của bạn
 
 // 🔹 Ngữ cảnh cố định về dự án của bạn
 const PROJECT_CONTEXT = `
@@ -113,7 +112,8 @@ Bạn đã hiểu toàn bộ hệ thống. Hãy luôn trả lời như một tr�
 `;
 
     const res = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
+        API_KEY,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

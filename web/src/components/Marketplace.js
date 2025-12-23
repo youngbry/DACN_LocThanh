@@ -20,6 +20,7 @@ const Marketplace = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
   const [buyingTokenId, setBuyingTokenId] = useState(null);
+  const [currentEthRate, setCurrentEthRate] = useState(null);
 
   // Filters
   const [filterModel, setFilterModel] = useState("");
@@ -79,12 +80,18 @@ const Marketplace = () => {
       );
 
       const listings = await marketplaceContract.getActiveListings();
+      const ethVndPrice = await marketplaceContract.ethVndPrice();
+      setCurrentEthRate(ethVndPrice.toString());
 
       const enriched = await Promise.all(
         listings.map(async (listing) => {
           try {
             const tokenId = Number(listing.tokenId);
             const motorbike = await nftContract.getMotorbike(tokenId);
+            
+            // Calculate required ETH for this VND price
+            const requiredEthWei = await marketplaceContract.getRequiredEth(tokenId);
+            const requiredEth = ethers.formatEther(requiredEthWei);
 
             // Price history
             let history = [];
@@ -93,8 +100,8 @@ const Marketplace = () => {
                 tokenId
               );
               history = rawHistory.map((h) => ({
-                oldPriceEth: ethers.formatEther(h.oldPrice),
-                newPriceEth: ethers.formatEther(h.newPrice),
+                oldPriceVnd: h.oldPrice.toString(),
+                newPriceVnd: h.newPrice.toString(),
                 timestamp: Number(h.timestamp),
               }));
             } catch (_) {
@@ -104,8 +111,9 @@ const Marketplace = () => {
             return {
               tokenId,
               seller: listing.seller,
-              priceEth: ethers.formatEther(listing.price),
-              priceRaw: listing.price,
+              priceVnd: listing.price.toString(),
+              requiredEth: requiredEth,
+              requiredEthWei: requiredEthWei,
               listedAt: Number(listing.listedAt),
               model: motorbike.model,
               year: motorbike.year?.toString?.() || "",
@@ -136,7 +144,7 @@ const Marketplace = () => {
         if (colorLower && !(n.color || "").toLowerCase().includes(colorLower))
           return false;
         if (yearFilter && n.year !== yearFilter) return false;
-        const priceNum = parseFloat(n.priceEth);
+        const priceNum = parseFloat(n.priceVnd);
         if (minP !== null && priceNum < minP) return false;
         if (maxP !== null && priceNum > maxP) return false;
         return true;
@@ -265,7 +273,7 @@ const Marketplace = () => {
       );
 
       const tx = await marketplaceContract.buyNFT(nft.tokenId, {
-        value: nft.priceRaw,
+        value: nft.requiredEthWei,
       });
       await tx.wait();
 
@@ -289,12 +297,23 @@ const Marketplace = () => {
 
   const startEditPrice = (nft) => {
     setEditingTokenId(nft.tokenId);
-    setNewPriceEth(nft.priceEth);
+    setNewPriceEth(formatVND(nft.priceVnd.toString())); // Reusing state name but it's VND now
   };
 
   const cancelEdit = () => {
     setEditingTokenId(null);
     setNewPriceEth("");
+  };
+
+  // Hàm định dạng số với dấu chấm phân cách
+  const formatVND = (value) => {
+    if (!value) return "";
+    const number = value.toString().replace(/\D/g, "");
+    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const handlePriceChange = (e) => {
+    setNewPriceEth(formatVND(e.target.value));
   };
 
   const saveNewPrice = async (nft) => {
@@ -305,10 +324,12 @@ const Marketplace = () => {
         setError("Không phát hiện ví trên trình duyệt");
         return;
       }
+
+      const rawPrice = newPriceEth.replace(/\./g, "");
       if (
-        !newPriceEth ||
-        isNaN(parseFloat(newPriceEth)) ||
-        parseFloat(newPriceEth) <= 0
+        !rawPrice ||
+        isNaN(parseFloat(rawPrice)) ||
+        parseFloat(rawPrice) <= 0
       ) {
         setError("Giá mới không hợp lệ");
         return;
@@ -321,8 +342,8 @@ const Marketplace = () => {
         MARKETPLACE_ABI,
         signer
       );
-      const weiPrice = ethers.parseEther(newPriceEth);
-      const tx = await marketplaceContract.updatePrice(nft.tokenId, weiPrice);
+      const vndPrice = Math.floor(parseFloat(rawPrice));
+      const tx = await marketplaceContract.updatePrice(nft.tokenId, vndPrice);
       await tx.wait();
       await loadMarketplaceData();
       setEditingTokenId(null);
@@ -351,6 +372,12 @@ const Marketplace = () => {
         <div>
           <h1>🛒 Chợ NFT Xe Máy</h1>
           <p>Khám phá và mua các NFT xe máy độc đáo</p>
+          {currentEthRate && (
+            <div className="live-rate-badge">
+              <span className="pulse-dot"></span>
+              Tỷ giá trực tiếp: 1 ETH = {Number(currentEthRate).toLocaleString()} VND
+            </div>
+          )}
         </div>
 
         <div className="mynft-wallet-box">
@@ -405,13 +432,13 @@ const Marketplace = () => {
           />
           <input
             className="market-input"
-            placeholder="Giá tối thiểu (ETH)"
+            placeholder="Giá tối thiểu (VND)"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
           />
           <input
             className="market-input"
-            placeholder="Giá tối đa (ETH)"
+            placeholder="Giá tối đa (VND)"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
           />
@@ -477,7 +504,10 @@ const Marketplace = () => {
                     <div className="mynft-top">
                       <span className="id">#{nft.tokenId}</span>
                       <span className="year">{nft.year || "(n/a)"}</span>
-                      <span className="price-tag">{nft.priceEth} ETH</span>
+                      <div className="price-container">
+                        <span className="price-tag">{Number(nft.priceVnd).toLocaleString()} VND</span>
+                        <span className="eth-sub">~ {nft.requiredEth} ETH</span>
+                      </div>
                     </div>
 
                     <h3 className="model">
@@ -517,7 +547,7 @@ const Marketplace = () => {
                               .reverse()
                               .map((h, idx) => (
                                 <li key={idx}>
-                                  {h.oldPriceEth} → {h.newPriceEth} ETH (
+                                  {Number(h.oldPriceVnd).toLocaleString()} → {Number(h.newPriceVnd).toLocaleString()} VND (
                                   {new Date(
                                     h.timestamp * 1000
                                   ).toLocaleDateString()}
@@ -551,9 +581,10 @@ const Marketplace = () => {
   (editingTokenId === nft.tokenId ? (
     <div className="market-edit-wrapper">
       <input
+        type="text"
         value={newPriceEth}
-        onChange={(e) => setNewPriceEth(e.target.value)}
-        placeholder="Giá mới (ETH)"
+        onChange={handlePriceChange}
+        placeholder="Giá mới (VND)"
         className="market-input small"
       />
       <div className="market-edit-actions">

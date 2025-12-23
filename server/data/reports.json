@@ -205,13 +205,33 @@
         "email": "locnguyennn114@gmail.com"
       },
       "wallet": null,
-      "status": "open",
+      "status": "resolved",
       "createdAt": 1765096744538,
-      "updatedAt": 1765096744538,
+      "updatedAt": 1765807759241,
+      "adminNote": "chúng tôi sẽ xem lại và báo lại bạn thời gian sớm nhất",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1765807759241,
+      "unlockRequested": true,
+      "unlockDecision": null
+    },
+    {
+      "id": "ijD9p_nmeE",
+      "subject": "làm cách nào để đăng ký xe mới",
+      "message": "hiện tại tôi có 1 chiếc xe cũ cần cấp NFT để dễ dàng mua bán thì phải làm sao",
+      "category": "mint",
+      "tokenId": null,
+      "contact": {
+        "name": "Nguyễn Thành Lộc",
+        "email": "locnguyennn114@gmail.com"
+      },
+      "wallet": null,
+      "status": "open",
+      "createdAt": 1765856458918,
+      "updatedAt": 1765856458918,
       "adminNote": "",
       "resolvedBy": null,
       "resolvedAt": null,
-      "unlockRequested": true,
+      "unlockRequested": false,
       "unlockDecision": null
     }
   ]
