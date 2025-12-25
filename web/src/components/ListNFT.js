@@ -126,7 +126,7 @@ const ListNFT = () => {
   const listNFT = async () => {
     // Lấy giá trị số thuần túy (xóa dấu chấm)
     const rawPrice = price.replace(/\./g, "");
-    
+
     if (!rawPrice || parseFloat(rawPrice) <= 0) {
       alert("Vui lòng nhập giá hợp lệ!");
       return;
@@ -306,7 +306,8 @@ const ListNFT = () => {
                   disabled={listing}
                 />
                 <small className="form-hint">
-                  Nhập giá bán bằng VND. Giá sẽ tự quy đổi ra ETH khi thanh toán.
+                  Nhập giá bán bằng VND. Giá sẽ tự quy đổi ra ETH khi thanh
+                  toán.
                 </small>
               </div>
 

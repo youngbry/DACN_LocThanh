@@ -233,6 +233,23 @@
       "resolvedAt": null,
       "unlockRequested": false,
       "unlockDecision": null
+    },
+    {
+      "id": "iCwPlx1nty",
+      "subject": "Request unlock NFT #0",
+      "message": "sao lại khóa xe của tôi",
+      "category": "unlock",
+      "tokenId": "0",
+      "contact": {},
+      "wallet": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+      "status": "resolved",
+      "createdAt": 1766561223879,
+      "updatedAt": 1766561266159,
+      "adminNote": "chúng tôi sẽ thông báo lại bạn trong thời gian sớm nhất",
+      "resolvedBy": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "resolvedAt": 1766561266159,
+      "unlockRequested": true,
+      "unlockDecision": null
     }
   ]
 }

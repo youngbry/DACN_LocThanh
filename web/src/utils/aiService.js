@@ -1,4 +1,4 @@
-const API_KEY = "AIzaSyAy0dLr2RxGs1xsLyuUzayEaUW812syaGI"; // nhớ thay lại key của bạn
+const API_KEY = "AIzaSyAqOTo6L5TlY0Ixv7g__ipM1oXSLQ3urVE"; // nhớ thay lại key của bạn
 
 // 🔹 Ngữ cảnh cố định về dự án của bạn
 const PROJECT_CONTEXT = `
@@ -128,6 +128,13 @@ Bạn đã hiểu toàn bộ hệ thống. Hãy luôn trả lời như một tr�
     );
 
     const data = await res.json();
+
+    if (!res.ok) {
+      if (res.status === 429) {
+        return "❗ Hệ thống AI đang quá tải hoặc hết hạn mức (Quota). Vui lòng thử lại sau hoặc kiểm tra API Key.";
+      }
+      throw new Error(data.error?.message || "Lỗi API");
+    }
 
     // DEBUG nếu cần:
     // console.log("Gemini raw:", data);

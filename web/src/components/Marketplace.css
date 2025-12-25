@@ -149,7 +149,8 @@
   0% {
     transform: scale(0.33);
   }
-  80%, 100% {
+  80%,
+  100% {
     opacity: 0;
   }
 }
@@ -159,26 +160,27 @@
 .market-edit-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;  /* Ensures space between input and buttons */
-  width: 100%;  /* Make sure it takes up full available space */
+  gap: 10px; /* Ensures space between input and buttons */
+  width: 100%; /* Make sure it takes up full available space */
   padding: 5px 0;
 }
 
 /* Edit buttons section */
 .market-edit-actions {
   display: flex;
-  justify-content: space-between;  /* Spread buttons out */
+  justify-content: space-between; /* Spread buttons out */
   gap: 15px;
-  flex-wrap: wrap;  /* Allow wrapping if space is tight */
+  flex-wrap: wrap; /* Allow wrapping if space is tight */
 }
 
 /* Ensure buttons have equal width and enough space */
-.mynft-btn.primary, .mynft-btn.secondary {
-  flex: 1;  /* Makes buttons take up equal space */
+.mynft-btn.primary,
+.mynft-btn.secondary {
+  flex: 1; /* Makes buttons take up equal space */
   min-width: 120px; /* Minimum width for buttons to avoid overflow */
   padding: 12px 20px;
   font-size: 1em;
-  margin: 0;  /* Remove default margin */
+  margin: 0; /* Remove default margin */
 }
 
 .mynft-btn {
@@ -199,7 +201,6 @@
   background-color: #6366f1; /* Primary button color */
   color: white;
 }
-
 
 /* Lịch sử giá phía dưới chi tiết NFT */
 .market-history {

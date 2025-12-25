@@ -88,9 +88,11 @@ const Marketplace = () => {
           try {
             const tokenId = Number(listing.tokenId);
             const motorbike = await nftContract.getMotorbike(tokenId);
-            
+
             // Calculate required ETH for this VND price
-            const requiredEthWei = await marketplaceContract.getRequiredEth(tokenId);
+            const requiredEthWei = await marketplaceContract.getRequiredEth(
+              tokenId
+            );
             const requiredEth = ethers.formatEther(requiredEthWei);
 
             // Price history
@@ -375,7 +377,8 @@ const Marketplace = () => {
           {currentEthRate && (
             <div className="live-rate-badge">
               <span className="pulse-dot"></span>
-              Tỷ giá trực tiếp: 1 ETH = {Number(currentEthRate).toLocaleString()} VND
+              Tỷ giá trực tiếp: 1 ETH ={" "}
+              {Number(currentEthRate).toLocaleString()} VND
             </div>
           )}
         </div>
@@ -505,7 +508,9 @@ const Marketplace = () => {
                       <span className="id">#{nft.tokenId}</span>
                       <span className="year">{nft.year || "(n/a)"}</span>
                       <div className="price-container">
-                        <span className="price-tag">{Number(nft.priceVnd).toLocaleString()} VND</span>
+                        <span className="price-tag">
+                          {Number(nft.priceVnd).toLocaleString()} VND
+                        </span>
                         <span className="eth-sub">~ {nft.requiredEth} ETH</span>
                       </div>
                     </div>
@@ -547,7 +552,8 @@ const Marketplace = () => {
                               .reverse()
                               .map((h, idx) => (
                                 <li key={idx}>
-                                  {Number(h.oldPriceVnd).toLocaleString()} → {Number(h.newPriceVnd).toLocaleString()} VND (
+                                  {Number(h.oldPriceVnd).toLocaleString()} →{" "}
+                                  {Number(h.newPriceVnd).toLocaleString()} VND (
                                   {new Date(
                                     h.timestamp * 1000
                                   ).toLocaleDateString()}
@@ -578,39 +584,38 @@ const Marketplace = () => {
                       </button>
 
                       {isOwner &&
-  (editingTokenId === nft.tokenId ? (
-    <div className="market-edit-wrapper">
-      <input
-        type="text"
-        value={newPriceEth}
-        onChange={handlePriceChange}
-        placeholder="Giá mới (VND)"
-        className="market-input small"
-      />
-      <div className="market-edit-actions">
-        <button
-          onClick={() => saveNewPrice(nft)}
-          className="mynft-btn primary"
-        >
-          Lưu
-        </button>
-        <button
-          onClick={cancelEdit}
-          className="mynft-btn secondary"
-        >
-          Huỷ
-        </button>
-      </div>
-    </div>
-  ) : (
-    <button
-      onClick={() => startEditPrice(nft)}
-      className="mynft-btn secondary"
-    >
-      ✏️ Sửa giá
-    </button>
-  ))}
-
+                        (editingTokenId === nft.tokenId ? (
+                          <div className="market-edit-wrapper">
+                            <input
+                              type="text"
+                              value={newPriceEth}
+                              onChange={handlePriceChange}
+                              placeholder="Giá mới (VND)"
+                              className="market-input small"
+                            />
+                            <div className="market-edit-actions">
+                              <button
+                                onClick={() => saveNewPrice(nft)}
+                                className="mynft-btn primary"
+                              >
+                                Lưu
+                              </button>
+                              <button
+                                onClick={cancelEdit}
+                                className="mynft-btn secondary"
+                              >
+                                Huỷ
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => startEditPrice(nft)}
+                            className="mynft-btn secondary"
+                          >
+                            ✏️ Sửa giá
+                          </button>
+                        ))}
                     </div>
                   </div>
                 </div>
