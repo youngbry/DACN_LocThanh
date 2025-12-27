@@ -49,24 +49,7 @@
   }
 }
 
-/* Back button styles */
-.back-btn {
-  background: #4a5568;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 20px;
-  transition: background-color 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.back-btn:hover {
-  background: #2d3748;
-}
+/* Back button styles moved to header-actions section */
 
 /* Removed old column layout for management-header to align with AdminReports header layout */
 
@@ -113,11 +96,12 @@
 }
 
 .management-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   margin-bottom: 40px;
   padding: 28px 35px;
+  background-color: #1e1b4b;
   background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 60%, #0d3b66 100%);
   color: #f8fafc;
   border-radius: 26px;
@@ -125,6 +109,17 @@
     0 0 0 1px rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
+  z-index: 1;
+}
+
+.management-header .back-btn {
+  justify-self: start;
+  width: fit-content;
+  margin: 0;
+}
+
+.management-header .header-actions {
+  justify-self: end;
 }
 .management-header::before {
   content: "";
@@ -168,6 +163,8 @@
 }
 
 .management-header h1 {
+  justify-self: center;
+  text-align: center;
   margin: 0;
   font-size: 2.2em;
   position: relative;

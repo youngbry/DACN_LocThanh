@@ -27,6 +27,20 @@ contract MotorbikeNFT is ERC721, Ownable {
     mapping(uint256 => bool) public locked;
     mapping(uint256 => string) public lockReason;
 
+    // KYC System
+    mapping(address => bool) public isKycVerified;
+    event UserVerified(address indexed user, bool status);
+
+    modifier onlyKyc() {
+        require(isKycVerified[msg.sender], "Ban can eKYC de thuc hien");
+        _;
+    }
+
+    function verifyUser(address _user, bool _status) external onlyOwner {
+        isKycVerified[_user] = _status;
+        emit UserVerified(_user, _status);
+    }
+
     event MotorbikeUpdated(uint256 indexed tokenId, string model, string color, uint256 year);
     event TokenLockSet(uint256 indexed tokenId, bool locked, string reason);
 

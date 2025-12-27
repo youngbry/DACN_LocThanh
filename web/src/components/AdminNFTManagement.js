@@ -65,22 +65,16 @@ const AdminNFTManagement = () => {
 
   const loadAllNFTs = async (provider, contract) => {
     try {
-      // Get all Transfer events to find all NFTs
-      const transferEvents = await contract.queryFilter(
-        contract.filters.Transfer()
-      );
-
-      // Get unique token IDs
-      const tokenIds = [
-        ...new Set(
-          transferEvents.map((event) => event.args.tokenId.toString())
-        ),
-      ];
+      // Get total supply
+      const totalSupply = await contract.totalSupply();
+      const total = Number(totalSupply);
 
       const nfts = [];
       const owners = new Set();
 
-      for (const tokenId of tokenIds) {
+      // Loop through all token IDs from 0 to totalSupply - 1
+      for (let i = 0; i < total; i++) {
+        const tokenId = i.toString();
         try {
           const nftData = await contract.getMotorbike(tokenId);
           const owner = await contract.ownerOf(tokenId);
@@ -88,24 +82,6 @@ const AdminNFTManagement = () => {
           const lReason = await contract.lockReason(tokenId);
 
           owners.add(owner.toLowerCase());
-
-          // Get transfer history for this NFT
-          const nftTransfers = transferEvents
-            .filter((event) => event.args.tokenId.toString() === tokenId)
-            .sort((a, b) => a.blockNumber - b.blockNumber);
-
-          // Get block timestamps
-          const transferHistory = [];
-          for (const transfer of nftTransfers) {
-            const block = await provider.getBlock(transfer.blockNumber);
-            transferHistory.push({
-              from: transfer.args.from,
-              to: transfer.args.to,
-              blockNumber: transfer.blockNumber,
-              timestamp: new Date(block.timestamp * 1000),
-              transactionHash: transfer.transactionHash,
-            });
-          }
 
           nfts.push({
             tokenId: tokenId,
@@ -115,8 +91,8 @@ const AdminNFTManagement = () => {
             color: nftData.color,
             year: nftData.year.toString(),
             currentOwner: owner,
-            transferHistory: transferHistory,
-            transferCount: transferHistory.length,
+            transferHistory: [], // Load on demand if needed
+            transferCount: 0,
             locked: isLocked,
             lockReason: lReason,
           });
@@ -125,8 +101,8 @@ const AdminNFTManagement = () => {
         }
       }
 
-      // Sort by tokenId
-      nfts.sort((a, b) => parseInt(a.tokenId) - parseInt(b.tokenId));
+      // Sort by tokenId descending (newest first)
+      nfts.sort((a, b) => parseInt(b.tokenId) - parseInt(a.tokenId));
 
       setAllNFTs(nfts);
       setStats({

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connectWallet } from "../utils/wallet";
 import { ABI, CONTRACT_ADDRESS } from "../blockchain/MotorbikeNFT";
 import { ethers } from "ethers";
+import { getKycStatus } from "../utils/kycUtils";
 
 function TransferNFT() {
   const [status, setStatus] = useState("");
@@ -23,8 +24,23 @@ function TransferNFT() {
       if (!window.ethereum) throw new Error("Vui lòng cài đặt MetaMask!");
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-      const tx = await contract.transferFrom(await signer.getAddress(), to, Number(tokenId));
+      const userAddr = await signer.getAddress();
+
+      // Check KYC
+      const kycStatus = await getKycStatus(userAddr);
+      if (kycStatus !== "verified") {
+        alert(
+          "Bạn cần xác thực tài khoản (eKYC) trước khi thực hiện giao dịch này!"
+        );
+        return;
+      }
+
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+      const tx = await contract.transferFrom(
+        userAddr,
+        to,
+        Number(tokenId)
+      );
       await tx.wait();
       setStatus(`Chuyển nhượng NFT #${tokenId} cho ${to} thành công!`);
     } catch (err) {

@@ -471,6 +471,9 @@ const AdminDashboard = () => {
             <Link to="/admin/nfts" className="action-btn">
               📋 Quản lý tất cả NFT
             </Link>
+            <Link to="/admin/kyc" className="action-btn">
+              🪪 Duyệt yêu cầu KYC
+            </Link>
             <Link to="/admin/reports" className="action-btn">
               📢 Báo cáo từ người dùng
             </Link>

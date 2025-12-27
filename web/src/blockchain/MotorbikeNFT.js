@@ -313,6 +313,23 @@ export const ABI = [
     ]
   },
   {
+    "type": "event",
+    "anonymous": false,
+    "name": "UserVerified",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "user",
+        "indexed": true
+      },
+      {
+        "type": "bool",
+        "name": "status",
+        "indexed": false
+      }
+    ]
+  },
+  {
     "type": "function",
     "name": "approve",
     "constant": false,
@@ -530,6 +547,25 @@ export const ABI = [
       {
         "type": "string",
         "name": "engineNumber"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "isKycVerified",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "address",
+        "name": ""
       }
     ],
     "outputs": [
@@ -1064,6 +1100,23 @@ export const ABI = [
       {
         "type": "uint256",
         "name": "year"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "verifyUser",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "address",
+        "name": "_user"
+      },
+      {
+        "type": "bool",
+        "name": "_status"
       }
     ],
     "outputs": []

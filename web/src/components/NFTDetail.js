@@ -5,6 +5,7 @@ import {
   CONTRACT_ADDRESS,
   ABI as CONTRACT_ABI,
 } from "../blockchain/MotorbikeNFT";
+import { getKycStatus } from "../utils/kycUtils";
 import "./NFTDetail.css";
 
 const NFTDetail = () => {
@@ -16,6 +17,7 @@ const NFTDetail = () => {
 
   const [userAddress, setUserAddress] = useState("");
   const [isOwner, setIsOwner] = useState(false);
+  const [kycStatus, setKycStatus] = useState(null);
 
   const [showReportForm, setShowReportForm] = useState(false);
   const [reportReason, setReportReason] = useState("");
@@ -42,6 +44,9 @@ const NFTDetail = () => {
         const accounts = await provider.send("eth_requestAccounts", []);
         const userAddr = accounts[0];
         setUserAddress(userAddr);
+
+        const status = await getKycStatus(userAddr);
+        setKycStatus(status);
 
         const contract = new ethers.Contract(
           CONTRACT_ADDRESS,
@@ -268,10 +273,32 @@ const NFTDetail = () => {
           <div className="owner-actions">
             {isOwner && !nft.locked && (
               <>
-                <Link className="btn primary" to={`/user/sell/${tokenId}`}>
+                <Link
+                  className="btn primary"
+                  to={`/user/sell/${tokenId}`}
+                  onClick={(e) => {
+                    if (kycStatus !== "verified") {
+                      e.preventDefault();
+                      alert(
+                        "Bạn cần xác thực tài khoản (eKYC) trước khi thực hiện giao dịch này!"
+                      );
+                    }
+                  }}
+                >
                   💸 Chuyển nhượng
                 </Link>
-                <Link className="btn secondary" to={`/user/list/${tokenId}`}>
+                <Link
+                  className="btn secondary"
+                  to={`/user/list/${tokenId}`}
+                  onClick={(e) => {
+                    if (kycStatus !== "verified") {
+                      e.preventDefault();
+                      alert(
+                        "Bạn cần xác thực tài khoản (eKYC) trước khi thực hiện giao dịch này!"
+                      );
+                    }
+                  }}
+                >
                   🏪 Đăng bán
                 </Link>
               </>

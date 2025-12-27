@@ -6,6 +6,7 @@ import {
   MARKETPLACE_ADDRESS,
   MARKETPLACE_ABI,
 } from "../blockchain/MotorbikeMarketplace";
+import { getKycStatus } from "../utils/kycUtils";
 import "./ListNFT.css";
 
 const ListNFT = () => {
@@ -47,6 +48,16 @@ const ListNFT = () => {
         const accounts = await provider.send("eth_requestAccounts", []);
         const userAddr = accounts.length > 0 ? accounts[0] : "";
         setUserAddress(userAddr);
+
+        // Check KYC
+        const kycStatus = await getKycStatus(userAddr);
+        if (kycStatus !== "verified") {
+          alert(
+            "Bạn cần xác thực tài khoản (eKYC) trước khi thực hiện giao dịch này!"
+          );
+          navigate("/user");
+          return;
+        }
 
         const nftContract = new ethers.Contract(
           CONTRACT_ADDRESS,

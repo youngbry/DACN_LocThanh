@@ -5,6 +5,7 @@ import {
   CONTRACT_ADDRESS,
   ABI as CONTRACT_ABI,
 } from "../blockchain/MotorbikeNFT";
+import { getKycStatus } from "../utils/kycUtils";
 import "./SellNFT.css";
 
 const SellNFT = () => {
@@ -35,6 +36,16 @@ const SellNFT = () => {
         const accounts = await provider.send("eth_requestAccounts", []);
         const userAddr = accounts.length > 0 ? accounts[0] : "";
         setUserAddress(userAddr);
+
+        // Check KYC
+        const kycStatus = await getKycStatus(userAddr);
+        if (kycStatus !== "verified") {
+          alert(
+            "Bạn cần xác thực tài khoản (eKYC) trước khi thực hiện giao dịch này!"
+          );
+          navigate("/user");
+          return;
+        }
 
         const contract = new ethers.Contract(
           CONTRACT_ADDRESS,

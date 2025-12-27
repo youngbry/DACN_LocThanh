@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 
@@ -23,42 +23,36 @@ const UserDashboard = () => {
     myNFTCount: 0,
     totalSystemNFTs: 0,
   });
+  const [kycStatus, setKycStatus] = useState(null);
+  const [kycData, setKycData] = useState(null);
+  const [showKycInfo, setShowKycInfo] = useState(false);
 
-  useEffect(() => {
-    connectAndLoadData();
-  }, []);
-
-  const connectAndLoadData = async () => {
+  const checkKycStatus = async (address) => {
     try {
-      setLoading(true);
+      const res = await fetch(`http://localhost:4000/api/kyc/requests?t=${Date.now()}`);
+      if (res.ok) {
+        const requests = await res.json();
+        const myRequests = requests.filter(
+          (r) => r.walletAddress.toLowerCase() === address.toLowerCase()
+        );
 
-      if (typeof window.ethereum !== "undefined") {
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const accounts = await provider.send("eth_requestAccounts", []);
+        // Ưu tiên trạng thái đã xác thực
+        const verifiedRequest = myRequests.find((r) => r.status === "verified");
+        // Nếu không có verified, lấy cái mới nhất
+        const latestRequest = myRequests.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )[0];
 
-        if (accounts.length > 0) {
-          const userAddr = accounts[0];
-          setUserAddress(userAddr);
-          setIsConnected(true);
-          setProvider(provider); // Lưu provider để dùng cho TransactionHistory
-
-          // Lấy số dư ví
-          const balanceWei = await provider.getBalance(userAddr);
-          setBalance(ethers.formatEther(balanceWei));
-
-          // Load tên gợi nhớ từ LocalStorage
-          const savedAliases = localStorage.getItem(`nft_aliases_${userAddr}`);
-          if (savedAliases) {
-            setAliases(JSON.parse(savedAliases));
-          }
-
-          await loadUserNFTs(provider, userAddr);
+        if (verifiedRequest) {
+          setKycStatus("verified");
+          setKycData(verifiedRequest);
+        } else if (latestRequest) {
+          setKycStatus(latestRequest.status);
+          setKycData(latestRequest);
         }
       }
-    } catch (err) {
-      console.error("Lỗi khi kết nối ví:", err);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("Error checking KYC status:", error);
     }
   };
 
@@ -100,6 +94,45 @@ const UserDashboard = () => {
       console.error("Lỗi load NFT:", error);
     }
   };
+
+  const connectAndLoadData = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      if (typeof window.ethereum !== "undefined") {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
+
+        if (accounts.length > 0) {
+          const userAddr = accounts[0];
+          setUserAddress(userAddr);
+          setIsConnected(true);
+          setProvider(provider); // Lưu provider để dùng cho TransactionHistory
+
+          // Lấy số dư ví
+          const balanceWei = await provider.getBalance(userAddr);
+          setBalance(ethers.formatEther(balanceWei));
+
+          // Load tên gợi nhớ từ LocalStorage
+          const savedAliases = localStorage.getItem(`nft_aliases_${userAddr}`);
+          if (savedAliases) {
+            setAliases(JSON.parse(savedAliases));
+          }
+
+          await loadUserNFTs(provider, userAddr);
+          checkKycStatus(userAddr);
+        }
+      }
+    } catch (err) {
+      console.error("Lỗi khi kết nối ví:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    connectAndLoadData();
+  }, [connectAndLoadData]);
 
   const connectWallet = () => {
     if (typeof window.ethereum !== "undefined") {
@@ -166,6 +199,42 @@ const UserDashboard = () => {
           <div className="user-stat-number">{stats.totalSystemNFTs}</div>
           <div className="user-stat-label">TỔNG NFT HỆ THỐNG</div>
         </div>
+      </div>
+
+      {/* KYC Banner */}
+      <div 
+        className={`kyc-banner ${kycStatus === "verified" ? "clickable" : ""}`}
+        onClick={() => kycStatus === "verified" && setShowKycInfo(true)}
+        style={{ cursor: kycStatus === "verified" ? "pointer" : "default" }}
+      >
+        <div className="kyc-content">
+          <h3>
+            {kycStatus === "verified"
+              ? "✅ Tài khoản đã xác thực"
+              : kycStatus === "pending"
+              ? "⏳ Đang chờ duyệt hồ sơ"
+              : "🔐 Xác thực danh tính (eKYC)"}
+          </h3>
+          <p>
+            {kycStatus === "verified"
+              ? "Bạn đã hoàn tất xác thực danh tính. Tài khoản của bạn đã được bảo vệ."
+              : kycStatus === "pending"
+              ? "Hồ sơ của bạn đang được Admin xem xét. Vui lòng quay lại sau."
+              : "Xác thực tài khoản để tăng độ tin cậy và bảo mật khi giao dịch."}
+          </p>
+        </div>
+
+        {kycStatus === "verified" ? (
+          <div className="kyc-status-badge">
+            <span>🛡️ Đã xác thực</span>
+          </div>
+        ) : kycStatus === "pending" ? (
+          <button className="kyc-btn disabled">Đang chờ duyệt...</button>
+        ) : (
+          <Link to="/kyc" className="kyc-btn">
+            Xác thực ngay ➡️
+          </Link>
+        )}
       </div>
 
       {/* QUICK ACTIONS */}
@@ -245,6 +314,14 @@ const UserDashboard = () => {
                     <Link
                       to={`/user/sell/${nft.tokenId}`}
                       className="user-nft-btn secondary small"
+                      onClick={(e) => {
+                        if (kycStatus !== "verified") {
+                          e.preventDefault();
+                          alert(
+                            "Bạn cần xác thực tài khoản (eKYC) trước khi giao dịch!"
+                          );
+                        }
+                      }}
                     >
                       Bán
                     </Link>
@@ -259,6 +336,49 @@ const UserDashboard = () => {
       {/* TRANSACTION HISTORY */}
       {isConnected && provider && (
         <TransactionHistory userAddress={userAddress} provider={provider} />
+      )}
+
+      {/* KYC Info Modal */}
+      {showKycInfo && kycData && (
+        <div className="kyc-modal-overlay" onClick={() => setShowKycInfo(false)}>
+          <div className="kyc-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="kyc-modal-header">
+              <h3>Thông tin cá nhân</h3>
+              <button
+                className="close-btn"
+                onClick={() => setShowKycInfo(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="kyc-modal-body">
+              <div className="info-row">
+                <label>Họ tên:</label>
+                <span>{kycData.fullName}</span>
+              </div>
+              <div className="info-row">
+                <label>Số CCCD:</label>
+                <span>{kycData.idNumber}</span>
+              </div>
+              <div className="info-row">
+                <label>Ngày sinh:</label>
+                <span>{kycData.dob}</span>
+              </div>
+              <div className="info-row">
+                <label>Giới tính:</label>
+                <span>{kycData.gender}</span>
+              </div>
+              <div className="info-row">
+                <label>Địa chỉ:</label>
+                <span>{kycData.address}</span>
+              </div>
+              <div className="info-row">
+                <label>Quốc tịch:</label>
+                <span>{kycData.nationality || "Việt Nam"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

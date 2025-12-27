@@ -13,6 +13,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminNFTManagement from "./components/AdminNFTManagement";
 import AdminReports from "./components/AdminReports";
 import AdminBatchRegister from "./components/AdminBatchRegister";
+import AdminKYC from "./components/AdminKYC";
 import UserDashboard from "./components/UserDashboard";
 import NFTDetail from "./components/NFTDetail";
 import SellNFT from "./components/SellNFT";
@@ -23,8 +24,9 @@ import TransferNFT from "./components/TransferNFT";
 import ReportIssue from "./components/ReportIssue";
 import HistoryPage from "./components/HistoryPage";
 import BlockExplorer from "./components/BlockExplorer";
+import KYCPage from "./components/KYCPage";
 import ChatWidget from "./components/chatbot/ChatWidget";
-import Footer from "./components/Footer.css";
+import "./components/Footer.css";
 
 // Header with navigation links for user pages
 const Navigation = () => {
@@ -116,6 +118,7 @@ function App() {
             <Route path="/admin/nfts" element={<AdminNFTManagement />} />
             <Route path="/admin/reports" element={<AdminReports />} />
             <Route path="/admin/batch" element={<AdminBatchRegister />} />
+            <Route path="/admin/kyc" element={<AdminKYC />} />
 
             {/* User Routes */}
             <Route path="/user" element={<UserDashboard />} />
@@ -128,6 +131,7 @@ function App() {
             <Route path="/report" element={<ReportIssue />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/explorer" element={<BlockExplorer />} />
+            <Route path="/kyc" element={<KYCPage />} />
 
             {/* 404 - Not Found */}
             <Route
